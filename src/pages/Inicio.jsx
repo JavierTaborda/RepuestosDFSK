@@ -1,9 +1,7 @@
-const Inicio = () => {
-    return (
-        <>   
-            <div className="text-center py-3">Inicio</div>
+export default function Inicio() {
+    return(
+        <>
+        <h6>Inicio</h6>
         </>
-    );
-};
-
-export default Inicio;
+    )
+}

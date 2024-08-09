@@ -1,0 +1,40 @@
+
+.product-card {
+    transition: 0.6s;
+    box-shadow: 0px 0px 1px #c3c1c1;
+    border: 1px solid transparent;
+    /* Agrega un borde transparente */
+}
+
+.product-card:hover {
+    /* transform: scale(1.01); */
+    cursor: pointer;
+    border: 1px solid rgb(233, 70, 21);
+}
+
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.product-card img {
+    max-width: 100%;
+}
+
+.logo {
+    width: 60px;
+    height: 22px;
+
+}
+.cardtext {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+.product-card {
+    background-color: #ffffff00;
+    /* Otros estilos para el contenedor */
+}

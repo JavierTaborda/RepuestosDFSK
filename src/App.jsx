@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css'
 import Header from './components/Header'
@@ -11,9 +12,9 @@ function App() {
     <>
       <BrowserRouter>
         <Header />
-        <Routes>
-          <Route path="/inicio" element={<Inicio/>} />
-          <Route path="/repuestos" element={<RepuestosBodega />} />
+        <Routes>         
+          <Route path="/" element={<Inicio/>} />
+          <Route path="/repuestos" element={<RepuestosBodega/>} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />

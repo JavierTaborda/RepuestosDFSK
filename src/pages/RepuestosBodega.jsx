@@ -1,29 +1,39 @@
-import { useState, useEffect } from "react" 
+import { useState, useEffect } from "react"
 import CardRepuesto from "../components/CardRepuesto";
 
 const URI = 'http://localhost:5116/api/Articulos/Existencia';
 
 export default function RepuestosBodega() {
-
-    const [data,setData]=useState(null)
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         fetch(URI)
-        .then((response)=>response.jason())
-        .then((data)=> setData(data));
-    },[]);
+            .then(response => response.json())
+            .then(data => {
+                setData(data);
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }, []);
 
     return (
         <>
-            <div className="container">
-                <h1 className="text-center py-3">Repuestos ({datos.length})</h1>
+            <div className="container my-5">
                 <div className="row">
-                    {datos?.map((repuestos) => (
-                        <CardRepuesto key={repuestos.articulo} repuestos={repuestos} />
+                    {data?.map(item => (
+                        
+                        <CardRepuesto key={item.articulo} repuestos={item} />
+                        // <div key={item.articulo}>
+                        //     <p>Artículo: {item.articulo}</p>
+                        //     <p>Descripción: {item.descripcion}</p>
+                        //     <p>En Stock: {item.existencia}</p>
+                        //     <p>Precio: {item.venta}$</p>
+                        // </div>
                     ))}
                 </div>
             </div>
-
         </>
-    )
+    );
 }

@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useState } from "react";
 export default function Header() {
   return (
     <>
@@ -12,13 +13,14 @@ export default function Header() {
 
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
 
-              <li className="nav-item">
+              <li className="nav-item">             
                 <Link to="/inicio" className="nav-link active" aria-current="page" href="/">Inicio</Link>
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item">             
                 <Link to="/repuestos" className="nav-link" aria-current="page" href="#">Repuestos</Link>
               </li>
+
               {/* <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dropdown
@@ -34,7 +36,7 @@ export default function Header() {
             </ul>
             <form className="d-flex" role="search">
               <input className="form-control me-2 rounded-5" type="search" placeholder="Buscar..." aria-label="Buscar" />
-              <button class="btn btn-outline-danger rounded-5"type="submit">Buscar</button>
+              <button className="btn btn-outline-danger rounded-5"type="submit">Buscar</button>
 
             </form>
           </div>
