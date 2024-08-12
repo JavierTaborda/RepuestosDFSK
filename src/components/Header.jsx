@@ -20,32 +20,28 @@ export default function Header() {
                 <Link to="/inicio" className="nav-link active" aria-current="page" href="/">Inicio</Link>
               </li>
 
-              <li className="nav-item">             
-                <Link to="/repuestos" className="nav-link" aria-current="page" href="#">Repuestos</Link>
-              </li>
-
-              {/* <li className="nav-item dropdown">
+              <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Dropdown
+                  Manejo de Repuestos
                 </a>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="#">Action</a></li>
-                  <li><a className="dropdown-item" href="#">Another action</a></li>
-                  <li><hr className="dropdown-divider" /></li>
+                  <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Repuestos</Link></li>
+                  <li><a className="dropdown-item" href="#">Solicitar Repuesto</a></li>
+                  <li><a className="dropdown-item" href="#">Estdo de Solicitudes</a></li>                
                   <li><a className="dropdown-item" href="#">Something else here</a></li>
                 </ul>
-              </li> */}
+              </li> 
 
             </ul>
             <div className="mx-2">
               <DarkMode/>           
             </div>
             
-            <form className="d-flex" role="search">
+            {/* <form className="d-flex" role="search">
               <input className="form-control me-2 rounded-5" type="search" placeholder="Buscar..." aria-label="Buscar" />
               <button className="btn btn-outline-danger rounded-5"type="submit">Buscar</button>
 
-            </form>
+            </form> */}
           </div>
         </div>
       </nav>

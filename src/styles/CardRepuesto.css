@@ -1,6 +1,6 @@
 .product-card {
     transition: 0.6s;
-    box-shadow: 0px 0px 4px #3f3f3f8e;
+    box-shadow: 0px 0px 3px #2d2d2d55;
     border: 1px solid transparent;
     /* Agrega un borde transparente */
 }

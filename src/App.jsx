@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from "react"
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import './App.css'
@@ -11,17 +11,20 @@ import Inicio from './pages/Inicio'
 
 function App() {
 
+  const [cart, setCart] = useState([]);
+
+
   return (
     <>
       <BrowserRouter>
-        <Header />      
-        <Routes>         
-          <Route path="/" element={<Inicio/>} />
-          <Route path="/repuestos" element={<RepuestosBodega/>} />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/repuestos" element={<RepuestosBodega />} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />
-        <ToastContainer            
+        <ToastContainer
           draggable />
       </BrowserRouter>
     </>
