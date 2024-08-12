@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react"
 import CardRepuesto from "../components/CardRepuesto";
+import { ToastContainer, toast } from 'react-toastify';
 
 const URI = 'https://localhost:7142/api/Articulos/Existencia';
 
 export default function RepuestosBodega() {
     const [data, setData] = useState([]);
+
+    const notify = () => toast("Wow so easy!") ;
 
     useEffect(() => {
         fetch(URI)
@@ -15,6 +18,7 @@ export default function RepuestosBodega() {
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
+                notify();
             });
     }, []);
 
