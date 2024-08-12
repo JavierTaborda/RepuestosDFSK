@@ -8,25 +8,3 @@ background-color: rgb(172, 172, 172);
 
 }
 
-@keyframes slideDown {
-    from {
-      transform: translateY(-15%);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  .modal.show .modal-dialog {
-    animation: slideDown 0.3s ease-out;
-  }
-  .modal-dialog {
-    max-width: 900px;
-    
-  }
-  
-  .modal-content {
-    border-radius: 0px; /* Ajusta el redondeo de las esquinas */
-  }

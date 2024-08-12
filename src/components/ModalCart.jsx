@@ -1,3 +1,4 @@
+import "../styles/ModalCart.css"
 import React from 'react';
 
 const ModalCart = ({ show, handleClose, product }) => {

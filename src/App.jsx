@@ -14,14 +14,15 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
-        <ToastContainer />
+        <Header />      
         <Routes>         
           <Route path="/" element={<Inicio/>} />
           <Route path="/repuestos" element={<RepuestosBodega/>} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />
+        <ToastContainer            
+          draggable />
       </BrowserRouter>
     </>
   )
