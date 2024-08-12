@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import DarkMode from "./DarkMode"
+
 export default function Header() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      {/* <nav className="navbar navbar-expand-lg bg-body-tertiary"> */}
+      <nav className="navbar navbar-expand-lg navbarcolor">
         <div className="container-fluid">
           <a className="navbar-brand" href="#"><img src="/DFSK.png" alt="Logo" className="logo" /></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +37,10 @@ export default function Header() {
               </li> */}
 
             </ul>
+            <div className="mx-2">
+              <DarkMode/>           
+            </div>
+            
             <form className="d-flex" role="search">
               <input className="form-control me-2 rounded-5" type="search" placeholder="Buscar..." aria-label="Buscar" />
               <button className="btn btn-outline-danger rounded-5"type="submit">Buscar</button>

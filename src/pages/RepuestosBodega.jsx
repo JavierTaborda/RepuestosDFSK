@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import CardRepuesto from "../components/CardRepuesto";
 
-const URI = 'http://localhost:5116/api/Articulos/Existencia';
+const URI = 'https://localhost:7142/api/Articulos/Existencia';
 
 export default function RepuestosBodega() {
     const [data, setData] = useState([]);
@@ -11,7 +11,7 @@ export default function RepuestosBodega() {
             .then(response => response.json())
             .then(data => {
                 setData(data);
-                console.log(data);
+                
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
