@@ -10,30 +10,37 @@ import RepuestosBodega from "./pages/RepuestosBodega";
 import Inicio from "./pages/Inicio";
 
 function App() {
+
   const [cart, setCart] = useState([]);
 
   function addToCart(item) {
-
-    const itemExist=cart.findIndex((repuesto)=>repuesto.articulo===item.articulo)
-    if(itemExist>=0)
-    {
-      const updatedCart=[...cart]
+    const itemExist = cart.findIndex((repuesto) => repuesto.articulo === item.articulo)
+    if (itemExist >= 0) {
+      const updatedCart = [...cart]
       updatedCart[itemExist].quantity++
       setCart(updatedCart)
     }
-    else
-    {
-      item.quantity=1
-      setCart([...cart,item])  
-       toast.info("¡Se agregó el producto.!");
+    else {
+      item.quantity = 1
+      setCart([...cart, item])
+      toast.info("¡Se agregó el articulo " + item.articulo +"!");
     }
- 
   }
+
+  function removeFromCart(id) {
+    setCart (prevCart => prevCart.filter(item => item.articulo !== id))
+    toast.info("¡Se eliminó el producto " + id +"!");   
+  }
+  
+
 
   return (
     <>
       <BrowserRouter>
-        <Header />
+        <Header
+          cart={cart}
+          removeFromCart={removeFromCart}
+        />
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route

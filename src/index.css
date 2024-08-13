@@ -9,3 +9,9 @@ background-color: rgb(172, 172, 172);
 
 }
 
+/* Colores de los dropdown */
+.dropdown-menu{
+    --bs-dropdown-link-hover-bg: #fd6c6cab;
+    --bs-dropdown-link-active-bg: #ff0101;
+    border-radius: 4px;
+}

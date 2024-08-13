@@ -28,7 +28,7 @@ export default function CardRepuesto({ repuestos, addToCart }) {
         <>
 
             <div className="col-md-4 col-lg-3 mb-2">
-                <div className="product-card">
+                <div className="product-card ">
                     <img src="/puerta.png" alt="Repuesto" className="cardimagen"></img>
                     <div className="card-body">
                         <div className="card-body text-start">

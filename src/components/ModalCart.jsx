@@ -38,7 +38,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                   <span className="badge rounded-pill text-bg-success">
                     <h5 className="pt-1 pb-0">${repuesto.venta.toFixed(2).toLocaleString()} </h5>
                   </span>
-
+                
                   <div className='mt-2 p-2 '>
                     <p className="lead">
                       <b>Articulo: </b>{repuesto.articulo}
@@ -50,7 +50,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                     <div className={`alert ${getStockClass(repuesto.existencia)}`} role="alert">
                       En Stock: {repuesto.existencia}
                     </div>
-                      {/* TODO: Crear Component para addcart */}
+                      
                     <div className="d-grid gap-2  pt-3">
                       <div className=" d-flex justify-content-center">
                         <button className="btn btn-outline-danger rounded-4 mx-5">
@@ -74,7 +74,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-outline-danger rounded-5" onClick={handleClose}>
-                Cerrar
+                <i className="bi bi-x"></i>Cerrar
               </button>
             </div>
           </div>

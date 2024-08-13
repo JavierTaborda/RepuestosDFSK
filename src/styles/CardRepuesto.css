@@ -1,12 +1,13 @@
 .product-card {
-    transition: 0.6s;
-    box-shadow: 0px 0px 3px #2d2d2d55;
+    transition: 0.6s; 
     border: 1px solid transparent;
+    box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.1);
     /* Agrega un borde transparente */
 }
 
 .product-card:hover {
-    /* transform: scale(1.01); */
+    -moz-box-shadow: -4px 4px 10px -3px rgba(0, 0, 0, 0.2);
+    box-shadow: -4px 4px 10px -3px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border: 1px solid rgb(233, 70, 21);
 }
