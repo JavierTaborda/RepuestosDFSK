@@ -16,7 +16,7 @@ const darkModal = () => {
   else { return ('bg-light') }
 }
 
-const ModalCart = ({ show, handleClose, repuesto }) => {
+const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
   return (
     <>
       {show && <div className="modal-backdrop fade show"></div>}
@@ -64,8 +64,8 @@ const ModalCart = ({ show, handleClose, repuesto }) => {
                         </button>
                       </div>
 
-                      <button className="btn btn-outline-success rounded-5">
-                        <span className="fw-medium">AGREGAR AL CARRITO</span> <i className="bi bi-bag-plus"></i>
+                      <button className="btn btn-outline-success rounded-5" onClick={()=>addToCard(repuesto)}>
+                        <span className="fw-medium">AGREGAR AL CARRITO </span> <i className="bi bi-bag-plus"></i>
                       </button>
                     </div>
                   </div>

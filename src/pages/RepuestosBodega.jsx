@@ -3,9 +3,9 @@ import { useState, useEffect } from "react"
 import CardRepuesto from "../components/CardRepuesto";
 import { ToastContainer, toast } from 'react-toastify';
 
-const URI = 'http://localhost:5116/api/Articulos/Existencia';
+const URI = 'https://localhost:7142/api/Articulos/Existencia';
 
-export default function RepuestosBodega() {
+export default function RepuestosBodega({addToCart}) {
     const [data, setData] = useState([]);
 
     const toastId = React.useRef(null);//Dont repeat the notification
@@ -67,7 +67,11 @@ export default function RepuestosBodega() {
                 <div className="row">
                     {data?.map(item => (
 
-                        <CardRepuesto key={item.articulo} repuestos={item} />
+                        <CardRepuesto
+                            key={item.articulo}
+                            repuestos={item} 
+                            addToCart={addToCart}
+                         />
 
                     ))}
                 </div>

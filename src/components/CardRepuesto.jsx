@@ -3,7 +3,7 @@ import { useState } from "react";
 import "../styles/CardRepuesto.css"
 import ModalCart from "./ModalCart";
 
-export default function CardRepuesto({ repuestos }) {
+export default function CardRepuesto({ repuestos, addToCart }) {
 
     const [showModal, setShowModal] = useState(false);
 
@@ -60,6 +60,7 @@ export default function CardRepuesto({ repuestos }) {
                 show={showModal}
                 handleClose={handleCloseModal}
                 repuesto={repuestos}
+                addToCard={addToCart}
             />
             
         </>
