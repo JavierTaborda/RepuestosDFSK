@@ -5,14 +5,14 @@ import DarkMode from "./DarkMode"
 
 
 
-export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQuantity }) {
+export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQuantity,clearCart }) {
   
-  const isEmpty= useMemo(()=>cart.length===0, [cart])
-  const carTotal=useMemo(()=>cart.reduce((total, item) => total + (item.venta * item.quantity), 0),[cart])
+  const isEmpty= useMemo(()=>cart?.length===0, [cart])
+  const carTotal=useMemo(()=>cart?.reduce((total, item) => total + (item.venta * item.quantity), 0),[cart])
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbarcolor fixed-top ">
+      <nav className="navbar navbar-expand-lg navbarcolor  sticky-top">
         <div className="container-fluid">
           <a className="navbar-brand" href="#"><img src="/DFSK.png" alt="Logo" className="logo" /></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,11 +41,12 @@ export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQ
             </ul>
 
             <div className="dropdown">
-              <button className="btn btn-outline-danger dropdown-toggle rounded-5" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="false">
+              <button className="btn btn-outline-danger dropdown-toggle rounded-5" type="button" 
+                data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" data-bs-auto-close="false">
                 <i className="bi bi-cart3"></i>
               </button>
 
-              <div className="dropdown-menu dropdown-menu-end p-4 shadow">
+              <div className="dropdown-menu dropdown-menu-end p-4 shadow " style={{ maxHeight: '70vh', overflowY: 'auto', maxWidth: '90vh', overflowX: 'auto' }}>
 
                 {isEmpty ? (
 
@@ -71,7 +72,7 @@ export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQ
                           </tr>
                         </thead>
                         <tbody>
-                          {cart.map(item => (
+                          {cart?.map(item => (
 
                             <tr key={item.articulo}>
                               <td>
@@ -109,9 +110,12 @@ export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQ
                         </tbody>
                       </table>
 
-                      <p className="text-end">Total pagar: <span className="fw-bold">${carTotal.toFixed(2).toLocaleString()}</span></p>
+                      <p className="text-end">Total pagar: <span className="fw-bold">${carTotal?.toFixed(2).toLocaleString()}</span></p>
 
-                      <button className="btn btn-warning  rounded-4   m-2 p-2"><i className="bi bi-bag-x"></i> Cancelar</button>
+                      <button className="btn btn-warning  rounded-4   m-2 p-2"
+                      onClick={clearCart}>
+                        <i className="bi bi-bag-x"></i> Cancelar
+                      </button>
                       <button className="btn btn-success rounded-4  m-2 p-2 "><i className="bi bi-bag-check"></i> Generar Solicitud</button>
                     </>
                   )}
@@ -128,7 +132,7 @@ export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQ
         </div>
 
       </nav>
-
+                  
     </>
 
   )

@@ -10,17 +10,28 @@ import RepuestosBodega from "./pages/RepuestosBodega";
 import Inicio from "./pages/Inicio";
 
 function App() {
-  const [cart, setCart] = useState([]);
+
+  //check local storage for cart useState
+  const IncialStateCart = () => {
+    const localStorageCart = localStorage.getItem("cart")
+    return localStorageCart ? JSON.parse(localStorageCart) : []
+  }
+  const [cart, setCart] = useState(IncialStateCart);
+
+  //save cart in local storage
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart))
+  }, [cart]);
 
   function addToCart(item) {
-    const itemExist = cart.findIndex(
-      (repuesto) => repuesto.articulo === item.articulo
-    );
+    const itemExist = cart.findIndex((repuesto) => repuesto.articulo === item.articulo)
+
     if (itemExist >= 0) {
-      if(cart[itemExist].quantity>=itemExist.existencia) return
+      //TODO:Enviar a incrementar si ya
+      if (cart[itemExist].quantity >= item.existencia) return toast.warning("No hay existencia disponible");
       const updatedCart = [...cart];
       updatedCart[itemExist].quantity++;
-      setCart();
+      setCart(updatedCart);
     } else {
       item.quantity = 1;
       setCart([...cart, item]);
@@ -69,6 +80,11 @@ function App() {
     setCart(updatedCart);
   }
 
+  function clearCart() {
+    setCart([])
+  }
+
+
   return (
     <>
       <BrowserRouter>
@@ -77,6 +93,7 @@ function App() {
           removeFromCart={removeFromCart}
           increaseQuantity={increaseQuantity}
           decreaseQuantity={decreaseQuantity}
+          clearCart={clearCart}
         />
         <Routes>
           <Route path="/" element={<Inicio />} />
@@ -87,7 +104,8 @@ function App() {
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />
-        <ToastContainer draggable />
+        <ToastContainer position="top-center"
+          draggable />
       </BrowserRouter>
     </>
   );
