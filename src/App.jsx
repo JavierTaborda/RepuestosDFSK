@@ -10,29 +10,64 @@ import RepuestosBodega from "./pages/RepuestosBodega";
 import Inicio from "./pages/Inicio";
 
 function App() {
-
   const [cart, setCart] = useState([]);
 
   function addToCart(item) {
-    const itemExist = cart.findIndex((repuesto) => repuesto.articulo === item.articulo)
+    const itemExist = cart.findIndex(
+      (repuesto) => repuesto.articulo === item.articulo
+    );
     if (itemExist >= 0) {
-      const updatedCart = [...cart]
-      updatedCart[itemExist].quantity++
-      setCart(updatedCart)
-    }
-    else {
-      item.quantity = 1
-      setCart([...cart, item])
-      toast.info("¡Se agregó el articulo " + item.articulo +"!");
+      if(cart[itemExist].quantity>=itemExist.existencia) return
+      const updatedCart = [...cart];
+      updatedCart[itemExist].quantity++;
+      setCart();
+    } else {
+      item.quantity = 1;
+      setCart([...cart, item]);
+      toast.info("¡Se agregó el articulo " + item.articulo + "!");
     }
   }
 
   function removeFromCart(id) {
-    setCart (prevCart => prevCart.filter(item => item.articulo !== id))
-    toast.info("¡Se eliminó el producto " + id +"!");   
+    setCart((prevCart) => prevCart.filter((item) => item.articulo !== id));
+    toast.info("¡Se eliminó el producto " + id + "!");
   }
-  
 
+  function increaseQuantity(id, existencia) {
+    const updatedCart = cart.map((item) => {
+      if (item.articulo === id)
+        if (item.quantity < existencia) {
+          return {
+            ...item,
+            quantity: item.quantity + 1,
+          };
+        } else {
+          toast.warning("No hay existencia disponible");
+        }
+
+      return item;
+    });
+    setCart(updatedCart);
+  }
+
+  function decreaseQuantity(id, existencia) {
+    const updatedCart = cart.map((item) => {
+      if (item.articulo === id) {
+        if (item.quantity > 1 && item.quantity <= existencia)
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
+        else {
+          toast.warning(
+            "Si no desea el producto solicitar, elimine con el botón X"
+          );
+        }
+      }
+      return item;
+    });
+    setCart(updatedCart);
+  }
 
   return (
     <>
@@ -40,6 +75,8 @@ function App() {
         <Header
           cart={cart}
           removeFromCart={removeFromCart}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
         />
         <Routes>
           <Route path="/" element={<Inicio />} />

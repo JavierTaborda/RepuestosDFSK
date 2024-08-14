@@ -51,8 +51,8 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                       En Stock: {repuesto.existencia}
                     </div>
                       
-                    <div className="d-grid gap-2  pt-3">
-                      <div className=" d-flex justify-content-center">
+                    <div className="d-grid gap-2  pt-5">
+                      {/* <div className=" d-flex justify-content-center">
                         <button className="btn btn-outline-danger rounded-4 mx-5">
                           <i className="bi bi-dash"></i>
                         </button>
@@ -62,9 +62,9 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                         <button className="btn btn-outline-success rounded-4 mx-5">
                           <i className="bi bi-plus"></i>
                         </button>
-                      </div>
+                      </div> */}
 
-                      <button className="btn btn-outline-success rounded-5" onClick={()=>addToCard(repuesto)}>
+                      <button className="btn btn-success rounded-5" onClick={()=>addToCard(repuesto)}>
                         <span className="fw-medium">AGREGAR AL CARRITO </span> <i className="bi bi-bag-plus"></i>
                       </button>
                     </div>

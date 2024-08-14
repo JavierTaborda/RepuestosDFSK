@@ -5,14 +5,14 @@ import DarkMode from "./DarkMode"
 
 
 
-export default function Header({ cart,removeFromCart }) {
+export default function Header({ cart,removeFromCart, increaseQuantity,decreaseQuantity }) {
   
   const isEmpty= useMemo(()=>cart.length===0, [cart])
   const carTotal=useMemo(()=>cart.reduce((total, item) => total + (item.venta * item.quantity), 0),[cart])
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbarcolor ">
+      <nav className="navbar navbar-expand-lg navbarcolor fixed-top ">
         <div className="container-fluid">
           <a className="navbar-brand" href="#"><img src="/DFSK.png" alt="Logo" className="logo" /></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,17 +75,24 @@ export default function Header({ cart,removeFromCart }) {
 
                             <tr key={item.articulo}>
                               <td>
-                                <img className="img-fluid" src="./public/puerta.png" alt="imagen" />
+                                <img className="img-fluid" src="./puerta.png" alt="imagen" />
                               </td>
                               <td className="fw-bold align-middle">{item.descripcion}</td>
                               <td className="fw-bold align-middle">
-                                ${item.venta}
+                                ${item.venta.toFixed(2).toLocaleString()}
                               </td>
                               <td className="align-middle">
                                 <div className="d-flex justify-content-between align-items-center">
-                                  <button type="button" className="btn btn-outline-dark btn-sm">-</button>
+                                  <button type="button" 
+                                    className="btn btn-outline-dark btn-sm "
+                                    onClick={()=> decreaseQuantity(item.articulo,item.existencia)}>-
+                                   
+                                  </button>
                                   <span>{item.quantity}</span>
-                                  <button type="button" className="btn btn-outline-dark btn-sm">+</button>
+                                  <button type="button" 
+                                    className="btn btn-outline-dark btn-sm" 
+                                    onClick={()=> increaseQuantity(item.articulo,item.existencia)}>+
+                                  </button>
                                 </div>
                               </td>
                               <td className="align-middle">
@@ -102,7 +109,7 @@ export default function Header({ cart,removeFromCart }) {
                         </tbody>
                       </table>
 
-                      <p className="text-end">Total pagar: <span className="fw-bold">${carTotal}</span></p>
+                      <p className="text-end">Total pagar: <span className="fw-bold">${carTotal.toFixed(2).toLocaleString()}</span></p>
 
                       <button className="btn btn-warning  rounded-4   m-2 p-2"><i className="bi bi-bag-x"></i> Cancelar</button>
                       <button className="btn btn-success rounded-4  m-2 p-2 "><i className="bi bi-bag-check"></i> Generar Solicitud</button>
