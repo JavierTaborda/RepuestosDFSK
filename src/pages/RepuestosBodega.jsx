@@ -5,8 +5,8 @@ import CardRepuesto from "../components/CardRepuesto";
 import Spinner from '../components/Spinner';
 
 const URI1 = 'http://localhost:5116/api/Articulos/Existencia';
-const URI2 = 'http://localhost:5116/api/Articulos/Existencia';
-const URI3 = 'http://localhost:5116/api/Articulos/Existencia';
+const URI2 = 'http://localhost:5116/api/Articulos/CodigosGrupo';
+const URI3 = 'http://localhost:5116/api/Articulos/CodigosMarca';
 
 export default function RepuestosBodega({ addToCart }) {
 
@@ -14,9 +14,15 @@ export default function RepuestosBodega({ addToCart }) {
     const [dataRepuesto, setRepuestos] = useState([]);
     const [dataMarca, setMarca] = useState([]);
     const [dataGrupo, setGrupo] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [stringMarca, setStringMarca] = useState("*")
+    const [stringGrupo, setStringGrupo] = useState("*")
 
+    const itemsPerPage = 12; // Cambia esto según tus necesidades
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    var visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
     const toastId = React.useRef(null);//Dont repeat the notification
-    //TODO: refactor this function to only one for all app
+
     const notifyerror = (error) => {
         if (!toast.isActive(toastId.current)) {
             toastId.current = toast.error(error, {
@@ -46,22 +52,43 @@ export default function RepuestosBodega({ addToCart }) {
     //         });
     // }, []);
 
-    const filterMarca= (marca) => {
-        setIsLoading(false);
-        console.log(marca)
-        fetch('http://localhost:5116/api/Articulos/Bodega/Marca/' + marca)
-                .then(response => response.json())
-                .then(dataRepuesto => {
-                    setRepuestos(dataRepuesto);
-                    notifysuccess();
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    notifyerror(error.message);
-                })
-                 .finally(() => setIsLoading(false));
-            
-    }
+    const filterMarca = async () => {
+        try {
+            setIsLoading(true);
+
+            const URIM = 'http://localhost:5116/api/Articulos/Bodega/Marca/' +
+                encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo);
+
+            console.log(stringMarca);
+            console.log(stringGrupo);
+            console.log(URIM);
+
+            const response = await fetch(URIM);
+            if (!response.ok) {
+                throw new Error('Error fetching data');
+            }
+
+            const dataRepuesto = await response.json();
+            setRepuestos(dataRepuesto);
+            notifysuccess();
+
+            // Resto de las operaciones después de obtener los datos
+            handlePageChange(1);
+            visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            notifyerror(error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (stringMarca || stringGrupo) {
+            filterMarca();
+        }
+       
+    }, [stringMarca, stringGrupo]);
 
     useEffect(() => {
 
@@ -70,7 +97,7 @@ export default function RepuestosBodega({ addToCart }) {
         const fetchMarca = () => fetch(URI3).then(response => response.json());
 
         Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
-            .then(([dataRepuesto, dataMarca, dataGrupo]) => {
+            .then(([dataRepuesto, dataGrupo, dataMarca]) => {
 
                 setRepuestos(dataRepuesto);
                 setGrupo(dataGrupo);
@@ -82,11 +109,7 @@ export default function RepuestosBodega({ addToCart }) {
             .finally(() => setIsLoading(false));
     }, []);
 
-    // TODO: check object empty
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12; // Cambia esto según tus necesidades
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
+
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -107,28 +130,32 @@ export default function RepuestosBodega({ addToCart }) {
 
                     <div className="btn-group ps-2 pt-3" role="group">
                         <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="bi bi-funnel" /> MARCA:
+                            <i className="bi bi-funnel" /> MARCA : {stringMarca}
                         </button>
                         <ul className="dropdown-menu shadow">
-                            <li><a className="dropdown-item" href="#">DFSK</a></li>
-                            <li><a className="dropdown-item" href="#">BLUESKY</a></li>
-                            <li><a className="dropdown-item" href="#">SHINERAY</a></li>
+                            <li><a onClick={() => setStringMarca('*')} className="dropdown-item" href="#">Todos</a></li>
+                            {dataMarca.map((item) => (
+                                <li key={item.codigo}>
+                                    <a onClick={() => setStringMarca(item.descripcion)} className="dropdown-item">{item.descripcion}</a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
                     <div className="btn-group ps-2 pt-3 " role="group">
                         <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="bi bi-funnel" /> GRUPO:
+                            <i className="bi bi-funnel" /> GRUPO: {stringGrupo}
                         </button>
                         <ul className="dropdown-menu shadow">
-                            {dataMarca.map((item) => (
+                            <li><a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a></li>
+                            {dataGrupo.map((item) => (
                                 <li key={item.codigo}>
-                                    <a onClick={() => filterMarca(item.marca)} className="dropdown-item">{item.marca}</a>
+                                    <a onClick={() => setStringGrupo(item.descripcion)} className="dropdown-item">{item.descripcion}</a>
                                 </li>
                             ))}
                         </ul>
                     </div>
-                
+
                     <div className="btn-group ps-2 pt-3" role="group">
                         <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className=" bi bi-sort-down" /> Ordenar por:
@@ -141,7 +168,7 @@ export default function RepuestosBodega({ addToCart }) {
                     </div>
                 </div>
 
-  
+
 
                 <div className="d-flex justify-content-center mt-4 mb-2">
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
@@ -152,7 +179,7 @@ export default function RepuestosBodega({ addToCart }) {
                         >
                             Anterior
                         </button>
-                        <button type="button" className="btn btn-danger"> {currentPage} / { Math.ceil(dataRepuesto?.length / itemsPerPage) } 
+                        <button type="button" className="btn btn-danger"> {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
                         </button>
 
                         <button
