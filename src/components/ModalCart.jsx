@@ -45,6 +45,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                       <br /><b>Producto: </b>{repuesto.descripcion}
                       <br /><b>Marca: </b>{repuesto.marca}
                       <br /><b>Modelo: </b>{repuesto.modelo}
+                      <br /><b>Grupo: </b>{repuesto.grupo}
                     </p>
 
                     <div className={`alert ${getStockClass(repuesto.existencia)}`} role="alert">

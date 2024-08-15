@@ -59,13 +59,12 @@ export default function RepuestosBodega({ addToCart }) {
             const URIM = 'http://localhost:5116/api/Articulos/Bodega/Marca/' +
                 encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo);
 
-            console.log(stringMarca);
-            console.log(stringGrupo);
+           
             console.log(URIM);
 
             const response = await fetch(URIM);
             if (!response.ok) {
-                throw new Error('Error fetching data');
+                notifyerror('Error de la petición.');
             }
 
             const dataRepuesto = await response.json();
@@ -76,21 +75,21 @@ export default function RepuestosBodega({ addToCart }) {
             handlePageChange(1);
             visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
         } catch (error) {
-            console.error('Error fetching data:', error);
-            notifyerror(error.message);
+            notifyerror('Error de la petición:'+error.message);
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        if (stringMarca || stringGrupo) {
+        if (!isLoading) {
             filterMarca();
         }
        
     }, [stringMarca, stringGrupo]);
 
     useEffect(() => {
+      
 
         const fetchRepuestos = () => fetch(URI1).then(response => response.json());
         const fetchGrupos = () => fetch(URI2).then(response => response.json());
@@ -107,6 +106,8 @@ export default function RepuestosBodega({ addToCart }) {
                 notifyerror("Error en la carga de datos: " + error.message);
             })
             .finally(() => setIsLoading(false));
+   
+
     }, []);
 
 
@@ -170,6 +171,8 @@ export default function RepuestosBodega({ addToCart }) {
 
 
 
+                {dataRepuesto?.length > 0 ? (
+
                 <div className="d-flex justify-content-center mt-4 mb-2">
                     <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                         <button
@@ -190,22 +193,24 @@ export default function RepuestosBodega({ addToCart }) {
                             Siguiente
                         </button>
                     </div>
-                </div>
+                </div>) : null}
 
                 <div className="row">
                     {isLoading ? (
                         <Spinner />
                     ) : (
+                        
                         visibleRepuestos.map((item) => (
                             <CardRepuesto key={item.articulo} repuestos={item} addToCart={addToCart} />
                         ))
                     )}
                 </div>
-
-                {/* Agrega los botones de paginación */}
-
+                    
+                { dataRepuesto?.length >0 ?(
+                        
+                   
                 <div className="d-flex justify-content-center mt-4 mb-2">
-                    <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <div className="btn-group" role="group" aria-label="Basic">
                         <button
                             className="btn btn-outline-danger"
                             onClick={() => handlePageChange(currentPage - 1)}
@@ -224,6 +229,9 @@ export default function RepuestosBodega({ addToCart }) {
                             Siguiente
                         </button>
                     </div>
+                </div>): null}
+                <div className="d-flex justify-content-center mt-4 mb-2">
+                    {dataRepuesto?.length}  elementos
                 </div>
 
             </div>
