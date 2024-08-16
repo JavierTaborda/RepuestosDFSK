@@ -8,6 +8,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import RepuestosBodega from "./pages/RepuestosBodega";
 import Inicio from "./pages/Inicio";
+import Solicitud from "./pages/Solicitud";
+import CrearRepuesto from "./pages/CrearRepuesto";
 
 function App() {
 
@@ -27,12 +29,13 @@ function App() {
     const itemExist = cart.findIndex((repuesto) => repuesto.articulo === item.articulo)
 
     if (itemExist >= 0) {
-      //TODO:Enviar a incrementar si ya
+
       if (cart[itemExist].quantity >= item.existencia) return toast.warning("No hay existencia disponible");
       const updatedCart = [...cart];
       updatedCart[itemExist].quantity++;
       setCart(updatedCart);
     } else {
+      if (item.existencia <= 0) return toast.warning("No hay existencia disponible");
       item.quantity = 1;
       setCart([...cart, item]);
       toast.info("¡Se agregó el articulo " + item.articulo + "!");
@@ -93,7 +96,7 @@ function App() {
           removeFromCart={removeFromCart}
           increaseQuantity={increaseQuantity}
           decreaseQuantity={decreaseQuantity}
-          clearCart={clearCart}
+          clearCart={clearCart}         
         />
         <Routes>
           <Route path="/" element={<Inicio />} />
@@ -101,6 +104,15 @@ function App() {
             path="/repuestos"
             element={<RepuestosBodega addToCart={addToCart} />}
           />
+          <Route path="/solicitud" element={<Solicitud 
+            cart={cart}
+            removeFromCart={removeFromCart} 
+            increaseQuantity={increaseQuantity} 
+            decreaseQuantity={decreaseQuantity} 
+            clearCart={clearCart} 
+            />} 
+          />
+          <Route path="/repuestonew" element={<CrearRepuesto/>} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />

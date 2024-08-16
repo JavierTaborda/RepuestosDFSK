@@ -180,10 +180,10 @@ export default function RepuestosBodega({ addToCart }) {
                             <i className=" bi bi-sort-down" /> Ordenar por: {orderData}
                         </button>
                         <ul className="dropdown-menu shadow">
-                            <li><a onClick={() => setorderData('Mayor Existencia')} className="dropdown-item" href="#"> <i class="bi bi-sort-down"></i> Mayor Existencia</a></li>
-                            <li><a onClick={() => setorderData('Menor Existencia')} className="dropdown-item" href="#"><i class="bi bi-sort-down-alt"></i> Menor Existencia</a></li>
-                            <li><a onClick={() => setorderData('Mayor Precio')} className="dropdown-item" href="#"> <i class="bi bi-sort-down"></i> Mayor Precio</a></li>
-                            <li><a onClick={() => setorderData('Menor Precio')} className="dropdown-item" href="#"><i class="bi bi-sort-down-alt"></i> Menor Precio</a></li>
+                            <li><a onClick={() => setorderData('Mayor Existencia')} className="dropdown-item" href="#"> <i className="bi bi-sort-down"></i> Mayor Existencia</a></li>
+                            <li><a onClick={() => setorderData('Menor Existencia')} className="dropdown-item" href="#"><i className="bi bi-sort-down-alt"></i> Menor Existencia</a></li>
+                            <li><a onClick={() => setorderData('Mayor Precio')} className="dropdown-item" href="#"> <i className="bi bi-sort-down"></i> Mayor Precio</a></li>
+                            <li><a onClick={() => setorderData('Menor Precio')} className="dropdown-item" href="#"><i className="bi bi-sort-down-alt"></i> Menor Precio</a></li>
                         </ul>
                     </div>
                 </div>

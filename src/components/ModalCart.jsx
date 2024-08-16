@@ -53,18 +53,6 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                     </div>
                       
                     <div className="d-grid gap-2  pt-5">
-                      {/* <div className=" d-flex justify-content-center">
-                        <button className="btn btn-outline-danger rounded-4 mx-5">
-                          <i className="bi bi-dash"></i>
-                        </button>
-
-                        <span className="fw-medium">1</span>
-
-                        <button className="btn btn-outline-success rounded-4 mx-5">
-                          <i className="bi bi-plus"></i>
-                        </button>
-                      </div> */}
-
                       <button className="btn btn-success rounded-5" onClick={()=>addToCard(repuesto)}>
                         <span className="fw-medium">AGREGAR AL CARRITO </span> <i className="bi bi-bag-plus"></i>
                       </button>
