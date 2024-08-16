@@ -17,10 +17,13 @@ export default function RepuestosBodega({ addToCart }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [stringMarca, setStringMarca] = useState("*")
     const [stringGrupo, setStringGrupo] = useState("*")
+    const [stringDescripcion, setstringDescripcion] = useState("*")
+    const [stringTextSearch, setstringTextSearch] = useState("")
 
     const itemsPerPage = 12; // Cambia esto según tus necesidades
     const startIndex = (currentPage - 1) * itemsPerPage;
     var visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
+   
     const toastId = React.useRef(null);//Dont repeat the notification
 
     const notifyerror = (error) => {
@@ -32,7 +35,7 @@ export default function RepuestosBodega({ addToCart }) {
     }
     const notifysuccess = () => {
         if (!toast.isActive(toastId.current)) {
-            toastId.current = toast.success("Cargado exitoso", {
+            toastId.current = toast.success("Cargado exitoso ", {
                 draggable: true
             });
         }
@@ -57,7 +60,8 @@ export default function RepuestosBodega({ addToCart }) {
             setIsLoading(true);
 
             const URIM = 'http://localhost:5116/api/Articulos/Bodega/Marca/' +
-                encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo);
+                encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo) 
+                + '/' + encodeURIComponent(stringDescripcion===""?"*":stringDescripcion);
 
            
             console.log(URIM);
@@ -78,15 +82,18 @@ export default function RepuestosBodega({ addToCart }) {
             notifyerror('Error de la petición:'+error.message);
         } finally {
             setIsLoading(false);
+           
         }
+        
     };
 
     useEffect(() => {
         if (!isLoading) {
+           
             filterMarca();
         }
        
-    }, [stringMarca, stringGrupo]);
+    }, [stringMarca, stringGrupo, stringDescripcion]);
 
     useEffect(() => {
       
@@ -115,6 +122,8 @@ export default function RepuestosBodega({ addToCart }) {
         setCurrentPage(pageNumber);
     };
 
+
+
     return (
         <>
 
@@ -123,12 +132,11 @@ export default function RepuestosBodega({ addToCart }) {
             <div className="container my-5">
 
                 <div className=" d-flex flex-wrap justify-content-between align-items-center p-3">
-
+               
                     <form className="d-flex pe-2 pt-3" role="search">
-                        <input className="form-control me-2 rounded-5 shadow-sm" type="search" placeholder="Buscar..." aria-label="Buscar" />
-                        <button className="btn btn-outline-danger rounded-5  shadow-sm" type="button">Buscar</button>
+                        <input className="form-control me-2 rounded-5 shadow-sm" value={stringTextSearch} onChange={(e) => setstringTextSearch(e.target.value)} type="search" placeholder="Buscar..." aria-label="Buscar" />
+                        <button className="btn btn-outline-danger rounded-5  shadow-sm" type="button" onClick={() => setstringDescripcion(stringTextSearch)}>Buscar</button>
                     </form>
-
                     <div className="btn-group ps-2 pt-3" role="group">
                         <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="bi bi-funnel" /> MARCA : {stringMarca}
