@@ -32,10 +32,11 @@ background-color: rgb(172, 172, 172);
 input, .form-control:focus {
     border-color: #fc9ca2;
     box-shadow: 0 0 0 .15rem #dc35451a;
+    
 }
-input {   
-    border-radius: 18px !important;
-    box-shadow: 1px 1px 6px 0 rgb(0, 0, 0, 0.2);
+input,select {   
+    border-radius: 15px !important;
+    box-shadow: 1px 1px 6px 0 rgba(0, 0, 0, 0.129);
     color: dimgray;
   }
 

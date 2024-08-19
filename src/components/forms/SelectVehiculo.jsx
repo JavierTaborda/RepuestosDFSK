@@ -3,13 +3,13 @@ import { toast } from "react-toastify";
 
 const URI = "http://localhost:5116/api/Vehiculos";
 
-export default function SelectVehiculo({  onIdVehiculoChange}) {
+export default function SelectVehiculo({ onIdVehiculoChange }) {
   const [dataVehiculos, setDataVehiculos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dataIdVehiculo, setdataIdVehiculo] = useState();
 
   useEffect(() => {
-    const fetchData = async () => { 
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await fetch(URI);
@@ -28,7 +28,7 @@ export default function SelectVehiculo({  onIdVehiculoChange}) {
     const newIdVehi = e.target.value;
     setdataIdVehiculo(newIdVehi);
     onIdVehiculoChange(newIdVehi);
-   
+
   };
 
   return (
@@ -41,8 +41,9 @@ export default function SelectVehiculo({  onIdVehiculoChange}) {
         <select
           className="form-select"
           value={dataIdVehiculo || ""}
-          onChange={handleSelectChange }
+          onChange={handleSelectChange}
         >
+          <option value="">Seleccione</option>
           {dataVehiculos.map((item) => (
             <option key={item.idVehiculo} value={item.idVehiculo}>
               {item.modelo}

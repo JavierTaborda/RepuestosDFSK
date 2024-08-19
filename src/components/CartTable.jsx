@@ -25,7 +25,9 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
                         <thead>
                             <tr>
                                 <th>Imagen</th>
+                                {sendForm ? <th>Articulos</th> : null}
                                 <th>Nombre</th>
+                                {sendForm ? <th>Grupo</th>: null}
                                 <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th></th>
@@ -34,14 +36,22 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
                         <tbody>
                             {cart?.map(item => (
 
-                                <tr key={item.articulo}>
+                                <tr key={item.articulo} className='p-1'>
                                     <td>
                                         <img className="img-fluid" src="./puerta.png" alt="imagen" style={{ maxHeight: '200px', }} />
                                     </td>
+                                    {sendForm ? <td className="fw-bold align-middle">{item.articulo}</td> : null}
+
                                     <td className="fw-bold align-middle">{item.descripcion}</td>
+
+                                    {sendForm ?<td className="fw-bold align-middle">{item.grupo}</td>: null}
+                                    
                                     <td className="fw-bold align-middle">
-                                        ${item.venta.toFixed(2).toLocaleString()}
+                                        ${
+                                            sendForm ? (item.venta*item.quantity).toFixed(2).toLocaleString() : item.venta.toFixed(2).toLocaleString()
+                                        }
                                     </td>
+
                                     <td className="align-middle">
                                         <div className="d-flex justify-content-between align-items-center">
                                             <button type="button"
@@ -71,20 +81,21 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
                     </table>
 
                     <p className="text-end">Total pagar: <span className="fw-bold">${carTotal?.toFixed(2).toLocaleString()}</span></p>
+                    <div className="d-flex justify-content-center">
+                        <button className="btn btn-warning  rounded-4   m-2 p-2"
+                            onClick={clearCart}>
+                            <i className="bi bi-bag-x"></i> Cancelar Pedido
+                        </button>
 
-                    <button className="btn btn-warning  rounded-4   m-2 p-2"
-                        onClick={clearCart}>
-                        <i className="bi bi-bag-x"></i> Cancelar Pedido
-                    </button>
-
-                    {sendForm===true ?
-                        <button className="btn btn-success rounded-4  m-2 p-2 " >
-                            <i className="bi bi-floppy"></i> Crear Solicitud</button>
-                        : 
-                            <Link to="/solicitud"aria-current="page" className="btn btn-success rounded-4  m-2 p-2 ">
+                        {sendForm === true ?
+                            null
+                            :
+                            <Link to="/solicitud" aria-current="page" className="btn btn-success rounded-4  m-2 p-2 ">
                                 <i className="bi bi-ui-checks"></i> Generar Solicitud
                             </Link>
                         }
+
+                    </div>
 
 
 

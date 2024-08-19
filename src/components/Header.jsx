@@ -45,11 +45,22 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                   Manejo de Repuestos
                 </a>
                 <ul className="dropdown-menu shadow-sm">
+                  <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Catálogo de Repuestos</Link></li>
                   <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#">Crear Repuesto</Link></li>
-                  <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Repuestos</Link></li>
                   <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Solicitud</Link></li>
-                  <li><a className="dropdown-item" href="#">Estdo de Solicitudes</a></li>
-                  <li><a className="dropdown-item" href="#">Something else here</a></li>
+                  <li><a className="dropdown-item" href="#">Estado de Solicitudes</a></li>
+                </ul>
+              </li>
+
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Ingresar Elementos
+                </a>
+                <ul className="dropdown-menu shadow-sm">
+                  <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Vehículos</Link></li>
+                  <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#"> Estados</Link></li>
+                  <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#">Responsables de Solicitud</Link></li>
+                  <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Vendedores</Link></li>
                 </ul>
               </li>
 
