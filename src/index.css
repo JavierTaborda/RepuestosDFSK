@@ -1,3 +1,14 @@
+/* pallete 
+fc9ca2
+fb747d
+fa4c58
+f92432
+e30613
+c70512
+9f040e
+77030b
+500207
+*/
 
 .navbarcolor{
 background-color: rgb(172, 172, 172);
@@ -11,8 +22,43 @@ background-color: rgb(172, 172, 172);
 
 /* Colores de los dropdown */
 .dropdown-menu{
-    --bs-dropdown-link-hover-bg: #fd6c6cab;
-    --bs-dropdown-link-active-bg: #ff0101;
+    --bs-dropdown-link-hover-bg: #fb747d;
+    --bs-dropdown-link-active-bg: #F92432;
     border-radius: 4px;
    
 }
+
+/* clases para inpust */
+input, .form-control:focus {
+    border-color: #fc9ca2;
+    box-shadow: 0 0 0 .15rem #dc35451a;
+}
+input {   
+    border-radius: 18px !important;
+    box-shadow: 1px 1px 6px 0 rgb(0, 0, 0, 0.2);
+    color: dimgray;
+  }
+
+  
+  input:invalid {
+    animation: justshake 0.3s forwards;
+    color: red;
+  }
+  
+  @keyframes justshake {
+    25% {
+      transform: translateX(5px);
+    }
+  
+    50% {
+      transform: translateX(-5px);
+    }
+  
+    75% {
+      transform: translateX(5px);
+    }
+  
+    100% {
+      transform: translateX-(5px);
+    }
+  }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useMemo } from "react"
 import { toast } from 'react-toastify';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/forms/Spinner';
 import CartTable from '../components/CartTable';
 
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart}) {

@@ -1,105 +1,173 @@
-import React from 'react';
-import { useState, useEffect, useForm} from "react"
-import { toast } from 'react-toastify';
-import Spinner from '../components/Spinner';
-import CartTable from '../components/CartTable';
+import React from "react";
+import { useState, useEffect, useForm } from "react";
+import { toast } from "react-toastify";
+import Spinner from "../components/forms/Spinner";
+import SelectVehiculo from "../components/forms/SelectVehiculo";
 
 export default function CrearRepuesto() {
+  const url = "http://localhost:5116/api/Repuestos/";
 
-    const [repuestoData, setRepuestoData] = useState({
-        IdRepuesto: 0,
-        Codigo: '',
-        Nombre: '',
-        Descripcion: '',
-        Precio: null,
-        IdVehiculo: null,
-        Marca: '',
-        Estatus: false,
-    });
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setRepuestoData({ ...repuestoData, [name]: value });
-    };
+  //Define objet of state for form fields repuestos
+  const [repuestoData, setRepuestoData] = useState({
+    IdRepuesto: 0,
+    Codigo: "",
+    Nombre: "",
+    Descripcion: "",
+    Precio: null,
+    IdVehiculo: null,
+    Marca: "",
+    Estatus: true,
+    EnInventario: false,
+  });
 
-    const url = 'http://localhost:5116/api/Repuestos/';
+  //error of validation
+  const [errors, setErrors] = useState({});
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(repuestoData),
-            });
+  //List of repuestos to API
+  const [listRepuestos, setlistRepuestos] = useState([]);
 
-            if (response.ok) {
-                // Procesar la respuesta exitosa aquí
-                console.log('Repuesto registrado correctamente');
-            } else {
-                // Manejar errores aquí
-                console.error('Error al registrar el repuesto');
-            }
-        } catch (error) {
-            console.error('Error en la solicitud:', error);
-        }
-    };
+  //Sets the value in the object field
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRepuestoData({ ...repuestoData, [name]: value });
+  };
   
+  const handleIdVehiChange = (newIdVehi) => {
+    setRepuestoData((prevData) => ({
+      ...prevData,
+      IdVehiculo: newIdVehi
+     
+    }));
+  };
 
-    return (
+  const validate = () => {
+    let tempErrors = {};
 
-        <div className="container my-4">
-            <div className="row g-5">
-                <div className="col-md-8 col-lg-9">
+    if (!repuestoData.Nombre) tempErrors.Nombre = "El nombre es requerido";
+    if (!repuestoData.Descripcion)
+      tempErrors.Descripcion = "La descripción es requerida";
+    if (!repuestoData.IdVehiculo)
+      tempErrors.IdVehiculo = "El vehículo es requerido";
+    if (!repuestoData.Marca) tempErrors.Marca = "La marca es requerida";
+    setErrors(tempErrors);
+    return Object.keys(tempErrors).length === 0;
+  };
 
-                    <h4>Crear Repuesto para Solicitud</h4>
-                    <form onSubmit={handleSubmit}  className="needs-validation">
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    repuestoData.Precio = 0;
 
-                        <div className="row g-3">
-                            <div className="col-4">
-                                <label htmlFor="codigo" className="form-label">
-                                    Código
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder='Ingresa Código'
-                                    id="codigo"
-                                    name="Codigo"
-                                    value={repuestoData.Codigo}
-                                    onChange={handleChange}
-                                />                                 
-                            </div>
-                            <div className="col-8">
-                                <label htmlFor="Nombre" className="form-label">
-                                    Nombre/Detalle
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder='Ingresa Nombre/Detalle'
-                                    id="Nombre"
-                                    name="Nombre"
-                                    value={repuestoData.Nombre}
-                                    onChange={handleChange}
-                                />                                 
-                            </div>
-                        </div>
+    if (validate()) {
+      const newlistRepuestos = [...listRepuestos, repuestoData];
+      setlistRepuestos(newlistRepuestos);
+      //console.log(newlistRepuestos);
 
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newlistRepuestos),
+        });
 
-                        <button type="submit" className="btn btn-success">
-                            Enviar
-                        </button>
-                    </form>
-                </div>
-                <div className="col-md-4 col-lg-3">
-                    <Spinner />
-                </div>
+        if (response.ok) {
+          // Procesar la respuesta exitosa aquí
+          toast.success("Repuesto registrado correctamente");
+        } else {
+          // Manejar errores aquí
+          toast.error("Error al registrar el repuesto");
+        }
+      } catch (error) {
+        toast.error("Error en la solicitud:" + error.message);
+      }
+    } else {
+      toast.warning("Todos los campos son obligatorios");
+    }
+  };
 
+  return (
+    <div className="container my-4">
+      <div className="row g-5">
+        <div className="col-md-8 col-lg-9">
+          <h4 className="mb-3">Crear Repuesto para Solicitud</h4>
+          <form onSubmit={handleSubmit} className="" >
+            <div className="row g-3">
+              <div className="col-4">
+                <label htmlFor="codigo" className="form-label">
+                  Código
+                </label>
+                <input
+                  type="text"
+                  className="form-control rounded-5"
+                  placeholder="Ingresa Código"
+                  id="codigo"
+                  name="Codigo"
+                  value={repuestoData.Codigo}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-8">
+                <label htmlFor="Nombre" className="form-label">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  className="form-control "
+                  placeholder="Ingresa Nombre"
+                  name="Nombre"
+                  id="Nombre"
+                  value={repuestoData.Nombre}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="col-6">
+                <label htmlFor="Descripcion" className="form-label">
+                  Descripción/Detalles
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ingrese Descripción"
+                  id="Descripcion"
+                  name="Descripcion"
+                  value={repuestoData.Descripcion}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-6">
+                <label htmlFor="Marca" className="form-label">
+                  Marca
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ingrese Marca"
+                  id="Marca"
+                  name="Marca"
+                  value={repuestoData.Marca}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
+            <div className="col-6">
+                <label className="form-label">Vehículo</label>
+                <SelectVehiculo 
+                   onIdVehiculoChange={handleIdVehiChange} 
+                  />
+            </div>
+
+            <button type="submit" className="btn btn-success mt-3">
+              Enviar
+            </button>
+          </form>
         </div>
-    );
-};
-
-
+        <div className="col-md-4 col-lg-3">
+          <Spinner />
+        </div>
+      </div>
+    </div>
+  );
+}

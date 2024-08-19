@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useMemo } from "react"
 import { toast } from 'react-toastify';
-import Spinner from './Spinner';
+import Spinner from './forms/Spinner';
 import { Link } from 'react-router-dom';
 
 export default function CartTable({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, sendForm }) {
