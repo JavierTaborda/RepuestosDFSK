@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../components/forms/Spinner';
+import apiUrl from '../apiConfig';
 
-const URI1 = 'http://localhost:5116/api/Solicitudes';
+
+const URI1 = `${apiUrl}/Solicitudes`;
 
 export default function EstadosSolicitudes() {
     const [dataResumen, setResumen] = useState([]);

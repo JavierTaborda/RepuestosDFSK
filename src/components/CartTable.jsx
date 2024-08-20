@@ -4,8 +4,6 @@ import Spinner from './forms/Spinner';
 import { Link } from 'react-router-dom';
 
 export default function CartTable({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal, sendForm }) {
-    // const isEmpty = useMemo(() => cart?.length === 0, [cart])
-    // const carTotal = useMemo(() => cart?.reduce((total, item) => total + (item.venta * item.quantity), 0), [cart])
 
     return (
         isEmpty ? (

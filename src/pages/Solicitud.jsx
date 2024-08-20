@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../components/forms/Spinner';
 import CartTable from '../components/CartTable';
+import apiUrl from '../apiConfig';
 import dayjs from 'dayjs';
 
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
@@ -55,7 +56,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
                 try {
 
-                    const response = await fetch("http://localhost:5116/api/Solicitudes", {
+                    const response = await fetch(apiUrl+"/Solicitudes", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -83,21 +84,21 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     useEffect(() => {
 
 
-        const fetchRepuestos = () => fetch(URI1).then(response => response.json());
-        const fetchGrupos = () => fetch(URI2).then(response => response.json());
-        const fetchMarca = () => fetch(URI3).then(response => response.json());
+        // const fetchRepuestos = () => fetch(URI1).then(response => response.json());
+        // const fetchGrupos = () => fetch(URI2).then(response => response.json());
+        // const fetchMarca = () => fetch(URI3).then(response => response.json());
 
-        Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
-            .then(([dataRepuesto, dataGrupo, dataMarca]) => {
+        // Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
+        //     .then(([dataRepuesto, dataGrupo, dataMarca]) => {
 
-                setRepuestos(dataRepuesto);
-                setGrupo(dataGrupo);
-                setMarca(dataMarca);
-            })
-            .catch(error => {
-                notifyerror("Error en la carga de datos: " + error.message);
-            })
-            .finally(() => setIsLoading(false));
+        //         setRepuestos(dataRepuesto);
+        //         setGrupo(dataGrupo);
+        //         setMarca(dataMarca);
+        //     })
+        //     .catch(error => {
+        //         notifyerror("Error en la carga de datos: " + error.message);
+        //     })
+        //     .finally(() => setIsLoading(false));
 
 
     }, []);

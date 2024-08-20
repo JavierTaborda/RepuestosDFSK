@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import apiUrl from "../../apiConfig";
 
-const URI = "http://localhost:5116/api/Vehiculos";
+const URI = `${apiUrl}/Vehiculos/`;
 
 export default function SelectVehiculo({ onIdVehiculoChange }) {
   const [dataVehiculos, setDataVehiculos] = useState([]);

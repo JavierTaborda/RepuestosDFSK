@@ -3,10 +3,11 @@ import { useState, useEffect } from "react"
 import { toast } from 'react-toastify';
 import CardRepuesto from "../components/CardRepuesto";
 import Spinner from '../components/forms/Spinner';
+import apiUrl from '../apiConfig';
 
-const URI1 = 'http://localhost:5116/api/Articulos/Existencia';
-const URI2 = 'http://localhost:5116/api/Articulos/CodigosGrupo';
-const URI3 = 'http://localhost:5116/api/Articulos/CodigosMarca';
+const URI1 = `${apiUrl}/Articulos/Existencia`;
+const URI2 = `${apiUrl}/Articulos/CodigosGrupo`;
+const URI3 = `${apiUrl}/Articulos/CodigosMarca`;
 
 export default function RepuestosBodega({ addToCart }) {
 
@@ -82,12 +83,9 @@ export default function RepuestosBodega({ addToCart }) {
         try {
             setIsLoading(true);
 
-            const URIM = 'http://localhost:5116/api/Articulos/Bodega/Marca/' +
+            const URIM = apiUrl+'/Articulos/Bodega/Marca/' +
                 encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo)
                 + '/' + encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion);
-
-
-            console.log(URIM);
 
             const response = await fetch(URIM);
             if (!response.ok) {

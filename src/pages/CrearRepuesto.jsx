@@ -3,9 +3,11 @@ import { useState, useEffect, useForm } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../components/forms/Spinner";
 import SelectVehiculo from "../components/forms/SelectVehiculo";
+import apiUrl from "../apiConfig";
 
 export default function CrearRepuesto() {
-  const url = "http://localhost:5116/api/Repuestos/";
+
+  const url = `${apiUrl}/Repuestos/`;
 
   //Define objet of state for form fields repuestos
   const [repuestoData, setRepuestoData] = useState({
