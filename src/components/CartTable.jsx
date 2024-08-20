@@ -1,12 +1,11 @@
 import React from 'react';
-import { useState, useEffect, useMemo } from "react"
 import { toast } from 'react-toastify';
 import Spinner from './forms/Spinner';
 import { Link } from 'react-router-dom';
 
-export default function CartTable({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, sendForm }) {
-    const isEmpty = useMemo(() => cart?.length === 0, [cart])
-    const carTotal = useMemo(() => cart?.reduce((total, item) => total + (item.venta * item.quantity), 0), [cart])
+export default function CartTable({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal, sendForm }) {
+    // const isEmpty = useMemo(() => cart?.length === 0, [cart])
+    // const carTotal = useMemo(() => cart?.reduce((total, item) => total + (item.venta * item.quantity), 0), [cart])
 
     return (
         isEmpty ? (
@@ -27,7 +26,7 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
                                 <th>Imagen</th>
                                 {sendForm ? <th>Articulos</th> : null}
                                 <th>Nombre</th>
-                                {sendForm ? <th>Grupo</th>: null}
+                                {sendForm ? <th>Grupo</th> : null}
                                 <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th></th>
@@ -44,11 +43,11 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
 
                                     <td className="fw-bold align-middle">{item.descripcion}</td>
 
-                                    {sendForm ?<td className="fw-bold align-middle">{item.grupo}</td>: null}
-                                    
+                                    {sendForm ? <td className="fw-bold align-middle">{item.grupo}</td> : null}
+
                                     <td className="fw-bold align-middle">
                                         ${
-                                            sendForm ? (item.venta*item.quantity).toFixed(2).toLocaleString() : item.venta.toFixed(2).toLocaleString()
+                                            sendForm ? (item.venta * item.quantity).toFixed(2).toLocaleString() : item.venta.toFixed(2).toLocaleString()
                                         }
                                     </td>
 
@@ -59,7 +58,7 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
                                                 onClick={() => decreaseQuantity(item.articulo, item.existencia)}>-
 
                                             </button>
-                                            <span>{item.quantity}</span>
+                                            <span className="px-2">{item.quantity}</span>
                                             <button type="button"
                                                 className="btn btn-outline-dark btn-sm"
                                                 onClick={() => increaseQuantity(item.articulo, item.existencia)}>+

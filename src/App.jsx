@@ -9,7 +9,8 @@ import RepuestosBodega from "./pages/RepuestosBodega";
 import Inicio from "./pages/Inicio";
 import Solicitud from "./pages/Solicitud";
 import CrearRepuesto from "./pages/CrearRepuesto";
-import {useCart} from  "./components/hooks/useCart";
+import { useCart } from "./hooks/useCart";
+import EstadosSolicitudes from "./pages/EstadosSolicitudes";
 
 function App() {
 
@@ -20,6 +21,8 @@ function App() {
     increaseQuantity,
     decreaseQuantity,
     clearCart,
+    isEmpty,
+    carTotal
   } = useCart()
 
   return (
@@ -31,6 +34,8 @@ function App() {
           increaseQuantity={increaseQuantity}
           decreaseQuantity={decreaseQuantity}
           clearCart={clearCart}
+          isEmpty={isEmpty}
+          carTotal={carTotal}
         />
         <Routes>
           <Route path="/" element={<Inicio />} />
@@ -38,6 +43,7 @@ function App() {
             path="/repuestos"
             element={<RepuestosBodega addToCart={addToCart} />}
           />
+          <Route path="/repuestonew" element={<CrearRepuesto />} />
           <Route
             path="/solicitud"
             element={
@@ -47,10 +53,12 @@ function App() {
                 increaseQuantity={increaseQuantity}
                 decreaseQuantity={decreaseQuantity}
                 clearCart={clearCart}
+                isEmpty={isEmpty}
+                carTotal={carTotal}
               />
             }
           />
-          <Route path="/repuestonew" element={<CrearRepuesto />} />
+          <Route path="/solicitudes" element={<EstadosSolicitudes />} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />

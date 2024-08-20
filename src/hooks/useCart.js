@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {  toast } from "react-toastify";
 export const useCart = () => {
   //check local storage for cart useState
@@ -77,6 +77,8 @@ export const useCart = () => {
   function clearCart() {
     setCart([]);
   }
+    const isEmpty = useMemo(() => cart?.length === 0, [cart]);
+    const carTotal = useMemo(() => cart?.reduce((total, item) => total + (item.venta * item.quantity), 0), [cart]);
 
   return {
     cart,
@@ -84,6 +86,8 @@ export const useCart = () => {
     removeFromCart,
     increaseQuantity,
     decreaseQuantity,
-    clearCart
+    clearCart, 
+    isEmpty,
+    carTotal
   };
 };

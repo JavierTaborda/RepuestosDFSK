@@ -62,7 +62,6 @@ export default function CrearRepuesto() {
       setIsLoading(true)
       const newlistRepuestos = [...listRepuestos, repuestoData];
       setlistRepuestos(newlistRepuestos);
-      //console.log(newlistRepuestos);
 
       try {
         const response = await fetch(url, {
@@ -74,10 +73,9 @@ export default function CrearRepuesto() {
         });
 
         if (response.ok) {
-          // Procesar la respuesta exitosa aquí
           toast.success("Repuesto registrado correctamente");
         } else {
-          // Manejar errores aquí
+
           toast.error("Error al registrar el repuesto");
         }
       } catch (error) {

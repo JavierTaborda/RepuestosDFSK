@@ -6,7 +6,7 @@ import CartTable from "./CartTable"
 
 
 
-export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart }) {
+export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbarcolor  sticky-top">
@@ -48,7 +48,8 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                   <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Catálogo de Repuestos</Link></li>
                   <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#">Crear Repuesto</Link></li>
                   <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Solicitud</Link></li>
-                  <li><a className="dropdown-item" href="#">Estado de Solicitudes</a></li>
+                  <li><Link to="/solicitudes" className=" dropdown-item" aria-current="page" href="#">Estado de Solicitudes</Link></li>
+
                 </ul>
               </li>
 
@@ -79,6 +80,8 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                   increaseQuantity={increaseQuantity}
                   decreaseQuantity={decreaseQuantity}
                   clearCart={clearCart}
+                  isEmpty={isEmpty}
+                  carTotal={carTotal}
                   sendForm={false} />
 
               </div>
