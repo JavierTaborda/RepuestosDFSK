@@ -10,6 +10,9 @@ c70512
 500207
 */
 
+.body{
+  scrollbar-color: #e80514 #f09d9d !important;
+}
 .navbarcolor{
 background-color: rgb(172, 172, 172);
 }
@@ -63,3 +66,4 @@ input,select {
       transform: translateX-(5px);
     }
   }
+
