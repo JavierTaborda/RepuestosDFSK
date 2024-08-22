@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import "../styles/CardRepuesto.css"
+import "../../styles/CardRepuesto.css";
 import ModalCart from "./ModalCart";
 
 export default function CardRepuesto({ repuestos, addToCart }) {

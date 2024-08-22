@@ -1,8 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
-import Spinner from '../components/forms/Spinner';
-import CartTable from '../components/CartTable';
-import apiUrl from '../apiConfig';
+import Spinner from '../../components/forms/Spinner';
+import CartTable from '../../components/RequestRepuestos/CartTable';
+import apiUrl from '../../apiConfig';
 import dayjs from 'dayjs';
 
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
@@ -106,8 +106,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     return (
 
         <div className='container pt-2'>
-            <div className='row p-2 justify-content-lg-around'>
-                <div className='col-md-7 col-lg-8 shadow-sm rounded-5 p-4'>
+            <div className='row p-2  px-2'>
+                <div className='col-md-7 col-lg-8 shadow-sm rounded-5 p-4 '>
                     <div className="table-responsive" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                         <CartTable
                             cart={cart}

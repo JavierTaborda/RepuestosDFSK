@@ -5,12 +5,13 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import RepuestosBodega from "./pages/RepuestosBodega";
+import RepuestosBodega from "./pages/RequestRespuestos/RepuestosBodega";
 import Inicio from "./pages/Inicio";
-import Solicitud from "./pages/Solicitud";
-import CrearRepuesto from "./pages/CrearRepuesto";
+import Solicitud from "./pages/RequestRespuestos/Solicitud";
+import CrearRepuesto from "./pages/RequestRespuestos/CrearRepuesto";
 import { useCart } from "./hooks/useCart";
-import EstadosSolicitudes from "./pages/EstadosSolicitudes";
+import EstadosSolicitudes from "./pages/RequestRespuestos/EstadosSolicitudes";
+import Vehicles from "./pages/AddData/Vehicles";
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
             }
           />
           <Route path="/solicitudes" element={<EstadosSolicitudes />} />
+          <Route path="/vehiculos" element={<Vehicles />} />
           <Route path="*" element={<Inicio />} />
         </Routes>
         <Footer />

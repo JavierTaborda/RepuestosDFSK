@@ -48,7 +48,10 @@ input,select {
     animation: justshake 0.3s forwards;
     color: red;
   }
-  
+    .form-check-input:checked {
+      background-color: #f92432;
+      border-color: #fb747d;
+    }
   @keyframes justshake {
     25% {
       transform: translateX(5px);

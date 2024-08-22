@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { toast } from 'react-toastify';
-import CardRepuesto from "../components/CardRepuesto";
-import Spinner from '../components/forms/Spinner';
-import apiUrl from '../apiConfig';
+import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
+import Spinner from '../../components/forms/Spinner';
+import apiUrl from '../../apiConfig';
 
 const URI1 = `${apiUrl}/Articulos/Existencia`;
 const URI2 = `${apiUrl}/Articulos/CodigosGrupo`;
@@ -141,10 +141,10 @@ export default function RepuestosBodega({ addToCart }) {
 
                 <div className=" d-flex flex-wrap justify-content-between align-items-center p-3">
 
-                    <form className="d-flex pe-2 pt-3" role="search">
+                    <div className="d-flex pe-2 pt-3" role="search">
                         <input className="form-control me-2 rounded-5 shadow-sm" value={stringTextSearch} onChange={(e) => setstringTextSearch(e.target.value)} type="search" placeholder="Buscar..." aria-label="Buscar" />
                         <button className="btn btn-outline-danger rounded-5  shadow-sm" type="button" onClick={() => setstringDescripcion(stringTextSearch)}>Buscar</button>
-                    </form>
+                    </div>
                     <div className="btn-group ps-2 pt-3" role="group">
                         <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="bi bi-funnel" /> MARCA : {stringMarca}

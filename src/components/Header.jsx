@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { useState } from "react";
 import DarkMode from "./DarkMode"
-import CartTable from "./CartTable"
+import CartTable from "./RequestRepuestos/CartTable"
 
 
 
@@ -58,10 +58,11 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                   Ingresar Elementos
                 </a>
                 <ul className="dropdown-menu shadow-sm">
-                  <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Vehículos</Link></li>
+                  <li><Link to="/vehiculos" className=" dropdown-item" aria-current="page" href="#">Vehículos</Link></li>                  
+                  <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Vendedores</Link></li>
                   <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#"> Estados</Link></li>
                   <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#">Responsables de Solicitud</Link></li>
-                  <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Vendedores</Link></li>
+
                 </ul>
               </li>
 

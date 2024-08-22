@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useEffect, useForm } from "react";
 import { toast } from "react-toastify";
-import Spinner from "../components/forms/Spinner";
-import SelectVehiculo from "../components/forms/SelectVehiculo";
-import apiUrl from "../apiConfig";
+import Spinner from "../../components/forms/Spinner";
+import SelectVehiculo from "../../components/forms/SelectVehiculo";
+import apiUrl from "../../apiConfig";
 
 export default function CrearRepuesto() {
 
