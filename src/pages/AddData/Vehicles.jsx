@@ -28,8 +28,9 @@ export default function Vehicles() {
 
     const filterByArticulo = async () => {
         try {
-            const response = await axios.get(apiUrl + `/Vehiculos/${filterData}`);
+            const response = await axios.get(apiUrl + `/Vehiculos/Codigo/${filterData}`);
             setVehicleData(response.data);
+            console.log(response.data);
         } catch (error) {
             toast.error(error.response.data);
 
@@ -116,6 +117,7 @@ export default function Vehicles() {
                                         <th>Marca</th>
                                         <th>Año</th>
                                         <th>Estado</th>
+                                        <th>Actualizar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -136,6 +138,10 @@ export default function Vehicles() {
                                                 </div>
 
                                             </td>
+                                            <td>
+
+                                                <button className="btn btn-outline-danger rounded-5" ><i className="bi bi-pencil-square"></i></button>    
+                                            </td>
                                         </tr>
                                     ))}
 
@@ -144,7 +150,18 @@ export default function Vehicles() {
                         }
                     </div>
                 </div>
-                <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'>
+                <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-3'>
+                    <h6 className='text-center p-2'> Agregar Vehículos desde Sistema</h6>
+                    <div className="row p-2 pt-3" >
+                    <div className="col-6">
+                            <input className="form-control me-2 rounded-5 shadow-sm" onChange={(e) => setFilterData(e.target.value)} type="search" placeholder="Artículo..." aria-label="Buscar" />
+                        </div>
+                        <div className="col-6">
+                        <button type="button" className="btn btn-outline-danger rounded-5" >
+                        <i className="bi bi-x"></i>Agregar Vehículo
+                    </button>                    
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
