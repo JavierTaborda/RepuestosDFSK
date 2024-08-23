@@ -32,26 +32,29 @@ export default function SelectVehiculo({ onIdVehiculoChange }) {
 
   };
 
-  return (
-    <>
-      {isLoading ? (
-        <div className="spinner-border spinner-border-sm" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      ) : (
-        <select
-          className="form-select"
-          value={dataIdVehiculo || ""}
-          onChange={handleSelectChange}
-        >
-          <option value="">Seleccione</option>
-          {dataVehiculos.map((item) => (
+return (
+  <>
+    {isLoading ? (
+      <div className="spinner-border spinner-border-sm" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    ) : (
+      <select
+        className="form-select"
+        value={dataIdVehiculo || ""}
+        onChange={handleSelectChange}
+      >
+        <option value="">Seleccione un vehículo</option>
+        {dataVehiculos.map((item) => (
+          item.estatus && (
             <option key={item.idVehiculo} value={item.idVehiculo}>
-              {item.modelo}
+              {item.descripcion}
             </option>
-          ))}
-        </select>
-      )}
-    </>
-  );
+          )
+        ))}
+      </select>
+    )}
+  </>
+);
+
 }
