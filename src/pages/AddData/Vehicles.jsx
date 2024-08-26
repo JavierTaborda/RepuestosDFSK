@@ -12,13 +12,13 @@ export default function Vehicles() {
     const [vehicleData, setVehicleData] = useState([])
 
 
-    const [searhData, setsearhData] = useState(false)
-    const [statusVehicle, setstatusVehicle] = useState()
-    const [filterData, setFilterData] = useState("")
+    const [searhData, setsearhData] = useState(false) //loading by articulo
+    const [statusVehicle, setstatusVehicle] = useState()//update estatus of vehicle
+    const [filterData, setFilterData] = useState("") //filter by articulo
 
-    const [filterDFSKData, setFilterDFSKData] = useState("")
-    const [searhDFSK, setsearhDFSK] = useState(false)
-    const [vehicleDFSKData, setVehicleDFSKData] = useState([])
+    const [filterDFSKData, setFilterDFSKData] = useState("")//search vehiclu in sistem Dfsk
+    const [searhDFSK, setsearhDFSK] = useState(false) //loading by articulo
+    const [vehicleDFSKData, setVehicleDFSKData] = useState([]) //insert vehicle from sistem Dfsk
 
     const [formvehicleData, setFormVehicleData] = useState({
         idVehiculo: 0,
@@ -30,8 +30,6 @@ export default function Vehicles() {
         vin: '',
         estatus: true,
     });
-
-
 
     const filterByArticulo = async () => {
         try {
@@ -49,34 +47,26 @@ export default function Vehicles() {
 
     const updateVehicle = async (vehiculo) => {
 
-        const updatedVehicleData = vehicleData.map((item) => {
-            if (item.id === vehiculo.id) {
-                // Update estatus of vehicle
-                vehiculo.estatus = !vehiculo.estatus;
-                axios.put(apiUrl + '/Vehiculos',
-                    vehiculo
-                )
-                    .then(function (response) {
+        vehiculo.estatus = !vehiculo.estatus;
+        axios.put(apiUrl + '/Vehiculos',
+            vehiculo
+        )
+            .then(function (response) {
 
-                        toast.success("Se actualizo el estado del vehículo " + vehiculo.descripcion);
-                        console.log(response.data);
-
-                        return { ...item, estatus: response.data.estatus };
-                    })
-                    .catch(function (error) {
-                        toast.error("No se logró actualizar el estado del vehículo " + error);
-                    });
-            }
-            return item;
-        });
-        setVehicleData(updatedVehicleData);
+                toast.success("Se actualizo el estado del vehículo " + vehiculo.descripcion);
+                //console.log(response.data) 
+               
+            })
+            .catch(function (error) {
+                toast.error("No se logró actualizar el estado del vehículo " + error);
+            });
     }
 
 
     const GetVehicleDFSK = async () => {
         try {
             const response = await axios.get(apiUrl + `/Articulos/Bodega/Vehiculos/${filterDFSKData}`);
-           
+
             if (response.data.length === 0) {
                 toast.warning("Artículo no encontrado");
             }
@@ -99,16 +89,16 @@ export default function Vehicles() {
             .catch(function (error) {
                 toast.error("No se logro actualizar el estado del vehículo " + error);
             });
+            
     };
 
 
 
-
-    const RefreshData = (text) => {
+    //TODO: actualizar data al insertar vehiculo
+    const RefreshData = () => {
         axios.get(apiUrl + '/Vehiculos')
             .then(function (response) {
                 setVehicleData(response.data)
-                console.log(text);
             })
             .catch(function (error) {
                 // console.log(error);
@@ -118,6 +108,7 @@ export default function Vehicles() {
             });
     };
 
+    //Add new vehicle from Sistem Dfsk
     const CreateVehicle = async (vehiclearticulos) => {
         setFormVehicleData({
             idVehiculo: 0,
@@ -130,9 +121,19 @@ export default function Vehicles() {
         });
     };
 
+
     useEffect(() => {
-        RefreshData("desde use effect");
+        RefreshData();
     }, []);
+
+    //refresh data
+    useEffect(() => {
+        if (statusVehicle !== undefined) {
+            
+            console.log("esta", statusVehicle)
+        }
+      
+    }, [vehicleData]);
 
 
     useEffect(() => {
@@ -144,8 +145,12 @@ export default function Vehicles() {
     useEffect(() => {
         if (statusVehicle !== undefined) {
             updateVehicle(statusVehicle);
+           // console.log("este",statusVehicle)
+           
         }
+
     }, [statusVehicle]);
+
 
     useEffect(() => {
         if (searhDFSK) {
@@ -204,12 +209,12 @@ export default function Vehicles() {
                                                         className="form-check-input"
                                                         type="checkbox"
                                                         role="switch"
-                                                        onChange={(e) => updateVehicle(item)}
+                                                        onChange={(e) => setstatusVehicle(item)}
                                                         checked={item.estatus}
                                                     />                                                </div>
                                             </td>
                                             <td className="align-middle text-center">
-                                                <button className="btn btn-outline-danger rounded-5 " onClick={(e) => setstatusVehicle(item)} ><i className="bi bi-pencil-square"></i></button>
+                                                <button className="btn btn-outline-danger rounded-5 " ><i className="bi bi-pencil-square"></i></button>
                                             </td>
                                         </tr>
                                     ))}
