@@ -47,8 +47,8 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                 <ul className="dropdown-menu shadow-sm">
                   <li><Link to="/repuestos" className=" dropdown-item" aria-current="page" href="#">Catálogo de Repuestos</Link></li>
                   <li><Link to="/repuestonew" className=" dropdown-item" aria-current="page" href="#">Crear Repuesto</Link></li>
-                  <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Solicitud</Link></li>
-                  <li><Link to="/solicitudes" className=" dropdown-item" aria-current="page" href="#">Estado de Solicitudes</Link></li>
+                  <li><Link to="/solicitud" className=" dropdown-item" aria-current="page" href="#">Ver Carrito</Link></li>
+                  <li><Link to="/solicitudes" className=" dropdown-item" aria-current="page" href="#">Historial de Pedidos</Link></li>
 
                 </ul>
               </li>

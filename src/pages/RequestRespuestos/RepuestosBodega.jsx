@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { toast } from 'react-toastify';
 import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
 import Spinner from '../../components/forms/Spinner';
+
 import apiUrl from '../../apiConfig';
 
 const URI1 = `${apiUrl}/Articulos/Existencia`;

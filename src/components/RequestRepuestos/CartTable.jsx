@@ -2,6 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../forms/Spinner';
 import { Link } from 'react-router-dom';
+import QuantityControl from "./QuantityControl"
 
 export default function CartTable({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal, sendForm }) {
 
@@ -35,33 +36,38 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
 
                                 <tr key={item.articulo} className='p-1'>
                                     <td>
-                                        <img className="img-fluid" src="./puerta.png" alt="imagen" style={{ maxHeight: '200px', }} />
+                                        {/* <img className="img-fluid" src="./puerta.png" alt="imagen" style={{ maxHeight: '200px', }} /> */}
+                                        <svg
+                                            viewBox="0 0 16 16"
+                                            className="bi bi-image-fill"
+                                            fill="currentColor"
+                                            height="40"
+                                            width="40"
+
+                                        >
+                                            <path
+                                                d="M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"
+                                            ></path>
+                                        </svg>
                                     </td>
-                                    {sendForm ? <td className="fw-bold align-middle">{item.articulo}</td> : null}
+                                    {sendForm ? <td className=" align-middle">{item.articulo}</td> : null}
 
-                                    <td className="fw-bold align-middle">{item.descripcion}</td>
+                                    <td className="fw-semibold align-middle">{item.descripcion}</td>
 
-                                    {sendForm ? <td className="fw-bold align-middle">{item.grupo}</td> : null}
+                                    {sendForm ? <td className=" align-middle">{item.grupo}</td> : null}
 
-                                    <td className="fw-bold align-middle">
+                                    <td className=" align-middle">
                                         ${
                                             sendForm ? (item.venta * item.quantity).toFixed(2).toLocaleString() : item.venta.toFixed(2).toLocaleString()
                                         }
                                     </td>
 
                                     <td className="align-middle">
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <button type="button"
-                                                className="btn btn-outline-dark btn-sm "
-                                                onClick={() => decreaseQuantity(item.articulo, item.existencia)}>-
-
-                                            </button>
-                                            <span className="px-2">{item.quantity}</span>
-                                            <button type="button"
-                                                className="btn btn-outline-dark btn-sm"
-                                                onClick={() => increaseQuantity(item.articulo, item.existencia)}>+
-                                            </button>
-                                        </div>
+                                        <QuantityControl
+                                            item={item}
+                                            increaseQuantity={increaseQuantity}
+                                            decreaseQuantity={decreaseQuantity}
+                                        />
                                     </td>
                                     <td className="align-middle">
                                         <button

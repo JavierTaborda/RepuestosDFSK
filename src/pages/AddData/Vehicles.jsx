@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import Spinner from '../../components/forms/Spinner';
 import apiUrl from '../../apiConfig';
 import axios from 'axios';
-import { text } from '@fortawesome/fontawesome-svg-core';
 
 
 export default function Vehicles() {

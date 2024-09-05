@@ -1,6 +1,8 @@
 import "../../styles/ModalCart.css"
 import React from 'react';
 import DarkMode from "../DarkMode"
+import QuantityControl from "./QuantityControl"
+
 const getStockClass = (stock) => {
   if (stock > 100) {
     return 'alert-success'; // Verde 

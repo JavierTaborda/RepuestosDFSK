@@ -1,8 +1,9 @@
 
 import { useState } from "react";
 import "../../styles/CardRepuesto.css";
+import "../../styles/ImageCard.css";
 import ModalCart from "./ModalCart";
-
+import ImageCard from '../forms/ImageCard';
 export default function CardRepuesto({ repuestos, addToCart }) {
 
     const [showModal, setShowModal] = useState(false);
@@ -28,8 +29,10 @@ export default function CardRepuesto({ repuestos, addToCart }) {
         <>
 
             <div className="col-md-4 col-lg-3 mb-2">
-                <div className="product-card ">
-                    <img src="/puerta.png" alt="Repuesto" className="cardimagen"></img>
+                <div className="product-card ">  
+                    <ImageCard info={repuestos.descripcion} stock={ repuestos.existencia}/>  
+                    {/* <img src="/puerta.png" alt="Repuesto" className="cardimagen"></img> */}
+               
                     <div className="card-body">
                         <div className="card-body text-start">
                             <h6 className="cardtext mb-1" title={repuestos.descripcion}>
