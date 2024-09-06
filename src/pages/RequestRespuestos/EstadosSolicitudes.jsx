@@ -33,6 +33,8 @@ export default function EstadosSolicitudes() {
 
 
     return (
+        <>
+        <h4>Historicos de Pedidos</h4>
         <div className='container pt-2'>
             <div className='table-responsive'>
                 <table className='table table-striped table-hover'>
@@ -61,5 +63,6 @@ export default function EstadosSolicitudes() {
                 </table>
             </div>
         </div>
+        </>
     );
 }
