@@ -66,7 +66,7 @@ export default function Vehicles() {
     const UpdateAddVehicle = async () => {
         try {
             await axios.put(apiUrl + '/Vehiculos/AddUpdate', formVehicleData);
-            toast.success(`Se actualizó el estado del vehículo ${formVehicleData.descripcion}`);
+            toast.success(`Se actualizó el vehículo ${formVehicleData.descripcion}`);
             RefreshData();
         } catch (error) {
             toast.error(`No se logró actualizar el estado del vehículo: ${error}`);
@@ -96,7 +96,7 @@ export default function Vehicles() {
     const updateFromDFSK = (articulo) => {
         setFilterDFSKData(articulo);
          setSearchDFSK(true);
-         toast.success('Valide el resultado de la busqueda, en el panel derecho.');
+         toast.info('Valide el resultado de la busqueda, en el panel derecho.');
     }
     
 
