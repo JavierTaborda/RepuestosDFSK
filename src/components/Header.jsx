@@ -68,7 +68,14 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
 
             </ul>
 
-            <div className="dropdown">
+            <div className="mx-2">
+              <button className="btn btn-success rounded-5" type="button">
+                <i className="bi bi-box-arrow-in-right"></i>
+
+              </button>
+            </div>
+
+            <div className="dropdown mx-2">
               <button className="btn btn-outline-danger dropdown-toggle rounded-5" type="button"
                 data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" data-bs-auto-close="false">
                 <i className="bi bi-cart3"></i>
@@ -87,6 +94,7 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
 
               </div>
             </div>
+            
 
             <div className="mx-2">
               <DarkMode />

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
 import Spinner from '../../components/forms/Spinner';
 
-import apiUrl from '../../apiConfig';
+import apiUrl from '../../services/apiConfig';
 
 const URI1 = `${apiUrl}/Articulos/Existencia`;
 const URI2 = `${apiUrl}/Articulos/CodigosGrupo`;

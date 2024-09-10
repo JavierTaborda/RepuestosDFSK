@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ImageCard from '../../components/forms/ImageCard';
 import Spinner from '../../components/forms/Spinner';
-import apiUrl from '../../apiConfig';
+import apiUrl from '../../services/apiConfig';
+
 import axios from 'axios';
 
 

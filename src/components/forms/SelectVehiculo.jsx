@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import apiUrl from "../../apiConfig";
+import apiUrl from "../../services/apiConfig";
 
 const URI = `${apiUrl}/Vehiculos/`;
 

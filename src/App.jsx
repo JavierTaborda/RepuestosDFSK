@@ -12,6 +12,7 @@ import CrearRepuesto from "./pages/RequestRespuestos/CrearRepuesto";
 import { useCart } from "./hooks/useCart";
 import EstadosSolicitudes from "./pages/RequestRespuestos/EstadosSolicitudes";
 import Vehicles from "./pages/AddData/Vehicles";
+import Login from "./pages/Login";
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<Inicio />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/repuestos"
             element={<RepuestosBodega addToCart={addToCart} />}

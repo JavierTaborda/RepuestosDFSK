@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/forms/Spinner';
 import CartTable from '../../components/RequestRepuestos/CartTable';
-import apiUrl from '../../apiConfig';
+import apiUrl from '../../services/apiConfig';
 import dayjs from 'dayjs';
 
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {

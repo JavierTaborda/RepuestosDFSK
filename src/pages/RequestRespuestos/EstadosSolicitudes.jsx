@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/forms/Spinner';
-import apiUrl from '../../apiConfig';
+import apiUrl from '../../services/apiConfig';
 
 
 const URI1 = `${apiUrl}/Solicitudes`;

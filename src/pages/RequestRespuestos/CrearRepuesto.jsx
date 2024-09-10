@@ -3,7 +3,7 @@ import { useState, useEffect, useForm } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../../components/forms/Spinner";
 import SelectVehiculo from "../../components/forms/SelectVehiculo";
-import apiUrl from "../../apiConfig";
+import apiUrl from "../../services/apiConfig";
 
 export default function CrearRepuesto() {
 
