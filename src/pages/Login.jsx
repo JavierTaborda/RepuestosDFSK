@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import HttpClient from '../services/HttpClient';
-
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+import Carousel from '../components/forms/Carousel';
 const Login = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
@@ -18,63 +20,71 @@ const Login = () => {
         setError(null);
 
         try {
-            loginUser().then((response) => {
-                console.log(response);
-            })
+            const response = await HttpClient.post('/auth/login', { user, password });
+
+            toast.success(response.data);
+            const expirationDate = new Date(new Date().getTime() + 30 * 60 * 1000); // 30 minutos a partir 
+            Cookies.set('token_access', response.data, { expires: expirationDate, secure: true, sameSite: 'Strict' });
+            console.log('Resultado', response.data);
+
+
         } catch (error) {
-            console.error(error);
-            setError('Login failed. Please check your credentials and try again.');
+
+            setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
+            toast.error(error.response.data);
         } finally {
             setLoading(false);
         }
     };
 
-     const loginUser = () => {
-        return new Promise((resolve, reject) => {
-            HttpClient.post('/auth/login', { user, password }).then((response) => {
-                resolve(response);
-                console.log(response,"Hola");
-            })
-        })
-    };
 
     return (
-        <div className='lgcontainer'>
-            <div className="login-container">
-                <img src="/DFSK.png" alt="Logo" className="p-4" />
-                <h2>Iniciar Sesión</h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor="username">Usuario:</label>
-                        <input
-                            type="text"
-                            id="username"
-                            value={user}
-                            onChange={(e) => setUser(e.target.value)}
-                            required
-                        />
+        <div className='container pt-4 '>
+            <div className='row align-items-center'>
+
+                <div className='col-md-4 '>
+                    <div className="login-container mx-auto">
+                        <img src="/DFSKimg.png" alt="Logo" className="p-4" width="175" />
+                        <h2>Iniciar Sesión</h2>
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label htmlFor="username">Usuario:</label>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    value={user}
+                                    onChange={(e) => setUser(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="password-container">
+                                <label htmlFor="password">Contraseña:</label>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                                <span
+                                    className="toggle-password"
+                                    onClick={togglePasswordVisibility}
+                                >
+                                    {showPassword ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
+                                </span>
+                            </div>
+                            {error && <p className="error">{error}</p>}
+                            <button type="submit" className="btn btn-success" disabled={loading}>
+                                {loading ? 'Validando...' : <><i className="bi bi-box-arrow-in-right"></i> Iniciar Sesión</>}
+                            </button>
+                        </form>
                     </div>
-                    <div className="password-container">
-                        <label htmlFor="password">Contraseña:</label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <span
-                            className="toggle-password"
-                            onClick={togglePasswordVisibility}
-                        >
-                            {showPassword ? <i className="bi bi-eye-slash"></i> : <i className="bi bi-eye"></i>}
-                        </span>
-                    </div>
-                    {error && <p className="error">{error}</p>}
-                    <button type="submit" className="btn btn-success" disabled={loading}>
-                        {loading ? 'Validando...' : <><i className="bi bi-box-arrow-in-right"></i> Iniciar Sesión</>}
-                    </button>
-                </form>
+                </div>
+                <div className='col-md-8 mx-auto'>
+
+                    <Carousel />
+
+                </div>
             </div>
         </div>
     );
