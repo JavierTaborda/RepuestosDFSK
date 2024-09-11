@@ -63,7 +63,7 @@ function App() {
           />
           <Route path="/solicitudes" element={<EstadosSolicitudes />} />
           <Route path="/vehiculos" element={<Vehicles />} />
-          <Route path="*" element={<Inicio />} />
+          <Route path="*" element={<Login />} />
         </Routes>
         <Footer />
         <ToastContainer position="top-center" draggable />
