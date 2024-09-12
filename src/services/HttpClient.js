@@ -2,19 +2,20 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5116/api";
 
-// axios.interceptors.request.use(
-//   (config) => {
-//     const tokenAccess = window.localStorage.getItem("token_access");
+axios.interceptors.request.use(
+  (config) => {
+    const tokenAccess = Cookies.get("token_access");
 
-//     if (tokenAccess) {
-//       config.headers.Authorization = `Bearer ${tokenAccess}`;
-//       return config;
-//     }
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+    if (tokenAccess) {
+      config.headers.Authorization = `Bearer ${tokenAccess}`;
+      return config;
+    }
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 
 // axios.interceptors.response.use(
 //   (config) => {

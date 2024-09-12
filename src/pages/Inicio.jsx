@@ -4,7 +4,7 @@ export default function Inicio() {
     return (
         <>
        
-            <div className="container mx-auto pb-5">
+            <div className="container mx-auto pb-2">
                 <Carousel/>
             </div>
       
@@ -75,10 +75,8 @@ export default function Inicio() {
 
 
                 {/* /END THE FEATURETTES */}
-            </div>{/* /.container */}
+            </div>
          
-  
-
         </>
     )
 }
