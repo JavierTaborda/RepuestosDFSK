@@ -31,8 +31,9 @@ const Login = () => {
         } catch (error) {
 
             setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
-            toast.error(error.response.data);
+            toast.error("Verifique la conexión a internet y vuelva a intentarlo.");
         } finally {
+            
             setLoading(false);
         }
     };
