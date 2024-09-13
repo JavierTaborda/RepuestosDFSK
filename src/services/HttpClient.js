@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Cookies from "js-cookie";
 axios.defaults.baseURL = "http://localhost:5116/api";
 
 axios.interceptors.request.use(
@@ -8,14 +8,13 @@ axios.interceptors.request.use(
 
     if (tokenAccess) {
       config.headers.Authorization = `Bearer ${tokenAccess}`;
-      return config;
     }
+    return config; // Asegúrate de devolver siempre la configuración
   },
   (error) => {
     return Promise.reject(error);
   }
 );
-
 
 // axios.interceptors.response.use(
 //   (config) => {

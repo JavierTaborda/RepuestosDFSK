@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import HttpClient from '../services/HttpClient';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import Carousel from '../components/forms/Carousel';
+import { AuthContext } from '../context/AuthProvider';
 const Login = () => {
-    const [user, setUser] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const { user, login, logout } = useContext(AuthContext);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -20,27 +23,24 @@ const Login = () => {
         setError(null);
 
         try {
-            const response = await HttpClient.post('/auth/login', { user, password });
-
-            toast.success(response.data);
-            const expirationDate = new Date(new Date().getTime() + 30 * 60 * 1000); // 30 minutos a partir 
-            Cookies.set('token_access', response.data, { expires: expirationDate, secure: true, sameSite: 'Strict' });
-            console.log('Resultado', response.data);
-
-
-        } catch (error) {
-
-            setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
-            toast.error("Verifique la conexión a internet y vuelva a intentarlo.");
-        } finally {
+            await login({ username, password }).then((response) => {
+                toast.success(response);
+            });
             
+        } catch (error) {
+            console.log("Aqui hay un error", error);
+            setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
+            toast.error("Verifique los datos de inicio de sesión y vuelva a intentarlo.");
+        } finally {
+
             setLoading(false);
+            nav
         }
     };
 
 
     return (
-        <div className='container pt-4 '>
+        <div className='container pt-5 pb-4'>
             <div className='row align-items-center'>
 
                 <div className='col-md-4 '>
@@ -53,8 +53,8 @@ const Login = () => {
                                 <input
                                     type="text"
                                     id="username"
-                                    value={user}
-                                    onChange={(e) => setUser(e.target.value)}
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     required
                                 />
                             </div>

@@ -1,5 +1,5 @@
 import Carousel from "../components/forms/Carousel";
-
+import { motion } from 'framer-motion';
 export default function Inicio() {
     return (
         <>
@@ -7,7 +7,7 @@ export default function Inicio() {
             <div className="container mx-auto pb-2">
                 <Carousel/>
             </div>
-      
+
             <div className="container marketing">
                 {/* Three columns of text below the carousel */}
                 <div className="row">
@@ -72,9 +72,6 @@ export default function Inicio() {
                         <img src="/Inicio3.jpg" alt="Glory 600 Interior" className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" />
                     </div>
                 </div>
-
-
-                {/* /END THE FEATURETTES */}
             </div>
          
         </>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "./App.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -13,6 +13,8 @@ import { useCart } from "./hooks/useCart";
 import EstadosSolicitudes from "./pages/RequestRespuestos/EstadosSolicitudes";
 import Vehicles from "./pages/AddData/Vehicles";
 import Login from "./pages/Login";
+import { AuthProvider } from './context/AuthProvider';
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
 
@@ -29,27 +31,25 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Header
-          cart={cart}
-          removeFromCart={removeFromCart}
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}
-          clearCart={clearCart}
-          isEmpty={isEmpty}
-          carTotal={carTotal}
-        />
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/repuestos"
-            element={<RepuestosBodega addToCart={addToCart} />}
+      <AuthProvider>
+ 
+          <Header
+            cart={cart}
+            removeFromCart={removeFromCart}
+            increaseQuantity={increaseQuantity}
+            decreaseQuantity={decreaseQuantity}
+            clearCart={clearCart}
+            isEmpty={isEmpty}
+            carTotal={carTotal}
           />
-          <Route path="/repuestonew" element={<CrearRepuesto />} />
-          <Route
-            path="/solicitud"
-            element={
+          <Routes>
+            <Route path="/" element={<Inicio />} index />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Inicio />} />
+
+            <Route path="/repuestos" element={<RepuestosBodega addToCart={addToCart} />} />
+            <Route path="/repuestonew" element={<CrearRepuesto />} />
+            <Route path="/solicitud" element={
               <Solicitud
                 cart={cart}
                 removeFromCart={removeFromCart}
@@ -60,14 +60,16 @@ function App() {
                 carTotal={carTotal}
               />
             }
-          />
-          <Route path="/solicitudes" element={<EstadosSolicitudes />} />
-          <Route path="/vehiculos" element={<Vehicles />} />
-          <Route path="*" element={<Inicio />} />
-        </Routes>
-        <Footer />
-        <ToastContainer position="top-center" draggable />
-      </BrowserRouter>
+            />
+            <Route path="/solicitudes" element={<EstadosSolicitudes />} />
+            <Route path="/vehiculos" element={<Vehicles />} />
+
+          </Routes>
+          <Footer />
+          <ToastContainer position="top-center" draggable />
+
+
+      </AuthProvider>
     </>
   );
 }
