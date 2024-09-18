@@ -13,17 +13,19 @@ const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = Cookies.get('token_access');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setUser(decodedToken);
+        if (!user) {
+            const token = Cookies.get('token_access');
+            if (token) {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+            }
         }
 
-    }, [user]);
+    }, []);
     const login = async (credentials) => {
         return new Promise((resolve, reject) => {
             HttpClient.post('/auth/login', credentials).then((response) => {
-               // console.log(response);
+                // console.log(response);
                 Cookies.set('token_access', response.data.token, { expires: 1, secure: true, sameSite: 'Strict' });
                 Cookies.set('refresh_token', response.data.refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
 
@@ -37,7 +39,7 @@ const AuthProvider = ({ children }) => {
         });
     };
 
-   
+
     const logout = () => {
         Cookies.remove('token_access');
         Cookies.remove('refresh_token');
@@ -45,12 +47,12 @@ const AuthProvider = ({ children }) => {
         navigate('/login');
 
     };
-     const redirect = () => {
+    const redirect = () => {
         navigate('/login')
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout,redirect }}>
+        <AuthContext.Provider value={{ user, login, logout, redirect }}>
             {children}
         </AuthContext.Provider>
     );
