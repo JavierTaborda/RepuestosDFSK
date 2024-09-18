@@ -1,18 +1,21 @@
 import React, { useContext } from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ element: Component, roles, ...rest }) => {
     const { user } = useContext(AuthContext);
+    
+    // TODO: cuando se recarga la pagoina no espèra el user y se va al inicio
+    if (!user) {
+        return <Navigate to="/inicio" />;
+    }
 
-    return (
-        <Route
-            {...rest}
-            render={(props) =>
-                user ? <Component {...props} /> : <Navigate to="/login" />
-            }
-        />
-    );
+    if (roles && !roles.includes(user.role)) {
+        return <Navigate to="/inicio" />;
+    }
+
+    return <Component {...rest} />;
 };
 
 export default PrivateRoute;
+

@@ -32,6 +32,7 @@ export default function EstadosSolicitudes() {
             // console.log(response.data);
         } catch (error) {
             setError(`Error en la carga de datos: ${error.message}`);
+            //console.log(error);
             if (error.response.status !== 401) {
                 toast.error(`Error en la carga de datos: ${error.message}`);
             }
@@ -121,17 +122,17 @@ export default function EstadosSolicitudes() {
                 ) : error ? (
                     <Alert severity="error">{error}</Alert>
                 ) : dataResumen.length > 0 ? (
-                    <TableContainer className='mt-3'>
+                    <TableContainer component={Paper }elevation={2} className='mt-3'>
                         <Table>
                             <TableHead>
                                 <TableRow>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }} />
-                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitud</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>#Solicitud</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Creación</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Cierre</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitante</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Monto Estimado</TableCell>
-                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Activo</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -147,12 +148,18 @@ export default function EstadosSolicitudes() {
                                                     {open[resumen.idResumenSolicitud] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell>{resumen.idResumenSolicitud}</TableCell>
+                                            <TableCell>
+                                                <span className={resumen.estatus ? 'h5 text-warning' : ' h5 text-success'}>
+                                                    {resumen.idResumenSolicitud}
+                                                </span>
+                                            </TableCell>
                                             <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                             <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                             <TableCell>{resumen.vendedor}</TableCell>
-                                            <TableCell>$ {resumen.solicitudes.reduce((acc, solicitud) => acc + solicitud.precio, 0)}</TableCell>
-                                            <TableCell>{resumen.estatus ? 'Activo' : 'Inactivo'}</TableCell>
+                                            <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio*solicitud.cantidad), 0)}</span></TableCell>
+                                            <TableCell>
+                                                {user.role === 'Admin' ? <button className='btn btn-outline-success rounded-5'><i className="bi bi-pencil-fill"></i></button> : null}
+                                            </TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

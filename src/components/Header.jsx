@@ -7,6 +7,7 @@ import { AuthContext } from '../context/AuthProvider';
 export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
   const { user, logout } = useContext(AuthContext);
 
+
   return (
     <>
     

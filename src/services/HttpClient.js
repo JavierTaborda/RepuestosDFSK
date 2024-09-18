@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
+
 axios.defaults.baseURL = "http://localhost:5116/api";
 
 axios.interceptors.request.use(
@@ -11,7 +12,7 @@ axios.interceptors.request.use(
     if (tokenAccess) {
       config.headers.Authorization = `Bearer ${tokenAccess}`;
     }
-    return config; 
+    return config;
   },
   (error) => {
     return Promise.reject(error);
@@ -23,18 +24,54 @@ axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      toast.warning(
-        "Tu sesión ha expirado. Redirigiendo a la página de login..."
-      );
-      setTimeout(() => {
-        window.location.href = "/login"; 
-      }, 4000); // Espera 4 segundos antes de redirigir
+  async (error) => {
+    const originalRequest = error.config;
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      const newToken = await refreshToken();
+      if (newToken) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+        return axios(originalRequest);
+      }
     }
     return Promise.reject(error);
   }
 );
+
+const refreshToken = async () => {
+  
+  try {
+    const response = await axios.post("/auth/refresh", {
+      refreshToken: Cookies.get("refresh_token"),
+    });
+    const newToken = response.data;
+    Cookies.set("token_access", newToken, {
+      expires: 1,
+      secure: true,
+      sameSite: "Strict",
+    });
+    
+    return newToken;
+  } catch (error) {
+    toast.warning(
+      "Tu sesión ha expirado. Redirigiendo a la página de login..."
+    );
+
+   
+    setTimeout(() => {
+      window.location.href = "/login";
+      Cookies.remove("token_access");
+      Cookies.remove("refresh_token");
+    }, 4000); // Espera 4 segundos antes de redirigir
+    newToken = null;
+  }
+  
+};
 
 const requestGeneric = {
   get: (url) => axios.get(url),

@@ -12,19 +12,14 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = Cookies.get('token_access');
-        if (token) {
-            const decodedToken = jwtDecode(token);
-            setUser(decodedToken);
-        }
-
-    }, []);
     const login = async (credentials) => {
         return new Promise((resolve, reject) => {
             HttpClient.post('/auth/login', credentials).then((response) => {
-                Cookies.set('token_access', response.data, { expires: 1, secure: true, sameSite: 'Strict' });
-                const decodedToken = jwtDecode(response.data);
+               // console.log(response);
+                Cookies.set('token_access', response.data.token, { expires: 1, secure: true, sameSite: 'Strict' });
+                Cookies.set('refresh_token', response.data.refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
+
+                const decodedToken = jwtDecode(response.data.token);
                 setUser(decodedToken);
                 navigate('/inicio'); // Redirige a la página de inicial después del login
                 resolve("Bienvenido, " + decodedToken.name);
@@ -34,8 +29,10 @@ const AuthProvider = ({ children }) => {
         });
     };
 
+   
     const logout = () => {
         Cookies.remove('token_access');
+        Cookies.remove('refresh_token');
         setUser(null);
         navigate('/login');
 
