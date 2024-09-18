@@ -1,17 +1,18 @@
 import React from 'react';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { toast } from 'react-toastify';
 import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
 import Spinner from '../../components/forms/Spinner';
-
+import { AuthContext } from '../../context/AuthProvider';
 import apiUrl from '../../services/apiConfig';
+import HttpClient from '../../services/HttpClient';
 
-const URI1 = `${apiUrl}/Articulos/Existencia`;
-const URI2 = `${apiUrl}/Articulos/CodigosGrupo`;
-const URI3 = `${apiUrl}/Articulos/CodigosMarca`;
+const URI1 = `/Articulos/Existencia`;
+const URI2 = `/Articulos/CodigosGrupo`;
+const URI3 = `/Articulos/CodigosMarca`;
 
 export default function RepuestosBodega({ addToCart }) {
-
+    const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true); // Estado para controlar la carga
     const [dataRepuesto, setRepuestos] = useState([]);
     const [dataMarca, setMarca] = useState([]);
@@ -45,79 +46,56 @@ export default function RepuestosBodega({ addToCart }) {
     }
 
 
-    // useEffect(() => {
-    //     fetch(URI)
-    //         .then(response => response.json())
-    //         .then(dataRepuesto => {
-    //             setRepuestos(dataRepuesto);
-    //             notifysuccess();
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching data:', error);
-    //             notifyerror(error.message);
-    //         });
-    // }, []);
-
     useEffect(() => {
-
-
-        const fetchRepuestos = () => fetch(URI1).then(response => response.json());
-        const fetchGrupos = () => fetch(URI2).then(response => response.json());
-        const fetchMarca = () => fetch(URI3).then(response => response.json());
+        const fetchRepuestos = () => HttpClient.get(URI1);
+        const fetchGrupos = () => HttpClient.get(URI2);
+        const fetchMarca = () => HttpClient.get(URI3);
 
         Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
             .then(([dataRepuesto, dataGrupo, dataMarca]) => {
-
-                setRepuestos(dataRepuesto);
-                setGrupo(dataGrupo);
-                setMarca(dataMarca);
+                setRepuestos(dataRepuesto.data);
+                setGrupo(dataGrupo.data);
+                setMarca(dataMarca.data);
             })
             .catch(error => {
                 notifyerror("Error en la carga de datos: " + error.message);
             })
             .finally(() => setIsLoading(false));
-
-
     }, []);
+
 
     const filterMarca = async () => {
         try {
             setIsLoading(true);
 
-            const URIM = apiUrl+'/Articulos/Bodega/Marca/' +
-                encodeURIComponent(stringMarca) + '/' + encodeURIComponent(stringGrupo)
-                + '/' + encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion);
+            const URIM = `/Articulos/Bodega/Marca/${encodeURIComponent(stringMarca)}/${encodeURIComponent(stringGrupo)}/${encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion)}`;
 
-            const response = await fetch(URIM);
-            if (!response.ok) {
-                notifyerror('Error de la petición.');
-            }
+            const response = await HttpClient.get(URIM);
+            const dataRepuesto = response.data;
 
-            const dataRepuesto = await response.json();
             setRepuestos(dataRepuesto);
 
-            //SORT 
+            // SORT
             dataRepuesto.sort((a, b) => {
-                if (orderData === "Mayor Existencia") { return b.existencia - a.existencia; }
-                else if (orderData === "Menor Existencia") { return a.existencia - b.existencia }
-                else if (orderData === "Mayor Precio") { return b.venta - a.venta }
-                { return a.venta - b.venta }
+                if (orderData === "Mayor Existencia") {
+                    return b.existencia - a.existencia;
+                } else if (orderData === "Menor Existencia") {
+                    return a.existencia - b.existencia;
+                } else if (orderData === "Mayor Precio") {
+                    return b.venta - a.venta;
+                } else {
+                    return a.venta - b.venta;
+                }
             });
-
-
-            //notifysuccess();
 
             // Paging
             handlePageChange(1);
-
             visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
         } catch (error) {
-            notifyerror('Error de la petición:' + error.message);
+            notifyerror('Error de la petición: ' + error.message);
         } finally {
             setIsLoading(false);
-
         }
-
     };
 
     useEffect(() => {

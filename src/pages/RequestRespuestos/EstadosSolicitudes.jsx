@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
-import {  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton,
-    TextField, Button, FormControl, InputLabel, Select, MenuItem,Alert
+import {
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton,
+    TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -28,10 +29,12 @@ export default function EstadosSolicitudes() {
         try {
             const response = await HttpClient.get(`/Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
             setResumen(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             setError(`Error en la carga de datos: ${error.message}`);
-            toast.error(`Error en la carga de datos: ${error.message}`);
+            if (error.response.status !== 401) {
+                toast.error(`Error en la carga de datos: ${error.message}`);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -44,8 +47,8 @@ export default function EstadosSolicitudes() {
 
     const handleSearch = () => {
         getData();
-   
-        console.log(startDate, endDate, statusFilter, user.user);
+
+        //console.log(startDate, endDate, statusFilter, user.user);
     };
 
 
@@ -53,7 +56,7 @@ export default function EstadosSolicitudes() {
         if (user) {
             getData();
         }
-        
+
     }, [user]);
 
     if (!user) {
@@ -62,12 +65,12 @@ export default function EstadosSolicitudes() {
 
     return (
         <>
-       
+
             <h2 className="bd-title text-center mb-0 p-3">Históricos de Pedidos</h2>
 
             <div className='container pt-2'>
-                <div className='row p-3'>
-                    <div className='col-3'>
+                <div className='row p-2'>
+                    <div className='col-md-3 pt-3'>
                         <FormControl fullWidth>
                             <InputLabel id="status-select-label">Filtrar por status</InputLabel>
                             <Select
@@ -83,7 +86,7 @@ export default function EstadosSolicitudes() {
                             </Select>
                         </FormControl>
                     </div>
-                    <div className='col-3'>
+                    <div className='col-md-3 pt-3'>
                         <TextField
                             InputLabelProps={{ shrink: true }}
                             type="date"
@@ -93,7 +96,7 @@ export default function EstadosSolicitudes() {
                             fullWidth
                         />
                     </div>
-                    <div className='col-3'>
+                    <div className='col-md-3 pt-3'>
                         <TextField
                             InputLabelProps={{ shrink: true }}
                             type="date"
@@ -103,7 +106,7 @@ export default function EstadosSolicitudes() {
                             fullWidth
                         />
                     </div>
-                    <div className='col-3'>
+                    <div className='col-md-3 pt-3'>
                         <Button variant="contained" color="error" onClick={handleSearch}>
                             Buscar
                         </Button>
@@ -118,7 +121,7 @@ export default function EstadosSolicitudes() {
                 ) : error ? (
                     <Alert severity="error">{error}</Alert>
                 ) : dataResumen.length > 0 ? (
-                    <TableContainer>
+                    <TableContainer className='mt-3'>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -127,6 +130,7 @@ export default function EstadosSolicitudes() {
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Creación</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Cierre</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitante</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Monto Estimado</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Activo</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -147,6 +151,7 @@ export default function EstadosSolicitudes() {
                                             <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                             <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                             <TableCell>{resumen.vendedor}</TableCell>
+                                            <TableCell>$ {resumen.solicitudes.reduce((acc, solicitud) => acc + solicitud.precio, 0)}</TableCell>
                                             <TableCell>{resumen.estatus ? 'Activo' : 'Inactivo'}</TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -197,9 +202,9 @@ export default function EstadosSolicitudes() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                        ) : dataResumen.length === 0 && !isLoading ?   (
+                ) : dataResumen.length === 0 && !isLoading ? (
                     <p>No se encontraron solicitudes.</p>
-                ): null}
+                ) : null}
             </div>
 
         </>

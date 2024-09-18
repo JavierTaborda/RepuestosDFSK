@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import apiUrl from "../../services/apiConfig";
+import HttpClient from '../../services/HttpClient';
 
-const URI = `${apiUrl}/Vehiculos/`;
+const URI = `/Vehiculos/`;
 
 export default function SelectVehiculo({ onIdVehiculoChange }) {
   const [dataVehiculos, setDataVehiculos] = useState([]);
@@ -10,18 +11,19 @@ export default function SelectVehiculo({ onIdVehiculoChange }) {
   const [dataIdVehiculo, setdataIdVehiculo] = useState();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(URI);
-        const data = await response.json();
-        setDataVehiculos(data);
-      } catch (error) {
-        toast.error("Error en la carga de datos: " + error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    
+      const fetchData = async () => {
+        try {
+          setIsLoading(true);
+          const response = await HttpClient.get(URI);
+          setDataVehiculos(response.data);
+        } catch (error) {
+          toast.error("Error en la carga de datos: " + error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
 
     fetchData();
   }, []);

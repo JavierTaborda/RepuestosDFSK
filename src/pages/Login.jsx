@@ -1,7 +1,5 @@
 import React, { useState, useContext } from 'react';
-import HttpClient from '../services/HttpClient';
 import { toast } from 'react-toastify';
-import Cookies from 'js-cookie';
 import Carousel from '../components/forms/Carousel';
 import { AuthContext } from '../context/AuthProvider';
 const Login = () => {

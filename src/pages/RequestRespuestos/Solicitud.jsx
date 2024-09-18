@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import Spinner from '../../components/forms/Spinner';
 import CartTable from '../../components/RequestRepuestos/CartTable';
 import apiUrl from '../../services/apiConfig';
+import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
@@ -21,7 +22,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         estatus: true,
         fechaCierre: dayjs(new Date(new Date().setDate(new Date().getDate() + 5))).format('YYYY-MM-DDTHH:mm:ss'),
         observacion: '',
-        idVendedor: 0,
+        idVendedor: user?.user || 0,
         solicitudes: []
     });
 
@@ -52,38 +53,37 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         createlistSolicitudes();
     };
 
-
-
+  
     useEffect(() => {
         if (isLoading) {
             async function fetchData() {
+               
+                
+                try { 
+                    if (resumenData.idVendedor===0){
+                    resumenData.idVendedor = user.user;
+                }
                 console.log(resumenData);
-                // try {
+                    const response = await HttpClient.post("/Solicitudes", resumenData)       
+                    if (response.status === 200) {
+                        toast.success("Solicitud registrada correctamente");
+                    } else {
+                        toast.error("Error al registrar la solicitud");
+                    }
+                   //console.log(response);
+                } catch (error) {
+                    toast.error("Error en la solicitud: ");
+                }
+                finally {
+                    setIsLoading(false);
+                }
 
-                //     const response = await fetch(apiUrl+"/Solicitudes", {
-                //         method: "POST",
-                //         headers: {
-                //             "Content-Type": "application/json",
-                //         },
-                //         body: JSON.stringify(resumenData),
-                //     });
-
-                //     if (response.ok) {
-                //         toast.success("Solicitud registrada correctamente");
-                //     } else {
-                //         toast.error("Error al registrar la solicitud");
-                //     }
-                //     console.log(response);
-                // } catch (error) {
-                //     toast.error("Error en la solicitud: ");
-                // }
-
-                setIsLoading(false);
             }
 
             fetchData();
         }
     }), [resumenData];
+
 
     useEffect(() => {
 

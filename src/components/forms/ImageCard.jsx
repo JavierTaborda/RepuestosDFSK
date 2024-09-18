@@ -18,7 +18,7 @@ export default function ImageCard({ info, stock }) {
                 </svg>
                 <div className="img-card__content  ">
                   
-                     <img className="img-fluid" src="./puerta.png" alt="imagen"  /> 
+                     {/* <img className="img-fluid" src="./puerta.png" alt="imagen"  />  */}
                     <p className="img-card__description ">
                         {info}
                     </p>
