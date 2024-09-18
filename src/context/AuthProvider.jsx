@@ -12,6 +12,14 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = Cookies.get('token_access');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setUser(decodedToken);
+        }
+
+    }, [user]);
     const login = async (credentials) => {
         return new Promise((resolve, reject) => {
             HttpClient.post('/auth/login', credentials).then((response) => {
