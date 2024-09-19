@@ -18,8 +18,14 @@ const AppRoutes = ({ cart, addToCart, removeFromCart, increaseQuantity, decrease
         <Route path="*" element={<Inicio />} />
 
         {/* Private routes */}
-        <Route path="/repuestos" element={<PrivateRoute element={RepuestosBodega}  />} />
+         <Route path="/repuestos" element={<PrivateRoute element={() => (
+            <RepuestosBodega
+                addToCart={addToCart}
+            />
+        )}  />} />
+
         <Route path="/repuestonew" element={<PrivateRoute element={CrearRepuesto} />} />
+    
         <Route path="/solicitud" element={<PrivateRoute element={() => (
             <Solicitud
                 cart={cart}

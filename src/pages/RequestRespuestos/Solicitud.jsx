@@ -7,13 +7,13 @@ import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
-    
+
     const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
-    const [estadosData, setEstadosData] = useState(1);
-    const [responsablesData, setResponsablesData] = useState(1);
-    const [vehiculoData, setVehiculoData] = useState(1);
-
+    const [dataRepuestos, setRepuestos] = useState([]);
+    const [dataInicial, setdataInicial] = useState([]);
+    const [loadData, setloadData] = useState(false);
+    const [createSolicitud, setcreateSolicitud] = useState(false);
 
 
     const [resumenData, setResumenData] = useState({
@@ -35,14 +35,15 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         const listSolicitudes = cart.map((item) => ({
             idSolicitud: 0,
             idResumenSolicitud: 0,
-            idResponsableSolicitud: responsablesData,
-            idRepuesto: 1,
+            idResponsableSolicitud: dataInicial.Responsable,
+            idRepuesto: dataRepuestos.find(x => x.codigo === item.articulo)?.idRepuesto,
             cantidad: item.quantity,
-            idEstado: estadosData,
+            idEstado: dataInicial.Estado,
             fechaSolicitud: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
             precio: item.venta,
             observacion: '',
         }));
+        console.log(listSolicitudes);
         setResumenData((prevData) => ({ ...prevData, solicitudes: listSolicitudes }));
         return true;
     };
@@ -53,24 +54,24 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         createlistSolicitudes();
     };
 
-  
+
     useEffect(() => {
         if (isLoading) {
             async function fetchData() {
-               
-                
-                try { 
-                    if (resumenData.idVendedor===0){
-                    resumenData.idVendedor = user.user;
-                }
-                console.log(resumenData);
-                    const response = await HttpClient.post("/Solicitudes", resumenData)       
+
+
+                try {
+                    if (resumenData.idVendedor === 0) {
+                        resumenData.idVendedor = user.user;
+                    }
+                    console.log(resumenData);
+                    const response = await HttpClient.post("/Solicitudes", resumenData)
                     if (response.status === 200) {
                         toast.success("Solicitud registrada correctamente");
                     } else {
                         toast.error("Error al registrar la solicitud");
                     }
-                   //console.log(response);
+
                 } catch (error) {
                     toast.error("Error en la solicitud: ");
                 }
@@ -87,25 +88,37 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
     useEffect(() => {
 
-        
-        // const fetchRepuestos = () => fetch(URI1).then(response => response.json());
-        // const fetchGrupos = () => fetch(URI2).then(response => response.json());
-        // const fetchMarca = () => fetch(URI3).then(response => response.json());
+    
+        if (loadData) {
 
-        // Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
-        //     .then(([dataRepuesto, dataGrupo, dataMarca]) => {
+            const listArticulos = cart.map(repuesto => ({
+                codigo: repuesto.articulo,
+                nombre: repuesto.descripcion,
+                marca: repuesto.marca
+            }));
 
-        //         setRepuestos(dataRepuesto);
-        //         setGrupo(dataGrupo);
-        //         setMarca(dataMarca);
-        //     })
-        //     .catch(error => {
-        //         notifyerror("Error en la carga de datos: " + error.message);
-        //     })
-        //     .finally(() => setIsLoading(false));
+            console.log(listArticulos);
 
+            const fetchRepuestos = () => HttpClient.post('/Repuestos/codigos', listArticulos);
+            const fetchDataInicial = () => HttpClient.get('/Solicitudes/DatosIniciales');
 
-    }, []);
+            console.log(listArticulos);
+            Promise.all([fetchRepuestos(), fetchDataInicial()])
+                .then(([dataRepuesto, dataInicial]) => {
+                    setRepuestos(dataRepuesto.data);
+                    setdataInicial(dataInicial.data);
+                    //console.log(dataInicial);
+                    console.log(dataRepuesto.data);
+                    setcreateSolicitud(true);
+                    
+                })
+                .catch(error => {
+                    toast.error("Error en la carga de datos: " + error.message);
+                })
+                .finally(() => setloadData(false));
+        }
+    }), [loadData];
+
 
     if (!user) {
         return <div><Spinner /></div>;
@@ -130,11 +143,22 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                                     carTotal={carTotal}
                                     sendForm={true}
                                 />
+                                    {!createSolicitud ?
+                                        <div className="d-grid gap-2">
+                                            <button type="button" onClick={() => setloadData(true)} className="btn btn-success mt-5">
+                                                <i className="bi bi-floppy"></i> Generar Solicitud
+                                            </button>
+                                        </div>
+                                        :
+                                        null
+                                    }
                             </div>
                         </div>
                         <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'>
 
                             {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
+
+                            !createSolicitud ? null:
 
                                 isLoading ? <Spinner /> :
                                     <form onSubmit={handleSubmit} className="p-3 list-group">
@@ -197,11 +221,14 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                                                 />
                                             </div>
                                         </div>
+                                        
+                                       
                                         <div className="d-grid gap-2">
                                             <button type="submit" className="btn btn-success mt-5">
                                                 <i className="bi bi-floppy"></i> Crear Solicitud
                                             </button>
                                         </div>
+                                        
                                     </form>
                             }
 

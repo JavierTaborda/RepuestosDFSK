@@ -20,7 +20,7 @@ export default function EstadosSolicitudes() {
     const [statusFilter, setStatusFilter] = useState('Todos');
     const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-    const [error, setError] = useState(null);
+    const [errormessage, setError] = useState(null);
 
     const getData = async () => {
         setIsLoading(true);
@@ -31,10 +31,16 @@ export default function EstadosSolicitudes() {
             setResumen(response.data);
             // console.log(response.data);
         } catch (error) {
-            setError(`Error en la carga de datos: ${error.message}`);
-            //console.log(error);
+            if (error.response) {
+                setError(error.response.data);
+            } else if (error.request) {
+                setError('No response received from server');
+            } else {
+                setError('Error: ' + error.message);
+            }
+
             if (error.response.status !== 401) {
-                toast.error(`Error en la carga de datos: ${error.message}`);
+                toast.error(`Error en la carga de datos: ${errormessage}`);
             }
         } finally {
             setIsLoading(false);
@@ -119,8 +125,8 @@ export default function EstadosSolicitudes() {
                         <Spinner />
                         <p>Cargando datos...</p>
                     </div>
-                ) : error ? (
-                    <Alert severity="error">{error}</Alert>
+                ) : errormessage ? (
+                    <Alert severity="error">{errormessage}</Alert>
                 ) : dataResumen.length > 0 ? (
                     <TableContainer component={Paper }elevation={2} className='mt-3'>
                         <Table>
@@ -158,7 +164,7 @@ export default function EstadosSolicitudes() {
                                             <TableCell>{resumen.vendedor}</TableCell>
                                             <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio*solicitud.cantidad), 0)}</span></TableCell>
                                             <TableCell>
-                                                {user.role === 'Admin' ? <button className='btn btn-outline-success rounded-5'><i className="bi bi-pencil-fill"></i></button> : null}
+                                                {user.role === 'admin' ? <button className='btn btn-outline-danger rounded-5'><i className="bi bi-pencil-fill"></i></button> : null}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow>

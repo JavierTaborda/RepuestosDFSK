@@ -85,17 +85,19 @@ export default function CartTable({ cart, removeFromCart, increaseQuantity, decr
 
                     <p className="text-end">Total pagar: <span className="fw-bold">${carTotal?.toFixed(2).toLocaleString()}</span></p>
                     <div className="d-flex justify-content-center">
-                        <button className="btn btn-warning  rounded-4   m-2 p-2"
-                            onClick={clearCart}>
-                            <i className="bi bi-bag-x"></i> Cancelar Pedido
-                        </button>
+
 
                         {sendForm === true ?
                             null
                             :
-                            <Link to="/solicitud" aria-current="page" className="btn btn-success rounded-4  m-2 p-2 ">
-                                <i className="bi bi-ui-checks"></i> Generar Solicitud
-                            </Link>
+                            <>  <button className="btn btn-warning  rounded-4   m-2 p-2"
+                                    onClick={clearCart}>
+                                    <i className="bi bi-bag-x"></i> Cancelar Pedido
+                                </button>
+                                <Link to="/solicitud" aria-current="page" className="btn btn-success rounded-4  m-2 p-2 ">
+                                    <i className="bi bi-ui-checks"></i> Generar Solicitud
+                                </Link>
+                            </>
                         }
 
                     </div>

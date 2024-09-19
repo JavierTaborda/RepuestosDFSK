@@ -2,7 +2,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
-
 axios.defaults.baseURL = "http://localhost:5116/api";
 
 axios.interceptors.request.use(
@@ -44,7 +43,6 @@ axios.interceptors.response.use(
 );
 
 const refreshToken = async () => {
-  
   try {
     const response = await axios.post("/auth/refresh", {
       refreshToken: Cookies.get("refresh_token"),
@@ -55,14 +53,13 @@ const refreshToken = async () => {
       secure: true,
       sameSite: "Strict",
     });
-    
+
     return newToken;
   } catch (error) {
     toast.warning(
       "Tu sesión ha expirado. Redirigiendo a la página de login..."
     );
 
-   
     setTimeout(() => {
       window.location.href = "/login";
       Cookies.remove("token_access");
@@ -70,7 +67,6 @@ const refreshToken = async () => {
     }, 4000); // Espera 4 segundos antes de redirigir
     newToken = null;
   }
-  
 };
 
 const requestGeneric = {

@@ -1,11 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 
 const PrivateRoute = ({ element: Component, roles, ...rest }) => {
-    const { user } = useContext(AuthContext);
-    
-    // TODO: cuando se recarga la pagoina no espèra el user y se va al inicio
+    const { user, loading } = useContext(AuthContext);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!loading) {
+            setIsLoading(false);
+        }
+    }, [loading]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     if (!user) {
         return <Navigate to="/inicio" />;
     }
@@ -18,4 +28,3 @@ const PrivateRoute = ({ element: Component, roles, ...rest }) => {
 };
 
 export default PrivateRoute;
-
