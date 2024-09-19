@@ -8,6 +8,7 @@ import CrearRepuesto from '../pages/RequestRespuestos/CrearRepuesto';
 import Solicitud from '../pages/RequestRespuestos/Solicitud';
 import EstadosSolicitudes from '../pages/RequestRespuestos/EstadosSolicitudes';
 import Vehicles from '../pages/AddData/Vehicles';
+import VenUsers from '../pages/AddData/VenUsers';
 
 const AppRoutes = ({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) => (
     <Routes>
@@ -34,6 +35,7 @@ const AppRoutes = ({ cart, addToCart, removeFromCart, increaseQuantity, decrease
 
         {/* Admin routes */}
         <Route path="/vehiculos" element={<PrivateRoute element={Vehicles} roles={['admin']} />} />
+        <Route path="/users" element={<PrivateRoute element={VenUsers} roles={['admin']} />} />
     </Routes>
 );
 
