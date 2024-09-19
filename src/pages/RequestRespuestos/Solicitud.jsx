@@ -67,7 +67,9 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     console.log(resumenData);
                     const response = await HttpClient.post("/Solicitudes", resumenData)
                     if (response.status === 200) {
+                        clearCart();
                         toast.success("Solicitud registrada correctamente");
+
                     } else {
                         toast.error("Error al registrar la solicitud");
                     }

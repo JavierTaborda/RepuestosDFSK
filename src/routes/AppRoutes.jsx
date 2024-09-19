@@ -9,40 +9,42 @@ import Solicitud from '../pages/RequestRespuestos/Solicitud';
 import EstadosSolicitudes from '../pages/RequestRespuestos/EstadosSolicitudes';
 import Vehicles from '../pages/AddData/Vehicles';
 import VenUsers from '../pages/AddData/VenUsers';
+function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
-const AppRoutes = ({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) => (
-    <Routes>
-        {/* Publics Routes */}
-        <Route path="/" element={<Inicio />} index />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Inicio />} />
+    const isAuthenticated = true; // Aquí deberías verificar la autenticación real
+    const userRole = 'admin'; // Aquí deberías obtener el rol real del usuario
 
-        {/* Private routes */}
-         <Route path="/repuestos" element={<PrivateRoute element={() => (
-            <RepuestosBodega
-                addToCart={addToCart}
-            />
-        )}  />} />
+    return (
+        <Routes>
+            <Route path="/" element={<Inicio />} index />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Inicio />} />
 
-        <Route path="/repuestonew" element={<PrivateRoute element={CrearRepuesto} />} />
-    
-        <Route path="/solicitud" element={<PrivateRoute element={() => (
-            <Solicitud
-                cart={cart}
-                removeFromCart={removeFromCart}
-                increaseQuantity={increaseQuantity}
-                decreaseQuantity={decreaseQuantity}
-                clearCart={clearCart}
-                isEmpty={isEmpty}
-                carTotal={carTotal}
-            />
-        )} roles={['admin', 'user']} />} />
-        <Route path="/solicitudes" element={<PrivateRoute element={EstadosSolicitudes}/>} />
+            {/* authentication */}
+            <Route element={<PrivateRoute  />}>
+                <Route path="/repuestos" element={<RepuestosBodega addToCart={addToCart} />} />
+                <Route path="/repuestonew" element={<CrearRepuesto />} />
+                <Route path="/solicitud" element={
+                    <Solicitud
+                        cart={cart}
+                        removeFromCart={removeFromCart}
+                        increaseQuantity={increaseQuantity}
+                        decreaseQuantity={decreaseQuantity}
+                        clearCart={clearCart}
+                        isEmpty={isEmpty}
+                        carTotal={carTotal}
+                    />
+                } />
+                <Route path="/solicitudes" element={<EstadosSolicitudes />} />
+            </Route>
 
-        {/* Admin routes */}
-        <Route path="/vehiculos" element={<PrivateRoute element={Vehicles} roles={['admin']} />} />
-        <Route path="/users" element={<PrivateRoute element={VenUsers} roles={['admin']} />} />
-    </Routes>
-);
+            {/* AddData admin*/}
+            <Route element={<PrivateRoute roles={['admin']} />}>
+                <Route path="/vehiculos" element={<Vehicles />} />
+                <Route path="/users" element={<VenUsers />} />
+            </Route>
+        </Routes >
+    );
+}
 
 export default AppRoutes;

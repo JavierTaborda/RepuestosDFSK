@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthProvider';
 
-const PrivateRoute = ({ element: Component, roles, ...rest }) => {
+const PrivateRoute = ({ roles }) => {
     const { user, loading } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const PrivateRoute = ({ element: Component, roles, ...rest }) => {
         return <Navigate to="/inicio" />;
     }
 
-    return <Component {...rest} />;
+    return <Outlet />;
 };
 
 export default PrivateRoute;

@@ -11,6 +11,7 @@ import Spinner from '../../components/forms/Spinner';
 import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
+import DialogHistory from '../../components/RequestRepuestos/DialogHistory';
 
 export default function EstadosSolicitudes() {
     const { user } = useContext(AuthContext);
@@ -21,7 +22,19 @@ export default function EstadosSolicitudes() {
     const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const [errormessage, setError] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedData, setSelectedData] = useState(null);
 
+
+    const handleModalOpen = (data) => {
+        setSelectedData(data);
+        setModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setModalOpen(false);
+        setSelectedData(null);
+    };
     const getData = async () => {
         setIsLoading(true);
         setError(null); // Reset error state
@@ -88,8 +101,8 @@ export default function EstadosSolicitudes() {
                                 onChange={(e) => setStatusFilter(e.target.value)}
                             >
                                 <MenuItem value="Todos"><em>Todos</em></MenuItem>
-                                <MenuItem value={true}>Activo</MenuItem>
-                                <MenuItem value={false}>Inactivo</MenuItem>
+                                <MenuItem value={true}>Pendientes</MenuItem>
+                                <MenuItem value={false}>Finalizados</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -164,7 +177,9 @@ export default function EstadosSolicitudes() {
                                             <TableCell>{resumen.vendedor}</TableCell>
                                             <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio*solicitud.cantidad), 0)}</span></TableCell>
                                             <TableCell>
-                                                {user.role === 'admin' ? <button className='btn btn-outline-danger rounded-5'><i className="bi bi-pencil-fill"></i></button> : null}
+                                                {user.role === 'admin' ? <button className='btn btn-outline-danger rounded-5' 
+                                                    onClick={() => handleModalOpen(resumen)}><i className="bi bi-pencil-fill"></i>
+                                                </button> : null}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -215,10 +230,12 @@ export default function EstadosSolicitudes() {
                             </TableBody>
                         </Table>
                     </TableContainer>
+
                 ) : dataResumen.length === 0 && !isLoading ? (
                     <p>No se encontraron solicitudes.</p>
                 ) : null}
             </div>
+            <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
 
         </>
 
