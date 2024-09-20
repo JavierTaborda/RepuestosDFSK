@@ -1,5 +1,5 @@
 import "../../styles/ImageCard.css";
-export default function ImageCard({ info, stock }) {
+export default function ImageCard({ info, articulo, stock }) {
 
     return (
         <>         
@@ -20,6 +20,8 @@ export default function ImageCard({ info, stock }) {
                   
                      {/* <img className="img-fluid" src="./puerta.png" alt="imagen"  />  */}
                     <p className="img-card__description ">
+                        {articulo}
+                        <br />
                         {info}
                     </p>
                     {stock < 1 && (

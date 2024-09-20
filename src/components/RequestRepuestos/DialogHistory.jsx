@@ -1,4 +1,3 @@
-// ModalComponent.jsx
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
@@ -7,18 +6,15 @@ const DialogHistory = ({ open, handleClose, data }) => {
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Detalles de la Solicitud</DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    {/* Aquí puedes mostrar los detalles del resumen seleccionado */}
-                    {data && (
-                        <div>
-                            <p>ID: {data.idResumenSolicitud}</p>
-                            <p>Fecha de Creación: {data.fechaCreacion}</p>
-                            <p>Fecha de Cierre: {data.fechaCierre}</p>
-                            <p>Solicitante: {data.vendedor}</p>
-                            <p>Monto Estimado: {data.montoEstimado}</p>
-                        </div>
-                    )}
-                </DialogContentText>
+                {data && (
+                    <>
+                        <DialogContentText>ID: {data.idResumenSolicitud}</DialogContentText>
+                        <DialogContentText>Fecha de Creación: {data.fechaCreacion}</DialogContentText>
+                        <DialogContentText>Fecha de Cierre: {data.fechaCierre}</DialogContentText>
+                        <DialogContentText>Solicitante: {data.vendedor}</DialogContentText>
+                        <DialogContentText>Monto Estimado: {data.montoEstimado}</DialogContentText>
+                    </>
+                )}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">
@@ -30,3 +26,4 @@ const DialogHistory = ({ open, handleClose, data }) => {
 };
 
 export default DialogHistory;
+

@@ -90,7 +90,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
     useEffect(() => {
 
-    
+
         if (loadData) {
 
             const listArticulos = cart.map(repuesto => ({
@@ -104,7 +104,6 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
             const fetchRepuestos = () => HttpClient.post('/Repuestos/codigos', listArticulos);
             const fetchDataInicial = () => HttpClient.get('/Solicitudes/DatosIniciales');
 
-            console.log(listArticulos);
             Promise.all([fetchRepuestos(), fetchDataInicial()])
                 .then(([dataRepuesto, dataInicial]) => {
                     setRepuestos(dataRepuesto.data);
@@ -112,7 +111,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     //console.log(dataInicial);
                     console.log(dataRepuesto.data);
                     setcreateSolicitud(true);
-                    
+
                 })
                 .catch(error => {
                     toast.error("Error en la carga de datos: " + error.message);
@@ -145,93 +144,93 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                                     carTotal={carTotal}
                                     sendForm={true}
                                 />
-                                    {!createSolicitud ?
-                                        <div className="d-grid gap-2">
-                                            <button type="button" onClick={() => setloadData(true)} className="btn btn-success mt-5">
-                                                <i className="bi bi-floppy"></i> Generar Solicitud
-                                            </button>
-                                        </div>
-                                        :
-                                        null
-                                    }
+                                {!createSolicitud ?
+                                    <div className="d-grid gap-2">
+                                        <button type="button" onClick={() => setloadData(true)} className="btn btn-success mt-5">
+                                            <i className="bi bi-floppy"></i> Generar Solicitud
+                                        </button>
+                                    </div>
+                                    :
+                                    null
+                                }
                             </div>
                         </div>
                         <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'>
 
                             {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
 
-                            !createSolicitud ? null:
+                                !createSolicitud ? null :
 
-                                isLoading ? <Spinner /> :
-                                    <form onSubmit={handleSubmit} className="p-3 list-group">
-                                        <div className="row g-3">
-                                            <div className="col-12 pt-3">
-                                                <h5 className='text-center pb-2'>Solicitud</h5>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="estado"
-                                                    name="idEstado"
-                                                    disabled
-                                                    value="Registro Inicial"
-                                                />
+                                    isLoading ? <Spinner /> :
+                                        <form onSubmit={handleSubmit} className="p-3 list-group">
+                                            <div className="row g-3">
+                                                <div className="col-12 pt-3">
+                                                    <h5 className='text-center pb-2'>Solicitud</h5>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="estado"
+                                                        name="idEstado"
+                                                        disabled
+                                                        value="Registro Inicial"
+                                                    />
+                                                </div>
+                                                <div className="col-12 pt-2">
+                                                    <label htmlFor="fechainicial" className="form-label">Fecha de Solicitud</label>
+                                                    <input
+                                                        type="datetime"
+                                                        className="form-control"
+                                                        id="fechainicial"
+                                                        name="fechaSolicitud"
+                                                        value={resumenData.fechaCreacion}
+                                                        disabled
+                                                    />
+                                                </div>
+                                                <div className="col-12 pt-2">
+                                                    <label htmlFor="fechacierre" className="form-label">Fecha Deseada de Entrega </label>
+                                                    <input
+                                                        type="datetime-local"
+                                                        className="form-control"
+                                                        id="fechacierre"
+                                                        name="fechaCierre"
+                                                        value={resumenData.fechaCierre}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
+                                                <div className="col-12 pt-2">
+                                                    <label htmlFor="vendedor" className="form-label">Solicitante</label>
+                                                    <input
+                                                        type="input"
+                                                        className="form-control"
+                                                        placeholder="Vendedor/Concesionario"
+                                                        // id="vendedor"
+                                                        // name="idVendedor"
+                                                        value={user.name}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
+                                                <div className="col-12 pt-2">
+                                                    <label htmlFor="textarea" className="form-label">Observación</label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="textarea"
+                                                        rows="3"
+                                                        placeholder="Comentarios..."
+                                                        name="observacion"
+                                                        value={resumenData.observacion}
+                                                        onChange={handleChange}
+                                                    />
+                                                </div>
                                             </div>
-                                            <div className="col-12 pt-2">
-                                                <label htmlFor="fechainicial" className="form-label">Fecha de Solicitud</label>
-                                                <input
-                                                    type="datetime"
-                                                    className="form-control"
-                                                    id="fechainicial"
-                                                    name="fechaSolicitud"
-                                                    value={resumenData.fechaCreacion}
-                                                    disabled
-                                                />
+
+
+                                            <div className="d-grid gap-2">
+                                                <button type="submit" className="btn btn-success mt-5">
+                                                    <i className="bi bi-floppy"></i> Crear Solicitud
+                                                </button>
                                             </div>
-                                            <div className="col-12 pt-2">
-                                                <label htmlFor="fechacierre" className="form-label">Fecha de Cierre Esperada</label>
-                                                <input
-                                                    type="datetime-local"
-                                                    className="form-control"
-                                                    id="fechacierre"
-                                                    name="fechaCierre"
-                                                    value={resumenData.fechaCierre}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className="col-12 pt-2">
-                                                <label htmlFor="vendedor" className="form-label">Solicitante</label>
-                                                <input
-                                                    type="input"
-                                                    className="form-control"
-                                                    placeholder="Vendedor/Concesionario"
-                                                    // id="vendedor"
-                                                    // name="idVendedor"
-                                                    value={user.name}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                            <div className="col-12 pt-2">
-                                                <label htmlFor="textarea" className="form-label">Observación</label>
-                                                <textarea
-                                                    className="form-control"
-                                                    id="textarea"
-                                                    rows="3"
-                                                    placeholder="Comentarios..."
-                                                    name="observacion"
-                                                    value={resumenData.observacion}
-                                                    onChange={handleChange}
-                                                />
-                                            </div>
-                                        </div>
-                                        
-                                       
-                                        <div className="d-grid gap-2">
-                                            <button type="submit" className="btn btn-success mt-5">
-                                                <i className="bi bi-floppy"></i> Crear Solicitud
-                                            </button>
-                                        </div>
-                                        
-                                    </form>
+
+                                        </form>
                             }
 
                         </div>

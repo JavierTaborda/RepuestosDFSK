@@ -148,7 +148,7 @@ export default function EstadosSolicitudes() {
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }} />
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>#Solicitud</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Creación</TableCell>
-                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Cierre</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Requerida</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitante</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Monto Estimado</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}></TableCell>
@@ -234,8 +234,8 @@ export default function EstadosSolicitudes() {
                 ) : dataResumen.length === 0 && !isLoading ? (
                     <p>No se encontraron solicitudes.</p>
                 ) : null}
-            </div>
             <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
+            </div>
 
         </>
 

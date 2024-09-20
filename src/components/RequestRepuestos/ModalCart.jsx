@@ -1,5 +1,6 @@
 import "../../styles/ModalCart.css"
 import React from 'react';
+import ImageCard from ".././forms/ImageCard"
 import DarkMode from "../DarkMode"
 import QuantityControl from "./QuantityControl"
 
@@ -24,7 +25,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
       {show && <div className="modal-backdrop fade show"></div>}
 
       <div className={`modal modal fade ${show ? 'show d-block ' : 'd-none'}`} tabIndex="-1" >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered" style={{ minWidth: '50%' }}>
           <div className={`modal-content ${darkModal()} `}>
             <div className="modal-header">
               <h5 className="modal-title">{repuesto.descripcion}</h5>
@@ -33,14 +34,16 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
             <div className="modal-body">
               <div className="row">
                 <div className="col-md-6">
-                  <img src="/puerta.png" alt={repuesto.name} style={{ width: '100%' }} />
+                  <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
+                    <ImageCard info={repuesto.descripcion} articulo={repuesto.articulo} stock={repuesto.existencia} />
+                  </div>
                 </div>
                 <div className="col-md-6">
 
                   <span className="badge rounded-pill text-bg-success">
                     <h5 className="pt-1 pb-0">${repuesto.venta.toFixed(2).toLocaleString()} </h5>
                   </span>
-                
+
                   <div className='mt-2 p-2 '>
                     <p className="lead">
                       <b>Articulo: </b>{repuesto.articulo}
@@ -53,9 +56,9 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                     <div className={`alert ${getStockClass(repuesto.existencia)}`} role="alert">
                       En Stock: {repuesto.existencia}
                     </div>
-                      
+
                     <div className="d-grid gap-2  pt-5">
-                      <button className="btn btn-success rounded-5" onClick={()=>addToCard(repuesto)}>
+                      <button className="btn btn-success rounded-5" onClick={() => addToCard(repuesto)}>
                         <span className="fw-medium">AGREGAR AL CARRITO </span> <i className="bi bi-bag-plus"></i>
                       </button>
                     </div>
