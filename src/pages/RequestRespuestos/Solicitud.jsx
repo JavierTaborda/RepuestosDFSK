@@ -5,13 +5,14 @@ import CartTable from '../../components/RequestRepuestos/CartTable';
 import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
+import { motion } from 'framer-motion';
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
     const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [dataRepuestos, setRepuestos] = useState([]);
     const [dataInicial, setdataInicial] = useState([]);
-    const [loadData, setloadData] = useState(false);
+    const [loadData, setloadData] = useState(true);
     const [createSolicitud, setcreateSolicitud] = useState(false);
 
 
@@ -89,8 +90,12 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
     useEffect(() => {
 
-
         if (loadData) {
+            console.log(cart);
+            if (cart.length === 0) {
+                setloadData(false);
+                return;
+            }
 
             const listArticulos = cart.map(repuesto => ({
                 codigo: repuesto.articulo,
@@ -108,7 +113,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     setRepuestos(dataRepuesto.data);
                     setdataInicial(dataInicial.data);
                     //console.log(dataInicial);
-                    console.log(dataRepuesto.data);
+                    //console.log(dataRepuesto.data);
                     setcreateSolicitud(true);
 
                 })
@@ -117,19 +122,32 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                 })
                 .finally(() => setloadData(false));
         }
+
     }), [loadData];
 
 
-    if (!user) {
-        return <div><Spinner /></div>;
+    if (!user || loadData) {
+        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+            <motion.div
+                style={{ fontSize: '18px' }}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ repeat: Infinity, duration: 1 }}
+            >
+                Cargando lista de repuestos...
+            </motion.div>
+            <Spinner />
+        </div>
     }
     return (
         <>
-            {!user ? (
-                <><Spinner /></>
-            ) : (
-
-                <div className='container pt-2'>
+            <h2 className="bd-title text-center mb-0 pt-2">Realizar Solicitud de Repuestos</h2>
+            <div className='container pt-2'>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
                     <div className='row p-2  px-2'>
                         <div className='col-md-7 col-lg-8 shadow-sm rounded-5 p-4 '>
                             <div className="table-responsive" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
@@ -143,17 +161,10 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                                     carTotal={carTotal}
                                     sendForm={true}
                                 />
-                                {!createSolicitud ?
-                                    <div className="d-grid gap-2">
-                                        <button type="button" onClick={() => setloadData(true)} className="btn btn-success mt-5">
-                                            <i className="bi bi-floppy"></i> Generar Solicitud
-                                        </button>
-                                    </div>
-                                    :
-                                    null
-                                }
+
                             </div>
                         </div>
+
                         <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'>
 
                             {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
@@ -234,9 +245,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
                         </div>
                     </div>
-                </div>
-
-            )}
+                </motion.div>
+            </div>
         </>
     );
 }
