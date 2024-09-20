@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../../components/forms/Spinner';
 import CartTable from '../../components/RequestRepuestos/CartTable';
-import apiUrl from '../../services/apiConfig';
 import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';

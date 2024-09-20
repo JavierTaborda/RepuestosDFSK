@@ -3,11 +3,10 @@ import { useState, useEffect, useForm } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../../components/forms/Spinner";
 import SelectVehiculo from "../../components/forms/SelectVehiculo";
-import apiUrl from "../../services/apiConfig";
-
+import HttpClient from "../../services/HttpClient";
 export default function CrearRepuesto() {
 
-  const url = `${apiUrl}/Repuestos/`;
+  const url = `/Repuestos/`;
 
   //Define objet of state for form fields repuestos
   const [repuestoData, setRepuestoData] = useState({
@@ -66,22 +65,31 @@ export default function CrearRepuesto() {
       setlistRepuestos(newlistRepuestos);
 
       try {
-        const response = await fetch(url, {
-          method: "POST",
+        const response = await axios.post(url, newlistRepuestos, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(newlistRepuestos),
         });
 
-        if (response.ok) {
+        if (response.status === 200) {
           toast.success("Repuesto registrado correctamente");
         } else {
-
           toast.error("Error al registrar el repuesto");
         }
       } catch (error) {
-        toast.error("Error en la solicitud:" + error.message);
+        if (error.response) {
+          toast.error("Error en la solicitud: " + error.response.data);
+        } else if (error.request) {
+          toast.error("No response received from server");
+        } else {
+          toast.error("Error: " + error.message);
+        }
+
+        if (error.response && error.response.status !== 401) {
+          toast.error(`Error en la carga de datos: ${error.message}`);
+        }
+      } finally {
+        // Aquí puedes agregar cualquier lógica que necesites ejecutar al final
       }
       //clear fields
       setRepuestoData({

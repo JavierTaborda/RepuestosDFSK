@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import apiUrl from "../../services/apiConfig";
 import HttpClient from '../../services/HttpClient';
 
 const URI = `/Vehiculos/`;

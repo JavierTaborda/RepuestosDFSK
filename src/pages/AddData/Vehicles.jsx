@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import ImageCard from '../../components/forms/ImageCard';
 import Spinner from '../../components/forms/Spinner';
-import apiUrl from '../../services/apiConfig';
+import HttpClient from '../../services/HttpClient';
+
 
 import axios from 'axios';
 
@@ -31,7 +32,7 @@ export default function Vehicles() {
 
     const fetchData = async (url, setData, errorMessage) => {
         try {
-            const response = await axios.get(url);
+            const response = await HttpClient.get(url);
             setData(response.data);
             if (response.data.length === 0) {
                 toast.error(errorMessage);
@@ -43,14 +44,14 @@ export default function Vehicles() {
 
     const filterByArticulo = () => {
         setSearchData(true);
-            fetchData(apiUrl + `/Vehiculos/Codigo/${filterData}`, setVehicleData, "Artículo no encontrado");
+            fetchData( `/Vehiculos/Codigo/${filterData}`, setVehicleData, "Artículo no encontrado");
         setSearchData(false);
     };
 
     const updateVehicle = async (vehiculo) => {
         vehiculo.estatus = !vehiculo.estatus;
         try {
-            await axios.put(apiUrl + '/Vehiculos', vehiculo);
+            await HttpClient.put('/Vehiculos', vehiculo);
             toast.success(`Se actualizó el estado del vehículo ${vehiculo.descripcion}`);
             RefreshData();
         } catch (error) {
@@ -60,13 +61,13 @@ export default function Vehicles() {
 
     const GetVehicleDFSK = () => {
         setSearchDFSK(true);
-        fetchData(apiUrl + `/Articulos/Bodega/Vehiculos/${filterDFSKData}`, setVehicleDFSKData, "Artículo no encontrado");
+        fetchData(`/Articulos/Bodega/Vehiculos/${filterDFSKData}`, setVehicleDFSKData, "Artículo no encontrado");
         setSearchDFSK(false);
     };
 
     const UpdateAddVehicle = async () => {
         try {
-            await axios.put(apiUrl + '/Vehiculos/AddUpdate', formVehicleData);
+            await axios.put('/Vehiculos/AddUpdate', formVehicleData);
             toast.success(`Se actualizó el vehículo ${formVehicleData.descripcion}`);
             RefreshData();
         } catch (error) {
@@ -76,7 +77,7 @@ export default function Vehicles() {
 
     //refresh or getdata
     const RefreshData = () => {
-        const url = filterData.length === 0 ? apiUrl + '/Vehiculos' : apiUrl + `/Vehiculos/Codigo/${filterData}`;
+        const url = filterData.length === 0 ? '/Vehiculos' : `/Vehiculos/Codigo/${filterData}`;
         fetchData(url, setVehicleData, "Error refreshing data");
     };
 
