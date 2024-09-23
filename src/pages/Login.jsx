@@ -26,13 +26,11 @@ const Login = () => {
             });
             
         } catch (error) {
-           // console.log("Aqui hay un error", error);
             setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
-            toast.error("Verifique los datos de inicio de sesión y vuelva a intentarlo.");
+            toast.error(error.request.response);
         } finally {
 
-            setLoading(false);
-            
+            setLoading(false);      
         }
     };
 

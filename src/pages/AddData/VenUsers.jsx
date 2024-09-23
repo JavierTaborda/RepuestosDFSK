@@ -13,7 +13,8 @@ const VenUsers = () => {
     telefono: '',
     clave: '',
     confirmarClave: '',
-    idRol: 0
+    idRol: 0,
+    estatus: true
   });
 
   useEffect(() => {

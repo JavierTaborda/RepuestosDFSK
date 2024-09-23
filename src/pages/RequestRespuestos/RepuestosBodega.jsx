@@ -46,6 +46,7 @@ export default function RepuestosBodega({ addToCart }) {
 
 
     useEffect(() => {
+    
         const fetchRepuestos = () => HttpClient.get(URI1);
         const fetchGrupos = () => HttpClient.get(URI2);
         const fetchMarca = () => HttpClient.get(URI3);

@@ -7,11 +7,8 @@ import { AuthContext } from '../context/AuthProvider';
 export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
   const { user, logout } = useContext(AuthContext);
 
-
   return (
     <>
-    
-
       <nav className="navbar navbar-expand-lg navbarcolor sticky-top">
         <div className="container-fluid">
           <Link to="/" className="nav-link active" aria-current="page">
@@ -39,17 +36,19 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                       <li><Link to="/solicitudes" className="dropdown-item">Historial de Pedidos</Link></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
-                    <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Ingresar Elementos
-                    </a>
-                    <ul className="dropdown-menu shadow-sm">
-                      <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
-                      <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
-                      <li><Link to="/repuestonew" className="dropdown-item">Estados</Link></li>
-                      <li><Link to="/repuestonew" className="dropdown-item">Responsables de Solicitud</Link></li>
-                    </ul>
-                  </li>
+                  {user.role === 'admin' && (
+                    <li className="nav-item dropdown">
+                      <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Ingresar Elementos
+                      </a>
+                      <ul className="dropdown-menu shadow-sm">
+                        <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
+                        <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
+                        {/* <li><Link to="/repuestonew" className="dropdown-item">Estados</Link></li>
+                        <li><Link to="/repuestonew" className="dropdown-item">Responsables de Solicitud</Link></li> */}
+                      </ul>
+                    </li>
+                  )}
                 </>
               )}
             </ul>
@@ -77,6 +76,6 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
         </div>
       </nav>
     </>
-
-  )
+  );
+  
 }
