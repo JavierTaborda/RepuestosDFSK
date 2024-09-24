@@ -19,7 +19,7 @@ export default function CrearRepuesto() {
   useEffect(() => {
     const fetchDataInicial = async () => {
       try {
-        const response = await HttpClient.get('/Solicitudes/DatosIniciales');
+        const response = await HttpClient.get('Solicitudes/DatosIniciales');
         setdataInicial(response.data);
       } catch (error) {
         toast.error("Error en la carga de datos: " + error.message);
@@ -53,7 +53,7 @@ export default function CrearRepuesto() {
           }
           console.log(resumenData);
           
-          const response = await HttpClient.post("/Solicitudes", resumenData)
+          const response = await HttpClient.post("Solicitudes", resumenData)
           if (response.status === 200) {
             
             toast.success("Solicitud registrada correctamente");

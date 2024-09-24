@@ -2,9 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
-//axios.defaults.baseURL = import.meta.env.VITE_API_URL;
-axios.defaults.baseURL = "http://localhost:5116/api";
-//axios.defaults.baseURL = "https://imbsystem.ddns.net:8443/api";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.interceptors.request.use(
   (config) => {
@@ -46,7 +44,7 @@ axios.interceptors.response.use(
 
 const refreshToken = async () => {
   try {
-    const response = await axios.post("/auth/refresh", {
+    const response = await axios.post("auth/refresh", {
       refreshToken: Cookies.get("refresh_token"),
     });
     const newToken = response.data;

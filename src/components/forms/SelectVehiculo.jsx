@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import HttpClient from '../../services/HttpClient';
 
-const URI = `/Vehiculos/`;
+const URI = `Vehiculos/`;
 
 export default function SelectVehiculo({ onIdVehiculoChange }) {
   const [dataVehiculos, setDataVehiculos] = useState([]);

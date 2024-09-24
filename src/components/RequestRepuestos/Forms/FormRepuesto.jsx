@@ -5,7 +5,7 @@ import HttpClient from "../../../services/HttpClient";
 import Spinner from "../../forms/Spinner";
 import { motion } from 'framer-motion';
 export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
-    const url = `/Repuestos/`;
+    const url = `Repuestos/`;
     const [listRepuestos, setlistRepuestos] = useState([]);
     const [repuestoData, setRepuestoData] = useState({
         IdRepuesto: 0,

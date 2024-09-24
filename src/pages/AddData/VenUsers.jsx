@@ -19,7 +19,7 @@ const VenUsers = () => {
 
   useEffect(() => {
     const getDataRoles = async () => {
-      const URI = '/Vendedores/Roles';
+      const URI = 'Vendedores/Roles';
       try {
         setIsLoading(true);
         const response = await HttpClient.get(URI);

@@ -40,7 +40,7 @@ export default function EstadosSolicitudes() {
         setError(null); // Reset error state
 
         try {
-            const response = await HttpClient.get(`/Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
+            const response = await HttpClient.get(`Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
             setResumen(response.data);
             // console.log(response.data);
         } catch (error) {

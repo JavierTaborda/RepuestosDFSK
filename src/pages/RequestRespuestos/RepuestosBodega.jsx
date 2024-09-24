@@ -6,9 +6,9 @@ import Spinner from '../../components/forms/Spinner';
 import { AuthContext } from '../../context/AuthProvider';
 import HttpClient from '../../services/HttpClient';
 
-const URI1 = `/Articulos/Existencia`;
-const URI2 = `/Articulos/CodigosGrupo`;
-const URI3 = `/Articulos/CodigosMarca`;
+const URI1 = `Articulos/Existencia`;
+const URI2 = `Articulos/CodigosGrupo`;
+const URI3 = `Articulos/CodigosMarca`;
 
 export default function RepuestosBodega({ addToCart }) {
     const { user } = useContext(AuthContext);
@@ -68,7 +68,7 @@ export default function RepuestosBodega({ addToCart }) {
         try {
             setIsLoading(true);
 
-            const URIM = `/Articulos/Bodega/Marca/${encodeURIComponent(stringMarca)}/${encodeURIComponent(stringGrupo)}/${encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion)}`;
+            const URIM = `Articulos/Bodega/Marca/${encodeURIComponent(stringMarca)}/${encodeURIComponent(stringGrupo)}/${encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion)}`;
 
             const response = await HttpClient.get(URIM);
             const dataRepuesto = response.data;

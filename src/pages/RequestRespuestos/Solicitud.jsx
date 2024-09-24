@@ -52,8 +52,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     if (resumenData.idVendedor === 0) {
                         resumenData.idVendedor = user.user;
                     }
-                    console.log(resumenData);
-                    const response = await HttpClient.post("/Solicitudes", resumenData)
+                    //console.log(resumenData);
+                    const response = await HttpClient.post("Solicitudes", resumenData)
                     if (response.status === 200) {
                         clearCart();
                         toast.success("Solicitud registrada correctamente");
@@ -93,8 +93,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
             //console.log(listArticulos);
 
-            const fetchRepuestos = () => HttpClient.post('/Repuestos/codigos', listArticulos);
-            const fetchDataInicial = () => HttpClient.get('/Solicitudes/DatosIniciales');
+            const fetchRepuestos = () => HttpClient.post('Repuestos/codigos', listArticulos);
+            const fetchDataInicial = () => HttpClient.get('Solicitudes/DatosIniciales');
 
             Promise.all([fetchRepuestos(), fetchDataInicial()])
                 .then(([dataRepuesto, dataInicial]) => {

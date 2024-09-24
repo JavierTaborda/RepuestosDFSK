@@ -44,14 +44,14 @@ export default function Vehicles() {
 
     const filterByArticulo = () => {
         setSearchData(true);
-            fetchData( `/Vehiculos/Codigo/${filterData}`, setVehicleData, "Artículo no encontrado");
+            fetchData( `Vehiculos/Codigo/${filterData}`, setVehicleData, "Artículo no encontrado");
         setSearchData(false);
     };
 
     const updateVehicle = async (vehiculo) => {
         vehiculo.estatus = !vehiculo.estatus;
         try {
-            await HttpClient.put('/Vehiculos', vehiculo);
+            await HttpClient.put('Vehiculos', vehiculo);
             toast.success(`Se actualizó el estado del vehículo ${vehiculo.descripcion}`);
             RefreshData();
         } catch (error) {
@@ -61,13 +61,13 @@ export default function Vehicles() {
 
     const GetVehicleDFSK = () => {
         setSearchDFSK(true);
-        fetchData(`/Articulos/Bodega/Vehiculos/${filterDFSKData}`, setVehicleDFSKData, "Artículo no encontrado");
+        fetchData(`Articulos/Bodega/Vehiculos/${filterDFSKData}`, setVehicleDFSKData, "Artículo no encontrado");
         setSearchDFSK(false);
     };
 
     const UpdateAddVehicle = async () => {
         try {
-            await axios.put('/Vehiculos/AddUpdate', formVehicleData);
+            await axios.put('Vehiculos/AddUpdate', formVehicleData);
             toast.success(`Se actualizó el vehículo ${formVehicleData.descripcion}`);
             RefreshData();
         } catch (error) {
@@ -77,7 +77,7 @@ export default function Vehicles() {
 
     //refresh or getdata
     const RefreshData = () => {
-        const url = filterData.length === 0 ? '/Vehiculos' : `/Vehiculos/Codigo/${filterData}`;
+        const url = filterData.length === 0 ? 'Vehiculos' : `Vehiculos/Codigo/${filterData}`;
         fetchData(url, setVehicleData, "Error refreshing data");
     };
 
