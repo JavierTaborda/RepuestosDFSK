@@ -21,12 +21,14 @@ const Login = () => {
         setError(null);
 
         try {
+            
             await login({ username, password }).then((response) => {
                 toast.success(response);
             });
             
         } catch (error) {
             setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
+            console.log(error);
             toast.error(error.request.response);
         } finally {
 

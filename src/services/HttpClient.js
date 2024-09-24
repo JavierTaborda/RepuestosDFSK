@@ -2,7 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
+//axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.baseURL = "http://localhost:5116/api";
+//axios.defaults.baseURL = "https://imbsystem.ddns.net:8443/api";
 
 axios.interceptors.request.use(
   (config) => {
