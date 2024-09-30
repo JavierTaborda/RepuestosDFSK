@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext,useState} from "react";
 import DarkMode from "./DarkMode"
-import CartTable from "./RequestRepuestos/CartTable"
+import CartView from "./RequestRepuestos/CartView";
 import { AuthContext } from '../context/AuthProvider';
 
 export default function Header({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
@@ -17,6 +17,7 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon" />
           </button>
+          
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {!user ? (
@@ -54,19 +55,12 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
             </ul>
             {user && (
               <>
-                <div className="dropdown mx-2 my-2">
-                  <button className="btn btn-outline-danger dropdown-toggle rounded-5" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" data-bs-auto-close="false">
-                    <i className="bi bi-cart3"></i>
-                  </button>
-                  <div className="dropdown-menu dropdown-menu-end p-3 shadow" style={{ maxHeight: '57vh', overflowY: 'auto', maxWidth: '95vw', overflowX: 'auto' }}>
-                    <CartTable cart={cart} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} clearCart={clearCart} isEmpty={isEmpty} carTotal={carTotal} sendForm={false} />
-                  </div>
-                </div>
+                <CartView cart={cart} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} clearCart={clearCart} isEmpty={isEmpty} carTotal={carTotal}/>
                 <div className="mx-2 my-2">
                   <button className="btn btn-outline-success rounded-5" type="button" title="Cerrar Sesión" onClick={logout}>
                     <i className="bi bi-box-arrow-in-right"></i>
                   </button>
-                </div>
+                </div> 
               </>
             )}
             <div className="mx-2 my-2">

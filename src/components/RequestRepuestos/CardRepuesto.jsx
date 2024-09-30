@@ -4,7 +4,7 @@ import "../../styles/CardRepuesto.css";
 import "../../styles/ImageCard.css";
 import ModalCart from "./ModalCart";
 import ImageCard from '../forms/ImageCard';
-export default function CardRepuesto({ repuestos, addToCart }) {
+export default function CardRepuesto({ repuestos, addToCart, cart, removeFromCart, increaseQuantity, decreaseQuantity }) {
 
     const [showModal, setShowModal] = useState(false);
 
@@ -67,6 +67,7 @@ export default function CardRepuesto({ repuestos, addToCart }) {
                 handleClose={handleCloseModal}
                 repuesto={repuestos}
                 addToCard={addToCart}
+        
             />
 
         </>

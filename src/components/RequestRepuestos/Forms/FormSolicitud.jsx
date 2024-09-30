@@ -3,16 +3,16 @@ import dayjs from 'dayjs';
 import { AuthContext } from '../../../context/AuthProvider';
 
 
-const FormSolicitud = ({  setResumenData, onSubmit }) => {
+const FormSolicitud = ({ setResumenData, onSubmit }) => {
     const { user } = useContext(AuthContext);
-   
+
     const [localResumenData, setLocalResumenData] = useState({
         idResumenSolicitud: 0,
         fechaCreacion: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
         estatus: true,
         fechaCierre: dayjs(new Date(new Date().setDate(new Date().getDate() + 5))).format('YYYY-MM-DDTHH:mm:ss'),
         observacion: '',
-        idVendedor: user?.user || 0,
+        idUsuario: user?.user || 0,
         solicitudes: []
     });
 
@@ -75,6 +75,39 @@ const FormSolicitud = ({  setResumenData, onSubmit }) => {
                     />
                 </div>
                 <div className="col-12 pt-2">
+                    <label htmlFor="direccion" className="form-label">Dirección</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="direccion"
+                        name="direccion"
+                    // value={localResumenData.direccion}
+                    // onChange={handleChange}
+                    />
+                </div>
+                <div className="col-12 pt-2">
+                    <label htmlFor="telefono" className="form-label">Teléfono</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="telefono"
+                        name="telefono"
+                    // value={localResumenData.telefono}
+                    // onChange={handleChange}
+                    />
+                </div>
+                <div className="col-12 pt-2">
+                    <label htmlFor="rif" className="form-label">RIF</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="rif"
+                        name="rif"
+                    // value={localResumenData.rif}
+                    // onChange={handleChange}
+                    />
+                </div>
+                <div className="col-12 pt-2">
                     <label htmlFor="textarea" className="form-label">Observación</label>
                     <textarea
                         className="form-control"
@@ -86,6 +119,24 @@ const FormSolicitud = ({  setResumenData, onSubmit }) => {
                         onChange={handleChange}
                     />
                 </div>
+                <div className="col-12 pt-2">
+                    <div className="row">
+                        <div className="col-8">
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="cupon"
+                                name="cupon"
+                            // value={localResumenData.rif}
+                            // onChange={handleChange}
+                            />
+                        </div>
+                        <div className="col-4">
+                            <button type="button" className="btn btn-outline-primary" > <i className="bi bi-plus-square"></i> Cupón</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div className="d-grid gap-2">
                 <button type="submit" className="btn btn-success mt-5">

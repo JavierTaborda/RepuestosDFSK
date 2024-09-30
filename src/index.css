@@ -37,7 +37,7 @@ background-color: rgb(172, 172, 172);
 }
 
 /* clases para inpust */
-input, .form-control:focus {
+/* input, .form-control:focus {
     border-color: #fc9ca2;
     box-shadow: 0 0 0 .15rem #dc35451a;
     
@@ -46,7 +46,7 @@ input,select {
     border-radius: 15px !important;
     box-shadow: 1px 1px 6px 0 rgba(0, 0, 0, 0.129);
     color: dimgray;
-  }
+  } */
 
   
   input:invalid {
@@ -122,4 +122,34 @@ max-width: 400px;
 .error {
   color: red;
   margin-top: 1rem;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-item {
+  margin-bottom: 10px;
+}
+
+.nav-link {
+  color: #000;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }

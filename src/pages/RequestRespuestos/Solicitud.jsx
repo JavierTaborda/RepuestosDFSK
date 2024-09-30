@@ -33,7 +33,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         }));
         //console.log(listSolicitudes);
         setResumenData((prevData) => ({ ...prevData, solicitudes: listSolicitudes }));
-       
+
     };
 
     const insertSolicitud = async (event) => {
@@ -49,10 +49,10 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
 
                 try {
-                    if (resumenData.idVendedor === 0) {
-                        resumenData.idVendedor = user.user;
+                    if (resumenData.idUsuario === 0) {
+                        resumenData.idUsuario = user.user;
                     }
-                    //console.log(resumenData);
+                    console.log(resumenData);
                     const response = await HttpClient.post("Solicitudes", resumenData)
                     if (response.status === 200) {
                         clearCart();
@@ -63,7 +63,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     }
 
                 } catch (error) {
-                    toast.error("Error en la solicitud: ");
+                    console.log(error);
+                    toast.error("Error en la solicitud: " + error.message);
                 }
                 finally {
                     setIsLoading(false);
@@ -79,7 +80,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     useEffect(() => {
 
         if (loadData) {
-          
+
             if (cart.length === 0) {
                 setloadData(false);
                 return;
@@ -154,18 +155,20 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                             </div>
                         </div>
 
-                        <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'>
+                        <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-1'>
+                            <div className="table-responsive" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                                {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
 
-                            {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
+                                    !createSolicitud ? null :
 
-                                !createSolicitud ? null :
+                                        isLoading ? <Spinner /> : <FormSolicitud
+                                            setResumenData={setResumenData}
+                                            onSubmit={insertSolicitud}
+                                        />
+                                      
+                                }
 
-                                    isLoading ? <Spinner /> : <FormSolicitud
-                                        setResumenData={setResumenData}
-                                        onSubmit={insertSolicitud}
-                                    />
-                            }
-
+                            </div>
                         </div>
                     </div>
                 </motion.div>

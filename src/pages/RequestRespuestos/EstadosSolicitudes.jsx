@@ -174,7 +174,7 @@ export default function EstadosSolicitudes() {
                                             </TableCell>
                                             <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
                                             <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                                            <TableCell>{resumen.vendedor}</TableCell>
+                                            <TableCell>{resumen.usuario}</TableCell>
                                             <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio*solicitud.cantidad), 0)}</span></TableCell>
                                             <TableCell>
                                                 {user.role === 'admin' ? <button className='btn btn-outline-danger rounded-5' 

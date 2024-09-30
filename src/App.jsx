@@ -25,17 +25,16 @@ function App() {
   return (
     <>
       <AuthProvider>
- 
-          <Header
-            cart={cart}
-            removeFromCart={removeFromCart}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-            clearCart={clearCart}
-            isEmpty={isEmpty}
-            carTotal={carTotal}
-          />
-          
+        <Header
+          cart={cart}
+          removeFromCart={removeFromCart}
+          increaseQuantity={increaseQuantity}
+          decreaseQuantity={decreaseQuantity}
+          clearCart={clearCart}
+          isEmpty={isEmpty}
+          carTotal={carTotal}
+        />
+
         <AppRoutes
           cart={cart}
           addToCart={addToCart}
@@ -46,8 +45,8 @@ function App() {
           isEmpty={isEmpty}
           carTotal={carTotal}
         />
-          <Footer />
-          <ToastContainer position="top-center" draggable />
+        <Footer />
+        <ToastContainer position="top-center" draggable />
 
 
       </AuthProvider>
