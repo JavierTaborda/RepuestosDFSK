@@ -9,6 +9,7 @@ import Solicitud from '../pages/RequestRespuestos/Solicitud';
 import EstadosSolicitudes from '../pages/RequestRespuestos/EstadosSolicitudes';
 import Vehicles from '../pages/AddData/Vehicles';
 import VenUsers from '../pages/AddData/VenUsers';
+import Repuestos from '../pages/AddData/Repuestos';
 function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
     const isAuthenticated = true; // Aquí deberías verificar la autenticación real
@@ -40,6 +41,7 @@ function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decrease
 
             {/* AddData admin*/}
             <Route element={<PrivateRoute roles={['admin']} />}>
+                <Route path="/editrepuestos" element={<Repuestos />} />
                 <Route path="/vehiculos" element={<Vehicles />} />
                 <Route path="/users" element={<VenUsers />} />
             </Route>

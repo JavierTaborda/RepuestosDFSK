@@ -43,8 +43,10 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                         Ingresar Elementos
                       </a>
                       <ul className="dropdown-menu shadow-sm">
+                        <li><Link to="/editrepuestos" className="dropdown-item">Repuestos</Link></li>
                         <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
                         <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
+                        
                         {/* <li><Link to="/repuestonew" className="dropdown-item">Estados</Link></li>
                         <li><Link to="/repuestonew" className="dropdown-item">Responsables de Solicitud</Link></li> */}
                       </ul>
