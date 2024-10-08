@@ -104,6 +104,7 @@ export default function Vehicles() {
 
     useEffect(() => {
         RefreshData();
+        
     }, []);
 
     useEffect(() => {

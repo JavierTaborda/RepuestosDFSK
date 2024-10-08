@@ -13,7 +13,9 @@ c70512
   --bs-danger: #d62e2f !important;
 }
  */
-
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
 
 body {
   font-family: 'Roboto', sans-serif;
