@@ -14,6 +14,7 @@ const Repuestos = () => {
 
     const handleFormSubmit = (data) => {
         console.log('Datos recibidos del formulario:', data);
+        toast.success("Hola")
         closeModal();
     };
 
@@ -23,7 +24,6 @@ const Repuestos = () => {
                 const repuestos = await getRepuestos();
                 setRepuestos(repuestos);
                 // toast.success('Repuestos cargados exitosamente');
-                console.log('Repuestos:', repuestos);
             } catch (error) {
                 console.error('Error fetching repuestos', error);
                 setError(error);
@@ -54,28 +54,37 @@ const Repuestos = () => {
                 transition={{ duration: 0.5 }}
                 className="container mx-auto p-4"
             >
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Código</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Nombre</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Descripción</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Precio</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Marca</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>En Inventario</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Editar</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Código</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Nombre</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Descripción</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Precio</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Marca</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>En Inventario</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Imagen</TableCell>
+                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Editar</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {repuestos.map((repuesto) => (
-                                <TableRow key={repuesto.idRepuesto}>
+                                <TableRow key={repuesto.idRepuesto} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell>{repuesto.codigo}</TableCell>
                                     <TableCell>{repuesto.nombre}</TableCell>
                                     <TableCell>{repuesto.descripcion}</TableCell>
                                     <TableCell>{repuesto.precio}</TableCell>
                                     <TableCell>{repuesto.marca}</TableCell>
                                     <TableCell>{repuesto.enInventario ? "Sí" : "No"}</TableCell>
+                                    <TableCell>
+                                        <img
+                                            src={repuesto.imagen}
+                                            className="img-fluid"
+                                            alt={repuesto.descripcion}
+                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }}
+                                        />
+                                    </TableCell>
                                     <TableCell>
                                         <button className="btn btn-outline-secondary" onClick={() => openModal(repuesto)}>
                                             <i className="bi bi-pencil-square"></i>
@@ -86,8 +95,12 @@ const Repuestos = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </motion.div>
-            <Dialog open={modalIsOpen} onClose={closeModal}  aria-labelledby="form-dialog-title"
+            <Dialog
+                open={modalIsOpen}
+                onClose={closeModal}
+                aria-labelledby="form-dialog-title"
                 sx={{
                     '& .MuiDialog-paper': {
                         margin: 'auto',
@@ -96,23 +109,25 @@ const Repuestos = () => {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         minWidth: '50%',
-                        '@media (max-width: 600px)': {  // Media query para pantallas de tamaño teléfono
-                            minWidth: '90%'
-                        }
+                        padding: 4,
+                        borderRadius: 2,
+                        boxShadow: 3,
+                        transition: 'all 0.3s ease',
+                        '@media (max-width: 600px)': { minWidth: '90%' }
                     }
-                }} >
+                }}
+            >
                 <DialogTitle id="form-dialog-title">Editar Repuesto</DialogTitle>
                 <DialogContent>
                     {selectedRepuesto && (
                         <EditRepuesto initialData={selectedRepuesto} onSubmit={handleFormSubmit} />
                     )}
                 </DialogContent>
-                <DialogActions> 
-                    <Button onClick={closeModal} sx={{ color: '#d62e2f' }}>
-                        Cerrar
-                    </Button>
+                <DialogActions>
+                    <Button onClick={closeModal} sx={{ color: '#d62e2f' }}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
+
         </>
     );
 };

@@ -4,6 +4,7 @@ import HttpClient from './HttpClient';
 export const getRepuestos = async () => {
   try {
     const response = await HttpClient.get("Repuestos");
+
     return response.data;
   } catch (error) {
     console.error(error);
@@ -11,6 +12,15 @@ export const getRepuestos = async () => {
   }
 };
 
+
+export const updateRespuestos = async (repuesto) => {
+  try {
+   const response = await HttpClient.put("Repuestos", repuesto);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 
 //Sitema IMB
 export const getMarcasImb = async () => {
@@ -33,5 +43,5 @@ export const getGrupos = async () => {
 };
 
 
-export default { getRepuestos,getMarcasImb,getGrupos };
+export default { getRepuestos,getMarcasImb,getGrupos,updateRespuestos };
 

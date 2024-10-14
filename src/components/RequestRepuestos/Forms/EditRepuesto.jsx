@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
-
+import { uploadFile } from '../../../firebase/config';
+import { toast } from 'react-toastify';
+import { updateRespuestos } from '../../../services/RepuestosService';
+import { updateImagenURL } from '../../../services/ArticulosService';
 export default function EditRepuesto({ initialData, onSubmit }) {
     const [formData, setFormData] = useState({
         idRepuesto: 0,
@@ -15,18 +18,13 @@ export default function EditRepuesto({ initialData, onSubmit }) {
         estatus: true,
         imagen: ''
     });
-
     const [file, setFile] = useState(null);
-    const { getRootProps, getInputProps } = useDropzone({
-        onDrop: acceptedFiles => {
-            setFile(acceptedFiles[0]);
-            setFormData({ ...formData, imagen: acceptedFiles[0].name });
-        }
-    });
+
 
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
+            console.log(initialData)
         }
     }, [initialData]);
 
@@ -38,10 +36,40 @@ export default function EditRepuesto({ initialData, onSubmit }) {
         setFormData({ ...formData, [e.target.name]: e.target.checked });
     };
 
-    const handleSubmit = (e) => {
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop: acceptedFiles => {
+            setFile(acceptedFiles[0]);
+        }
+    });
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(formData);
+        try {
+            const fileType = file.name.split('.').pop(); // Get the file extension
+            const url = await uploadFile(file, `${formData.codigo}.${fileType}`);
+            if (url.length > 0) {
+                formData.imagen = url;
+                const responseDFSK = await updateImagenURL({ articulo: formData.codigo, urlImagen: formData.imagen });
+                if (responseDFSK === "Exitoso") {
+                    const responseConcesionario = await updateRespuestos(formData);
+                    if (responseConcesionario.status === 200) {
+                        toast.success("Repuesto actualizado exitosamente");
+                    } else {
+                        toast.error("Error al actualizar el repuesto");
+                    }
+                }
+
+                else {
+                    toast.error("Error al actualizar el repuesto");
+                }
+
+                // onSubmit(formData);
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message);
+        }
     };
+
 
     const previewImage = file ? URL.createObjectURL(file) : null;
 
@@ -129,6 +157,10 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-check-input"
                         />
                     </div>
+                    <div className=" pt-2">
+                        <label>Imagen actual:</label>
+                        <img src={formData.imagen} className="img-thumbnail" alt={formData.nombre} />
+                    </div>
                 </div>
                 <div {...getRootProps()} className="p-4 border border-secondary rounded mt-4">
                     <input {...getInputProps()} />
@@ -141,6 +173,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                         </div>
                     )}
                 </div>
+          
                 <button type="submit" className="btn btn-success mt-4">Guardar</button>
             </form>
         </motion.div>

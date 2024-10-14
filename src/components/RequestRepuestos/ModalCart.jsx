@@ -35,7 +35,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
               <div className="row">
                 <div className="col-md-6">
                   <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
-                    <ImageCard info={repuesto.descripcion} articulo={repuesto.articulo} stock={repuesto.existencia} />
+                    <ImageCard info={repuesto.descripcion} articulo={repuesto.articulo} stock={repuesto.existencia} img={repuesto.urlimagen}/>
                   </div>
                 </div>
                 <div className="col-md-6">

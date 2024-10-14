@@ -163,7 +163,7 @@ export default function Vehicles() {
                                     {vehicleData?.map((item) => (
                                         <tr key={item.idVehiculo} className='p-1'>
                                             <td style={{ maxHeight: '80px', maxWidth: '80px' }}>
-                                                <ImageCard info={item.descripcion} stock={item.existencia} />
+                                                <ImageCard info={item.descripcion} stock={item.existencia} img={item.urlimagen} />
                                             </td>
                                             <td className="align-middle">{item.codigo}</td>
                                             <td className="align-middle">{item.descripcion}</td>
