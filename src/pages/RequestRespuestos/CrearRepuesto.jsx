@@ -5,6 +5,7 @@ import FormSolicitud from "../../components/RequestRepuestos/Forms/FormSolicitud
 import { motion } from 'framer-motion';
 import { toast } from "react-toastify";
 import HttpClient from '../../services/HttpClient';
+import{getInitialData} from '../../services/SolicitudesService';
 import dayjs from 'dayjs';
 export default function CrearRepuesto() {
 
@@ -19,8 +20,9 @@ export default function CrearRepuesto() {
   useEffect(() => {
     const fetchDataInicial = async () => {
       try {
-        const response = await HttpClient.get('Solicitudes/DatosIniciales');
-        setdataInicial(response.data);
+        const response = await getInitialData();
+        setdataInicial(response);
+        //console.log(response);
       } catch (error) {
         toast.error("Error en la carga de datos: " + error.message);
       } finally {

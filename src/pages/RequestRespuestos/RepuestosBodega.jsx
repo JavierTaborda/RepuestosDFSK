@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useRef, useMemo } from "react";
 import { toast } from 'react-toastify';
 import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
 import Spinner from '../../components/forms/Spinner';
@@ -8,50 +7,43 @@ import { getRepuestosFilters, getAllRepuestos } from '../../services/ArticulosSe
 
 export default function RepuestosBodega({ addToCart }) {
     const { user } = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(true); // Estado para controlar la carga
+    const [isLoading, setIsLoading] = useState(true);
     const [dataRepuesto, setRepuestos] = useState([]);
     const [dataMarca, setMarca] = useState([]);
     const [dataGrupo, setGrupo] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [stringMarca, setStringMarca] = useState("*")
-    const [stringGrupo, setStringGrupo] = useState("*")
-    const [stringDescripcion, setstringDescripcion] = useState("*")
-    const [stringTextSearch, setstringTextSearch] = useState("")
-    const [orderData, setorderData] = useState("")
+    const [stringMarca, setStringMarca] = useState("*");
+    const [stringGrupo, setStringGrupo] = useState("*");
+    const [stringDescripcion, setStringDescripcion] = useState("*");
+    const [stringTextSearch, setStringTextSearch] = useState("");
+    const [orderData, setOrderData] = useState("");
+    const itemsPerPage = 12;
+    const toastId = useRef(null);
+    const startIndex = useMemo(() => (currentPage - 1) * itemsPerPage, [currentPage]);
 
-    const itemsPerPage = 12; // Cambia esto según tus necesidades
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    var visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
-
-    const toastId = React.useRef(null);//Dont repeat the notification
-
-    const notifyerror = (error) => {
+    const notifyError = (error) => {
         if (!toast.isActive(toastId.current)) {
-            toastId.current = toast.error(error, {
-                draggable: true
-            });
+            toastId.current = toast.error(error, { draggable: true });
         }
-    }
-    const notifysuccess = () => {
-        if (!toast.isActive(toastId.current)) {
-            toastId.current = toast.success("Cargado exitoso ", {
-                draggable: true
-            });
-        }
-    }
+    };
 
+    const notifySuccess = () => {
+        if (!toast.isActive(toastId.current)) {
+            toastId.current = toast.success("Cargado exitoso ", { draggable: true });
+        }
+    };
 
     useEffect(() => {
-
         const fetchData = async () => {
             try {
                 const { repuestos, grupo, marca } = await getAllRepuestos();
                 setRepuestos(repuestos);
                 setGrupo(grupo);
                 setMarca(marca);
+                //notifySuccess();
             } catch (err) {
                 console.error(err);
-                setError(err);
+                notifyError(err.message);
             } finally {
                 setIsLoading(false);
             }
@@ -59,108 +51,153 @@ export default function RepuestosBodega({ addToCart }) {
         fetchData();
     }, []);
 
-
     const filterMarca = async () => {
         try {
             setIsLoading(true);
-        
-             const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo, stringDescripcion);
-            setRepuestos(dataRepuesto);
-
-            // SORT
-            dataRepuesto.sort((a, b) => {
-                if (orderData === "Mayor Existencia") {
-                    return b.existencia - a.existencia;
-                } else if (orderData === "Menor Existencia") {
-                    return a.existencia - b.existencia;
-                } else if (orderData === "Mayor Precio") {
-                    return b.venta - a.venta;
-                } else {
-                    return a.venta - b.venta;
-                }
-            });
-
-            // Paging
-            handlePageChange(1);
-            visibleRepuestos = dataRepuesto?.slice(startIndex, startIndex + itemsPerPage);
+            const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo, stringDescripcion);
+            const sortedRepuestos = sortRepuestos(dataRepuesto, orderData);
+            setRepuestos(sortedRepuestos);
+            handlePageChange(1); // Reset to first page
         } catch (error) {
-            notifyerror('Error de la petición: ' + error.message);
+            notifyError('Error de la petición: ' + error.message);
         } finally {
             setIsLoading(false);
         }
     };
 
+    const sortRepuestos = (repuestos, order) => {
+        return repuestos.sort((a, b) => {
+            switch (order) {
+                case "Mayor Existencia":
+                    return b.existencia - a.existencia;
+                case "Menor Existencia":
+                    return a.existencia - b.existencia;
+                case "Mayor Precio":
+                    return b.venta - a.venta;
+                case "Menor Precio":
+                    return a.venta - b.venta;
+                default:
+                    return 0;
+            }
+        });
+    };
+
     useEffect(() => {
         if (!isLoading) {
-
             filterMarca();
         }
-
     }, [stringMarca, stringGrupo, stringDescripcion, orderData]);
-
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
+    const visibleRepuestos = useMemo(() => dataRepuesto.slice(startIndex, startIndex + itemsPerPage), [dataRepuesto, startIndex]);
 
     return (
         <>
             <h2 className="bd-title text-center mb-0 pt-2">Inventario de Repuestos</h2>
-
             <div className="container my-5">
-
-                <div className=" d-flex flex-wrap justify-content-between align-items-center p-3">
-
+                <div className="d-flex flex-wrap justify-content-between align-items-center p-3">
                     <div className="d-flex pe-2 pt-3" role="search">
-                        <input className="form-control me-2 rounded-5 shadow-sm" value={stringTextSearch} onChange={(e) => setstringTextSearch(e.target.value)} type="search" placeholder="Buscar..." aria-label="Buscar" />
-                        <button className="btn btn-outline-danger rounded-5  shadow-sm" type="button" onClick={() => setstringDescripcion(stringTextSearch)}>Buscar</button>
+                        <input
+                            className="form-control me-2 rounded-5 shadow-sm"
+                            value={stringTextSearch}
+                            onChange={(e) => setStringTextSearch(e.target.value)}
+                            type="search"
+                            placeholder="Buscar..."
+                            aria-label="Buscar"
+                        />
+                        <button
+                            className="btn btn-outline-danger rounded-5 shadow-sm"
+                            type="button"
+                            onClick={() => setStringDescripcion(stringTextSearch)}
+                        >
+                            Buscar
+                        </button>
                     </div>
+
                     <div className="btn-group ps-2 pt-3" role="group">
-                        <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button
+                            type="button"
+                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
                             <i className="bi bi-funnel" /> MARCA : {stringMarca}
                         </button>
                         <ul className="dropdown-menu shadow">
-                            <li><a onClick={() => setStringMarca('*')} className="dropdown-item" href="#">Todos</a></li>
+                            <li>
+                                <a onClick={() => setStringMarca('*')} className="dropdown-item" href="#">Todos</a>
+                            </li>
                             {dataMarca.map((item) => (
                                 <li key={item.codigo}>
-                                    <a onClick={() => setStringMarca(item.descripcion)} className="dropdown-item">{item.descripcion}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="btn-group ps-2 pt-3 " role="group">
-                        <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="bi bi-funnel" /> GRUPO: {stringGrupo}
-                        </button>
-                        <ul className="dropdown-menu shadow">
-                            <li><a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a></li>
-                            {dataGrupo.map((item) => (
-                                <li key={item.codigo}>
-                                    <a onClick={() => setStringGrupo(item.descripcion)} className="dropdown-item">{item.descripcion}</a>
+                                    <a onClick={() => setStringMarca(item.descripcion)} className="dropdown-item">
+                                        {item.descripcion}
+                                    </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
                     <div className="btn-group ps-2 pt-3" role="group">
-                        <button type="button" className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className=" bi bi-sort-down" /> Ordenar por: {orderData}
+                        <button
+                            type="button"
+                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <i className="bi bi-funnel" /> GRUPO: {stringGrupo}
                         </button>
                         <ul className="dropdown-menu shadow">
-                            <li><a onClick={() => setorderData('Mayor Existencia')} className="dropdown-item" href="#"> <i className="bi bi-sort-down"></i> Mayor Existencia</a></li>
-                            <li><a onClick={() => setorderData('Menor Existencia')} className="dropdown-item" href="#"><i className="bi bi-sort-down-alt"></i> Menor Existencia</a></li>
-                            <li><a onClick={() => setorderData('Mayor Precio')} className="dropdown-item" href="#"> <i className="bi bi-sort-down"></i> Mayor Precio</a></li>
-                            <li><a onClick={() => setorderData('Menor Precio')} className="dropdown-item" href="#"><i className="bi bi-sort-down-alt"></i> Menor Precio</a></li>
+                            <li>
+                                <a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a>
+                            </li>
+                            {dataGrupo.map((item) => (
+                                <li key={item.codigo}>
+                                    <a onClick={() => setStringGrupo(item.descripcion)} className="dropdown-item">
+                                        {item.descripcion}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <div className="btn-group ps-2 pt-3" role="group">
+                        <button
+                            type="button"
+                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            <i className="bi bi-sort-down" /> Ordenar por: {orderData}
+                        </button>
+                        <ul className="dropdown-menu shadow">
+                            <li>
+                                <a onClick={() => setOrderData('Mayor Existencia')} className="dropdown-item" href="#">
+                                    <i className="bi bi-sort-down"></i> Mayor Existencia
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={() => setOrderData('Menor Existencia')} className="dropdown-item" href="#">
+                                    <i className="bi bi-sort-down-alt"></i> Menor Existencia
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={() => setOrderData('Mayor Precio')} className="dropdown-item" href="#">
+                                    <i className="bi bi-sort-down"></i> Mayor Precio
+                                </a>
+                            </li>
+                            <li>
+                                <a onClick={() => setOrderData('Menor Precio')} className="dropdown-item" href="#">
+                                    <i className="bi bi-sort-down-alt"></i> Menor Precio
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
-
-
-                {dataRepuesto?.length > 0 ? (
-
+                {dataRepuesto?.length > 0 && (
                     <div className="d-flex justify-content-center mt-4 mb-2">
                         <div className="btn-group" role="group" aria-label="Basic mixed styles example">
                             <button
@@ -170,9 +207,9 @@ export default function RepuestosBodega({ addToCart }) {
                             >
                                 Anterior
                             </button>
-                            <button type="button" className="btn btn-danger"> {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
+                            <button type="button" className="btn btn-danger">
+                                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
                             </button>
-
                             <button
                                 className="btn btn-outline-danger"
                                 onClick={() => handlePageChange(currentPage + 1)}
@@ -181,23 +218,16 @@ export default function RepuestosBodega({ addToCart }) {
                                 Siguiente
                             </button>
                         </div>
-                    </div>) : null}
+                    </div>
+                )}
 
                 <div className="row">
-                    {isLoading ? (
-                        <Spinner />
-                    ) : (
-
-                        visibleRepuestos.map((item) => (
-                            <CardRepuesto key={item.articulo} repuestos={item} addToCart={addToCart} />
-                        ))
-
-                    )}
+                    {isLoading ? <Spinner /> : visibleRepuestos.map((item) => (
+                        <CardRepuesto key={item.articulo} repuestos={item} addToCart={addToCart} />
+                    ))}
                 </div>
 
-                {dataRepuesto?.length > 0 ? (
-
-
+                {dataRepuesto?.length > 0 && (
                     <div className="d-flex justify-content-center mt-4 mb-2">
                         <div className="btn-group" role="group" aria-label="Basic">
                             <button
@@ -207,9 +237,9 @@ export default function RepuestosBodega({ addToCart }) {
                             >
                                 Anterior
                             </button>
-                            <button type="button" className="btn btn-danger"> {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
+                            <button type="button" className="btn btn-danger">
+                                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
                             </button>
-
                             <button
                                 className="btn btn-outline-danger"
                                 onClick={() => handlePageChange(currentPage + 1)}
@@ -218,12 +248,14 @@ export default function RepuestosBodega({ addToCart }) {
                                 Siguiente
                             </button>
                         </div>
-                    </div>) : null}
-                <div className="d-flex justify-content-center mt-4 mb-2">
-                    {dataRepuesto?.length}  elementos
-                </div>
+                    </div>
+                )}
 
+                <div className="d-flex justify-content-center mt-4 mb-2">
+                    {dataRepuesto?.length} elementos
+                </div>
             </div>
         </>
     );
 }
+

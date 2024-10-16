@@ -4,7 +4,7 @@ export default function ImageCard({ info, articulo, stock, img }) {
 
     return (
         <>  <section id="img-card1" className="img-card">      
-            {img ? <img className="img-fluid" src={img} alt="imagen" /> : 
+            {img ? <img className="img-fluid" src={img} alt={info} /> : 
                 <ImgDefault />}
                 <div className="img-card__content  ">
                   
