@@ -4,11 +4,7 @@ import { toast } from 'react-toastify';
 import CardRepuesto from "../../components/RequestRepuestos/CardRepuesto";
 import Spinner from '../../components/forms/Spinner';
 import { AuthContext } from '../../context/AuthProvider';
-import HttpClient from '../../services/HttpClient';
-
-const URI1 = `Articulos/Existencia`;
-const URI2 = `Articulos/CodigosGrupo`;
-const URI3 = `Articulos/CodigosMarca`;
+import { getRepuestosFilters, getAllRepuestos } from '../../services/ArticulosService';
 
 export default function RepuestosBodega({ addToCart }) {
     const { user } = useContext(AuthContext);
@@ -46,33 +42,29 @@ export default function RepuestosBodega({ addToCart }) {
 
 
     useEffect(() => {
-    
-        const fetchRepuestos = () => HttpClient.get(URI1);
-        const fetchGrupos = () => HttpClient.get(URI2);
-        const fetchMarca = () => HttpClient.get(URI3);
 
-        Promise.all([fetchRepuestos(), fetchGrupos(), fetchMarca()])
-            .then(([dataRepuesto, dataGrupo, dataMarca]) => {
-                setRepuestos(dataRepuesto.data);
-                setGrupo(dataGrupo.data);
-                setMarca(dataMarca.data);
-            })
-            .catch(error => {
-                notifyerror("Error en la carga de datos: " + error.message);
-            })
-            .finally(() => setIsLoading(false));
+        const fetchData = async () => {
+            try {
+                const { repuestos, grupo, marca } = await getAllRepuestos();
+                setRepuestos(repuestos);
+                setGrupo(grupo);
+                setMarca(marca);
+            } catch (err) {
+                console.error(err);
+                setError(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
     }, []);
 
 
     const filterMarca = async () => {
         try {
             setIsLoading(true);
-
-            const URIM = `Articulos/Bodega/Marca/${encodeURIComponent(stringMarca)}/${encodeURIComponent(stringGrupo)}/${encodeURIComponent(stringDescripcion === "" ? "*" : stringDescripcion)}`;
-
-            const response = await HttpClient.get(URIM);
-            const dataRepuesto = response.data;
-
+        
+             const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo, stringDescripcion);
             setRepuestos(dataRepuesto);
 
             // SORT
