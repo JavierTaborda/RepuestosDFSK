@@ -12,7 +12,6 @@ export const getRepuestos = async () => {
   }
 };
 
-
 export const updateRespuestos = async (repuesto) => {
   try {
    const response = await HttpClient.put("Repuestos", repuesto);
@@ -21,7 +20,6 @@ export const updateRespuestos = async (repuesto) => {
     throw error;
   }
 };
-
 
 export const postRepuesto = async (repuestoData) => {
   try {

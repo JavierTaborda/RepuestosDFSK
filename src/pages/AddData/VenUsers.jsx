@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import HttpClient from '../../services/HttpClient';
 import { toast } from 'react-toastify'; // Asegúrate de importar toast
 import 'bootstrap/dist/css/bootstrap.min.css'; // Asegúrate de importar Bootstrap CSS
-
-const VenUsers = () => { 
+import { getDataRoles, postUserData } from '../../services/UserService';
+const VenUsers = () => {
   const [dataRoles, setDataRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -18,12 +18,11 @@ const VenUsers = () => {
   });
 
   useEffect(() => {
-    const getDataRoles = async () => {
-      const URI = 'Usuarios/Roles';
+    const getRoles = async () => {
       try {
         setIsLoading(true);
-        const response = await HttpClient.get(URI);
-        setDataRoles(response.data);
+        const response = await getDataRoles();
+        setDataRoles(response);
       } catch (error) {
         toast.error("Error en la carga de datos: " + error.message);
       } finally {
@@ -31,7 +30,7 @@ const VenUsers = () => {
       }
     };
 
-    getDataRoles();
+    getRoles();
   }, []);
 
   const handleChange = (e) => {
@@ -49,8 +48,8 @@ const VenUsers = () => {
       return;
     }
     try {
-      const response = await HttpClient.post('/Auth/Registrar', formData);
-      console.log('Response:', response.data);
+      const response = await postUserData(formData);
+      console.log('Response:', response);
       toast.success("Usuario registrado exitosamente");
     } catch (error) {
       console.error('Error:', error);
@@ -163,9 +162,9 @@ const VenUsers = () => {
             </select>
           </div>
         )}
-        
+
         <button type="submit" className="btn btn-success mt-3"> <i className="bi bi-pencil"></i> Registrar</button>
-        
+
       </form>
     </div>
   );

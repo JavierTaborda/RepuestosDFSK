@@ -64,7 +64,7 @@ const refreshToken = async () => {
       window.location.href = "/login";
       Cookies.remove("token_access");
       Cookies.remove("refresh_token");
-    }, 4000); // Espera 4 segundos antes de redirigir
+    }, 4000); 
     newToken = null;
   }
 };
