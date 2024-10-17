@@ -4,8 +4,8 @@ import SelectVehiculo from "../../forms/SelectVehiculo";
 import HttpClient from "../../../services/HttpClient";
 import Spinner from "../../forms/Spinner";
 import { motion } from 'framer-motion';
+import { postRepuesto } from "../../../services/RepuestosService";
 export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
-    const url = `Repuestos/`;
     const [listRepuestos, setlistRepuestos] = useState([]);
     const [repuestoData, setRepuestoData] = useState({
         IdRepuesto: 0,
@@ -48,41 +48,33 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
         return Object.keys(tempErrors).length === 0;
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         repuestoData.Precio = 0;
-        
+
         if (validate()) {
-
-            if (!insertRepuesto) {
-                setIsClicked(true)
-
+            if (!isClicked) {
+                setIsClicked(true);
             }
-
             setIsLoading(true);
+
             try {
-                const response = await HttpClient.post(url, repuestoData);
+                console.log(repuestoData);
+                const response = await postRepuesto(repuestoData);
+
                 if (response.status === 200) {
-                   
                     setrepuestoData(response.data);
-                    //console.log(response.data);
-                    // setRepuestoData({
-                    //     Codigo: "",
-                    //     Nombre: "",
-                    //     Descripcion: "",
-                    //     Marca: "",
-                    // });
-                    //setlistRepuestos([]);
                 } else {
                     toast.error("Error al registrar el repuesto");
                 }
             } catch (error) {
                 if (error.response) {
-
                     console.log(repuestoData);
-                    toast.error("Error en al guardar los datos, hay una solicitud similar ya procesada." + error.response.data);
+                    toast.error("Error al guardar los datos, hay una solicitud similar ya procesada: " + error.response.data);
+                    setIsClicked(false);
                 } else if (error.request) {
-                    toast.error("Error conectando con el servidor..");
+                    toast.error("Error conectando con el servidor.");
                 } else {
                     toast.error("Error: " + error.message);
                 }
@@ -90,12 +82,10 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                 setlistRepuestos([]);
                 setIsLoading(false);
             }
-
         } else {
             toast.warning("Todos los campos son obligatorios");
         }
     };
-
     return (
         <form onSubmit={handleSubmit} className="pt-5">
             <div className="row g-3">

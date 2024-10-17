@@ -4,8 +4,7 @@ import FormRepuesto from "../../components/RequestRepuestos/Forms/FormRepuesto";
 import FormSolicitud from "../../components/RequestRepuestos/Forms/FormSolicitud";
 import { motion } from 'framer-motion';
 import { toast } from "react-toastify";
-import HttpClient from '../../services/HttpClient';
-import{getInitialData} from '../../services/SolicitudesService';
+import { getInitialData, postSolicitud } from '../../services/SolicitudesService';
 import dayjs from 'dayjs';
 export default function CrearRepuesto() {
 
@@ -45,38 +44,28 @@ export default function CrearRepuesto() {
     }
   }, [repuestoData]);
 
+
   useEffect(() => {
     if (loadingForm) {
-      async function fetchData() {
-
+      const fetchData = async () => {
         try {
-          if (resumenData.idVendedor === 0) {
-            resumenData.idVendedor = user.user;
+          if (resumenData.idUsuario === 0) {
+            resumenData.idUsuario = user.user;
           }
-          console.log(resumenData);
-          
-          const response = await HttpClient.post("Solicitudes", resumenData)
+          const response = await postSolicitud(resumenData);
           if (response.status === 200) {
-            
             toast.success("Solicitud registrada correctamente");
-
           } else {
             toast.error("Error al registrar la solicitud");
           }
-
         } catch (error) {
-          //console.log(error);
-          toast.error("Error en la solicitud: ", error);
-        }
-        finally {
+          toast.error("Error en la solicitud." + error.message);
+        } finally {
           setloadingForm(false);
         }
-
-      }
-      
+      };
       fetchData();
     }
-
   }, [resumenData]);
 
   const insertSolicitud = async (event) => {
@@ -125,20 +114,20 @@ export default function CrearRepuesto() {
 
             {
               !isLoading ? null :
-              loadingForm ? <Spinner /> :
-                <motion.div
-                  className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 1 }}
-                >
-                  <FormSolicitud
-                    setResumenData={setResumenData}
-                    onSubmit={insertSolicitud}
+                loadingForm ? <Spinner /> :
+                  <motion.div
+                    className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1 }}
+                  >
+                    <FormSolicitud
+                      setResumenData={setResumenData}
+                      onSubmit={insertSolicitud}
 
-                  />
+                    />
 
-                </motion.div>}
+                  </motion.div>}
           </div>
         </motion.div>
       </div>

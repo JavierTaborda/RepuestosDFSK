@@ -7,7 +7,8 @@ import HttpClient from '../../services/HttpClient';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import { motion } from 'framer-motion';
-import { ins } from 'framer-motion/client';
+import { getInitialData, postSolicitud } from '../../services/SolicitudesService';
+import { listRepuestos } from '../../services/RepuestosService';
 function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
     const { user } = useContext(AuthContext);
@@ -42,7 +43,6 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         createlistSolicitudes();
     };
 
-
     useEffect(() => {
         if (isLoading) {
             async function fetchData() {
@@ -52,8 +52,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     if (resumenData.idUsuario === 0) {
                         resumenData.idUsuario = user.user;
                     }
-                    console.log(resumenData);
-                    const response = await HttpClient.post("Solicitudes", resumenData)
+
+                    const response = await postSolicitud(resumenData);
                     if (response.status === 200) {
                         clearCart();
                         toast.success("Solicitud registrada correctamente");
@@ -77,42 +77,38 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     }), [resumenData];
 
 
+    
     useEffect(() => {
-
         if (loadData) {
-
             if (cart.length === 0) {
                 setloadData(false);
                 return;
             }
-
             const listArticulos = cart.map(repuesto => ({
                 codigo: repuesto.articulo,
                 nombre: repuesto.descripcion,
                 marca: repuesto.marca
             }));
 
-            //console.log(listArticulos);
+            const fetchData = async () => {
+                try {
+                    const dataRepuesto = await listRepuestos(listArticulos);
+                    setRepuestos(dataRepuesto);
 
-            const fetchRepuestos = () => HttpClient.post('Repuestos/codigos', listArticulos);
-            const fetchDataInicial = () => HttpClient.get('Solicitudes/DatosIniciales');
+                    const dataInicial = await getInitialData();
+                    setdataInicial(dataInicial);
 
-            Promise.all([fetchRepuestos(), fetchDataInicial()])
-                .then(([dataRepuesto, dataInicial]) => {
-                    setRepuestos(dataRepuesto.data);
-                    setdataInicial(dataInicial.data);
-                    //console.log(dataInicial);
-                    //console.log(dataRepuesto.data);
                     setcreateSolicitud(true);
-
-                })
-                .catch(error => {
+                } catch (error) {
                     toast.error("Error en la carga de datos: " + error.message);
-                })
-                .finally(() => setloadData(false));
+                } finally {
+                    setloadData(false);
+                }
+            };
+            fetchData();
         }
+    }, []);
 
-    }), [];
 
 
 

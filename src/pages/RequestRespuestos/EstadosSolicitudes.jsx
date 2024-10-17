@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import Spinner from '../../components/forms/Spinner';
-import HttpClient from '../../services/HttpClient';
+import {getStateSolicitudes} from '../../services/SolicitudesService';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import DialogHistory from '../../components/RequestRepuestos/DialogHistory';
@@ -40,7 +40,8 @@ export default function EstadosSolicitudes() {
         setError(null); // Reset error state
 
         try {
-            const response = await HttpClient.get(`Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
+            const response = await getStateSolicitudes(startDate,endDate,statusFilter,user.user);
+            //const response = await HttpClient.get(`Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
             setResumen(response.data);
             // console.log(response.data);
         } catch (error) {

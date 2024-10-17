@@ -22,6 +22,27 @@ export const updateRespuestos = async (repuesto) => {
   }
 };
 
+
+export const postRepuesto = async (repuestoData) => {
+  try {
+    const response = await HttpClient.post("Repuestos", repuestoData);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const listRepuestos = async (listArticulos) => {
+  try {
+    const response = await HttpClient.post('Repuestos/codigos', listArticulos);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
 //Sitema IMB
 export const getMarcasImb = async () => {
    try {
@@ -43,5 +64,5 @@ export const getGrupos = async () => {
 };
 
 
-export default { getRepuestos,getMarcasImb,getGrupos,updateRespuestos };
+export default { getRepuestos,getMarcasImb,getGrupos,updateRespuestos, postRepuesto, listRepuestos };
 
