@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import HttpClient from '../../services/HttpClient';
 import { toast } from 'react-toastify'; // Asegúrate de importar toast
 import 'bootstrap/dist/css/bootstrap.min.css'; // Asegúrate de importar Bootstrap CSS
 import { getDataRoles, postUserData } from '../../services/UserService';

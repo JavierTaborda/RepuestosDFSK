@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getRepuestos } from '../../services/RepuestosService';
+import { filterRepuestos } from '../../services/RepuestosService';
 import EditRepuesto from '../../components/RequestRepuestos/Forms/EditRepuesto';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
+import ImgDefault from '../../components/forms/ImgDefault';
 
 
 const Repuestos = () => {
@@ -19,18 +20,19 @@ const Repuestos = () => {
     };
 
     useEffect(() => {
-        const fetchRepuestos = async () => {
-            try {
-                const repuestos = await getRepuestos();
-                setRepuestos(repuestos);
-                // toast.success('Repuestos cargados exitosamente');
-            } catch (error) {
-                console.error('Error fetching repuestos', error);
-                setError(error);
-            }
-        };
+
         fetchRepuestos();
     }, []);
+
+    const fetchRepuestos = async () => {
+        try {
+            const repuestos = await filterRepuestos();
+            setRepuestos(repuestos);
+        } catch (error) {
+            console.error('Error fetching repuestos', error);
+            setError(error);
+        }
+    };
 
     const openModal = (repuesto) => {
         setSelectedRepuesto(repuesto);
@@ -64,7 +66,7 @@ const Repuestos = () => {
                                 <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Precio</TableCell>
                                 <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Marca</TableCell>
                                 <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>En Inventario</TableCell>
-                                <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Imagen</TableCell>
+                                <TableCell style={{ textAlign: 'center', verticalAlign: 'middle' }} sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Imagen</TableCell>
                                 <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white', padding: 2 }}>Editar</TableCell>
                             </TableRow>
                         </TableHead>
@@ -77,13 +79,16 @@ const Repuestos = () => {
                                     <TableCell>{repuesto.precio}</TableCell>
                                     <TableCell>{repuesto.marca}</TableCell>
                                     <TableCell>{repuesto.enInventario ? "Sí" : "No"}</TableCell>
-                                    <TableCell>
-                                        <img
-                                            src={repuesto.imagen}
-                                            className="img-fluid"
-                                            alt={repuesto.descripcion}
-                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }}
-                                        />
+                                    <TableCell style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                        {repuesto.imagen ?
+                                            <img
+                                                src={repuesto.imagen}
+                                                className="img-fluid"
+                                                alt={repuesto.descripcion}
+                                                style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }}
+                                            />
+                                            : <ImgDefault />
+                                        }
                                     </TableCell>
                                     <TableCell>
                                         <button className="btn btn-outline-secondary" onClick={() => openModal(repuesto)}>

@@ -17,7 +17,7 @@ export const getAllRepuestos = async () => {
   try {
     const fetchRepuestos = () => HttpClient.get(URI1);
     const fetchGrupos = () => HttpClient.get(URI2);
-    const fetchMarca = () => HttpClient.get(URI3);
+    const fetchMarca = () => getMarca();
 
     const [dataRepuesto, dataGrupo, dataMarca] = await Promise.all([
       fetchRepuestos(),
@@ -28,13 +28,23 @@ export const getAllRepuestos = async () => {
     return {
       repuestos: dataRepuesto.data,
       grupo: dataGrupo.data,
-      marca: dataMarca.data,
+      marca: dataMarca,
     };
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
+
+export const getMarca = async () => {
+  try {
+    const response = await HttpClient.get("Articulos/CodigosMarca");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};  
 
 export const getRepuestosFilters = async (Marca, Grupo, Descripcion) => {
   try {
