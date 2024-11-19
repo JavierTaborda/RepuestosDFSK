@@ -1,6 +1,6 @@
 import "../../styles/ImageCard.css";
 import ImgDefault from "./ImgDefault";
-export default function ImageCard({ info, articulo, stock, img }) {
+export default function ImageCard({ info, nparte, stock, img }) {
 
     return (
         <>  <section id="img-card1" className="img-card">      
@@ -9,7 +9,7 @@ export default function ImageCard({ info, articulo, stock, img }) {
                 <div className="img-card__content  ">
                   
                     <p className="img-card__description ">
-                        {articulo}
+                        {nparte}
                         <br />
                         {info}
                     </p>

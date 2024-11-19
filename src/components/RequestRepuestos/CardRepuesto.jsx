@@ -31,7 +31,7 @@ export default function CardRepuesto({ repuestos, addToCart, cart, removeFromCar
             <div className="col-md-4 col-lg-3 mb-2">
                 <div className="product-card ">
                     <div className="image-container">
-                        <ImageCard info={repuestos.descripcion} articulo={repuestos.articulo} stock={repuestos.existencia} img ={repuestos.urlimagen}/>
+                        <ImageCard info={repuestos.descripcion} nparte={repuestos.numeroparte} stock={repuestos.existencia} img ={repuestos.urlimagen}/>
 
                     </div>
                     {/* <img src="/puerta.png" alt="Repuesto" className="cardimagen"></img> */}

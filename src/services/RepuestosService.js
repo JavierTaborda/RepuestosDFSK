@@ -6,7 +6,7 @@ export const getRepuestos = async () => {
 
     return response.data;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     throw error;
   }
 };
@@ -31,6 +31,7 @@ export const postRepuesto = async (repuestoData) => {
 
 export const filterRepuestos = async (nombre, marca, inventario, modelo) => {
   try {
+   //  console.log({ nombre, marca, inventario, modelo }); 
     const response = await HttpClient.get(`Repuestos/Filtrar`, {
       params: { nombre, marca, inventario, modelo },
     });
@@ -64,7 +65,7 @@ export const getGrupos = async () => {
     const response = await HttpClient.get("Articulos/CodigosGrupo");
     return response.data;
   } catch (error) {
-    console.error(error);
+    //console.error(error);
     throw error;
   }
 };

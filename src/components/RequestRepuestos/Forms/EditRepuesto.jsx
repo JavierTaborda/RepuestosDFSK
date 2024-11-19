@@ -24,7 +24,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
-            console.log(initialData)
+            //console.log(initialData)
         }
     }, [initialData]);
 

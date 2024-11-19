@@ -154,9 +154,9 @@ export default function RepuestosBodega({ addToCart }) {
                                 <a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a>
                             </li>
                             {dataGrupo.map((item) => (
-                                <li key={item.codigo}>
-                                    <a onClick={() => setStringGrupo(item.descripcion)} className="dropdown-item">
-                                        {item.descripcion}
+                                <li key={item.idgrupo}>
+                                    <a onClick={() => setStringGrupo(item.grupo)} className="dropdown-item">
+                                        {item.grupo}
                                     </a>
                                 </li>
                             ))}

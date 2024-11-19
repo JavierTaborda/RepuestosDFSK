@@ -11,7 +11,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import ImgDefault from '../../components/forms/ImgDefault';
-import FilterAltIcon from '@mui/icons-material/FilterList'; // Importa el ícono de filtro
 import SearchIcon from '@mui/icons-material/Search'
 
 const Repuestos = () => {
@@ -25,7 +24,7 @@ const Repuestos = () => {
     const [enInventario, setEnInventario] = useState(true);
 
     const handleFormSubmit = (data) => {
-        console.log('Datos recibidos del formulario:', data);
+     //   console.log('Datos recibidos del formulario:', data);
         closeModal();
     };
 
@@ -46,6 +45,7 @@ const Repuestos = () => {
 
     const handleSearchClick = () => {
         fetchRepuestos(); 
+        toast.success('Busqueda exitosa');
     };
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const Repuestos = () => {
 
     const fetchRepuestos = async () => {
         try {
-            const repuestos = await filterRepuestos();
+            const repuestos = await filterRepuestos(searchTerm, marca, enInventario, modelo);
             setRepuestos(repuestos);
         } catch (error) {
             console.error('Error fetching repuestos', error);
@@ -112,11 +112,7 @@ const Repuestos = () => {
                             value={marca}
                             label="Marca"
                             onChange={handleMarcaChange}
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <FilterAltIcon />
-                                </InputAdornment>
-                            }
+                          
                         >
                             <MenuItem value="">
                                 <em>None</em>

@@ -11,7 +11,7 @@ export const updateImagenURL = async (url) => {
 
 export const getAllRepuestos = async () => {
   const URI1 = `Articulos/Existencia`;
-  const URI2 = `Articulos/CodigosGrupo`;
+  const URI2 = `Articulos/Grupos`;
   const URI3 = `Articulos/CodigosMarca`;
 
   try {
@@ -24,7 +24,7 @@ export const getAllRepuestos = async () => {
       fetchGrupos(),
       fetchMarca(),
     ]);
-
+  //console.log(dataGrupo.data);
     return {
       repuestos: dataRepuesto.data,
       grupo: dataGrupo.data,
