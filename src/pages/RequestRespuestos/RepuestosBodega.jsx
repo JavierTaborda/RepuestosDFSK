@@ -11,6 +11,7 @@ export default function RepuestosBodega({ addToCart }) {
     const [dataRepuesto, setRepuestos] = useState([]);
     const [dataMarca, setMarca] = useState([]);
     const [dataGrupo, setGrupo] = useState([]);
+    const [dataCategoria, setCategoria] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [stringMarca, setStringMarca] = useState("*");
     const [stringGrupo, setStringGrupo] = useState("*");
@@ -19,7 +20,9 @@ export default function RepuestosBodega({ addToCart }) {
     const [orderData, setOrderData] = useState("");
     const itemsPerPage = 12;
     const toastId = useRef(null);
-    const startIndex = useMemo(() => (currentPage - 1) * itemsPerPage, [currentPage]);
+
+    // Calcular el índice de inicio para la paginación
+    const startIndex = useMemo(() => (currentPage - 1) * itemsPerPage, [currentPage, itemsPerPage]);
 
     const notifyError = (error) => {
         if (!toast.isActive(toastId.current)) {
@@ -33,14 +36,16 @@ export default function RepuestosBodega({ addToCart }) {
         }
     };
 
+    // Obtener todos los repuestos al montar el componente
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { repuestos, grupo, marca } = await getAllRepuestos();
+                const { repuestos, grupo,categoria, marca } = await getAllRepuestos();
                 setRepuestos(repuestos);
+                console.log(repuestos);
                 setGrupo(grupo);
+                setCategoria(categoria);
                 setMarca(marca);
-                //notifySuccess();
             } catch (err) {
                 console.error(err);
                 notifyError(err.message);
@@ -51,6 +56,7 @@ export default function RepuestosBodega({ addToCart }) {
         fetchData();
     }, []);
 
+    // Filtrar los repuestos según los criterios seleccionados
     const filterMarca = async () => {
         try {
             setIsLoading(true);
@@ -65,6 +71,7 @@ export default function RepuestosBodega({ addToCart }) {
         }
     };
 
+    // Ordenar los repuestos según el criterio seleccionado
     const sortRepuestos = (repuestos, order) => {
         return repuestos.sort((a, b) => {
             switch (order) {
@@ -82,180 +89,159 @@ export default function RepuestosBodega({ addToCart }) {
         });
     };
 
+    // Filtrar los datos cada vez que los criterios de búsqueda o de ordenación cambian
     useEffect(() => {
         if (!isLoading) {
             filterMarca();
         }
     }, [stringMarca, stringGrupo, stringDescripcion, orderData]);
 
+    // Manejar el cambio de página
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
 
-    const visibleRepuestos = useMemo(() => dataRepuesto.slice(startIndex, startIndex + itemsPerPage), [dataRepuesto, startIndex]);
+    // Obtener los repuestos visibles para la página actual
+    const visibleRepuestos = useMemo(() => dataRepuesto.slice(startIndex, startIndex + itemsPerPage), [dataRepuesto, startIndex, itemsPerPage]);
 
-    return (
-        <>
-            <h2 className="bd-title text-center mb-0 pt-2">Inventario de Repuestos</h2>
-            <div className="container my-5">
-                <div className="d-flex flex-wrap justify-content-between align-items-center p-3">
-                    <div className="d-flex pe-2 pt-3" role="search">
-                        <input
-                            className="form-control me-2 rounded-5 shadow-sm"
-                            value={stringTextSearch}
-                            onChange={(e) => setStringTextSearch(e.target.value)}
-                            type="search"
-                            placeholder="Buscar..."
-                            aria-label="Buscar"
-                        />
-                        <button
-                            className="btn btn-outline-danger rounded-5 shadow-sm"
-                            type="button"
-                            onClick={() => setStringDescripcion(stringTextSearch)}
-                        >
-                            Buscar
-                        </button>
-                    </div>
-
-                    <div className="btn-group ps-2 pt-3" role="group">
-                        <button
-                            type="button"
-                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="bi bi-funnel" /> MARCA : {stringMarca}
-                        </button>
-                        <ul className="dropdown-menu shadow">
-                            <li>
-                                <a onClick={() => setStringMarca('*')} className="dropdown-item" href="#">Todos</a>
-                            </li>
-                            {dataMarca.map((item) => (
-                                <li key={item.codigo}>
-                                    <a onClick={() => setStringMarca(item.descripcion)} className="dropdown-item">
-                                        {item.descripcion}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="btn-group ps-2 pt-3" role="group">
-                        <button
-                            type="button"
-                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="bi bi-funnel" /> GRUPO: {stringGrupo}
-                        </button>
-                        <ul className="dropdown-menu shadow">
-                            <li>
-                                <a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a>
-                            </li>
-                            {dataGrupo.map((item) => (
-                                <li key={item.idgrupo}>
-                                    <a onClick={() => setStringGrupo(item.grupo)} className="dropdown-item">
-                                        {item.grupo}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div className="btn-group ps-2 pt-3" role="group">
-                        <button
-                            type="button"
-                            className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
-                            <i className="bi bi-sort-down" /> Ordenar por: {orderData}
-                        </button>
-                        <ul className="dropdown-menu shadow">
-                            <li>
-                                <a onClick={() => setOrderData('Mayor Existencia')} className="dropdown-item" href="#">
-                                    <i className="bi bi-sort-down"></i> Mayor Existencia
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={() => setOrderData('Menor Existencia')} className="dropdown-item" href="#">
-                                    <i className="bi bi-sort-down-alt"></i> Menor Existencia
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={() => setOrderData('Mayor Precio')} className="dropdown-item" href="#">
-                                    <i className="bi bi-sort-down"></i> Mayor Precio
-                                </a>
-                            </li>
-                            <li>
-                                <a onClick={() => setOrderData('Menor Precio')} className="dropdown-item" href="#">
-                                    <i className="bi bi-sort-down-alt"></i> Menor Precio
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                {dataRepuesto?.length > 0 && (
-                    <div className="d-flex justify-content-center mt-4 mb-2">
-                        <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            >
-                                Anterior
-                            </button>
-                            <button type="button" className="btn btn-danger">
-                                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === Math.ceil(dataRepuesto?.length / itemsPerPage)}
-                            >
-                                Siguiente
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                <div className="row">
-                    {isLoading ? <Spinner /> : visibleRepuestos.map((item) => (
-                        <CardRepuesto key={item.articulo} repuestos={item} addToCart={addToCart} />
-                    ))}
-                </div>
-
-                {dataRepuesto?.length > 0 && (
-                    <div className="d-flex justify-content-center mt-4 mb-2">
-                        <div className="btn-group" role="group" aria-label="Basic">
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                            >
-                                Anterior
-                            </button>
-                            <button type="button" className="btn btn-danger">
-                                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === Math.ceil(dataRepuesto?.length / itemsPerPage)}
-                            >
-                                Siguiente
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                <div className="d-flex justify-content-center mt-4 mb-2">
-                    {dataRepuesto?.length} elementos
-                </div>
+     return (
+    <>
+      <h2 className="bd-title text-center mb-0 pt-2">Inventario de Repuestos</h2>
+      <div className="container my-5">
+        <div className="d-flex flex-wrap justify-content-between align-items-center p-3">
+          <div className="d-flex pe-2 pt-3" role="search">
+            <input
+              className="form-control me-2 rounded-5 shadow-sm"
+              value={stringTextSearch}
+              onChange={(e) => setStringTextSearch(e.target.value)}
+              type="search"
+              placeholder="Buscar..."
+              aria-label="Buscar"
+            />
+            <button
+              className="btn btn-outline-danger rounded-5 shadow-sm"
+              type="button"
+              onClick={() => setStringDescripcion(stringTextSearch)}
+            >
+              Buscar
+            </button>
+          </div>
+          <div className="btn-group ps-2 pt-3" role="group">
+            <button
+              type="button"
+              className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-funnel" /> MARCA : {stringMarca}
+            </button>
+            <ul className="dropdown-menu shadow">
+              <li>
+                <a onClick={() => setStringMarca('*')} className="dropdown-item" href="#">Todos</a>
+              </li>
+              {dataMarca.map((item) => (
+                <li key={item.codigo}>
+                  <a onClick={() => setStringMarca(item.descripcion)} className="dropdown-item">
+                    {item.descripcion}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="btn-group ps-2 pt-3" role="group">
+            <button
+              type="button"
+              className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-funnel" /> GRUPO: {stringGrupo}
+            </button>
+            <ul className="dropdown-menu shadow">
+              <li>
+                <a onClick={() => setStringGrupo('*')} className="dropdown-item" href="#">Todos</a>
+              </li>
+              {dataGrupo.map((item) => (
+                <li key={item.idgrupo}>
+                  <a onClick={() => setStringGrupo(item.grupo)} className="dropdown-item">
+                    {item.grupo}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="btn-group ps-2 pt-3" role="group">
+            <button
+              type="button"
+              className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-sort-down" /> Ordenar por: {orderData}
+            </button>
+            <ul className="dropdown-menu shadow">
+              <li>
+                <a onClick={() => setOrderData('Mayor Existencia')} className="dropdown-item" href="#">
+                  <i className="bi bi-sort-down"></i> Mayor Existencia
+                </a>
+              </li>
+              <li>
+                <a onClick={() => setOrderData('Menor Existencia')} className="dropdown-item" href="#">
+                  <i className="bi bi-sort-down-alt"></i> Menor Existencia
+                </a>
+              </li>
+              <li>
+                <a onClick={() => setOrderData('Mayor Precio')} className="dropdown-item" href="#">
+                  <i className="bi bi-sort-down"></i> Mayor Precio
+                </a>
+              </li>
+              <li>
+                <a onClick={() => setOrderData('Menor Precio')} className="dropdown-item" href="#">
+                  <i className="bi bi-sort-down-alt"></i> Menor Precio
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {dataRepuesto?.length > 0 && (
+          <div className="d-flex justify-content-center mt-4 mb-2">
+            <div className="btn-group" role="group" aria-label="Basic mixed styles example">
+              <button className="btn btn-outline-danger" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                Anterior
+              </button>
+              <button type="button" className="btn btn-danger">
+                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
+              </button>
+              <button className="btn btn-outline-danger" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === Math.ceil(dataRepuesto?.length / itemsPerPage)}>
+                Siguiente
+              </button>
             </div>
-        </>
-    );
+          </div>
+        )}
+        <div className="row">
+          {isLoading ? <Spinner /> : visibleRepuestos.map((item) => (
+            <CardRepuesto key={item.articulo} repuestos={item} addToCart={addToCart} />
+          ))}
+        </div>
+        {dataRepuesto?.length > 0 && (
+          <div className="d-flex justify-content-center mt-4 mb-2">
+            <div className="btn-group" role="group" aria-label="Basic">
+              <button className="btn btn-outline-danger" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                Anterior
+              </button>
+              <button type="button" className="btn btn-danger">
+                {currentPage} / {Math.ceil(dataRepuesto?.length / itemsPerPage)}
+              </button>
+              <button className="btn btn-outline-danger" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === Math.ceil(dataRepuesto?.length / itemsPerPage)}>
+                Siguiente
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="d-flex justify-content-center mt-4 mb-2">
+          {dataRepuesto?.length} elementos
+        </div>
+      </div>
+    </>
+  );
 }
-

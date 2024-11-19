@@ -10,38 +10,50 @@ export const updateImagenURL = async (url) => {
 };
 
 export const getAllRepuestos = async () => {
-  const URI1 = `Articulos/Existencia`;
-  const URI2 = `Articulos/Grupos`;
-  const URI3 = `Articulos/CodigosMarca`;
+  // const URI1 = `Articulos/Existencia`;
+  // const URI2 = `Articulos/Grupos`;
+  // const URI3 = `Articulos/CodigosMarca`;
 
   try {
-    const fetchRepuestos = () => HttpClient.get(URI1);
-    const fetchGrupos = () => HttpClient.get(URI2);
+    const fetchRepuestos = () => getAllArticulosExistencia();
+    const fetchGrupos = () => getGrupos();
+    const fetchCategorias = () => getCategorias();
     const fetchMarca = () => getMarca();
 
-    const [dataRepuesto, dataGrupo, dataMarca] = await Promise.all([
+    const [dataRepuesto, dataGrupo, dataCategoria, dataMarca] = await Promise.all([
       fetchRepuestos(),
       fetchGrupos(),
+      fetchCategorias(),
       fetchMarca(),
     ]);
   //console.log(dataGrupo.data);
     return {
-      repuestos: dataRepuesto.data,
-      grupo: dataGrupo.data,
+      repuestos: dataRepuesto,
+      grupo: dataGrupo,
+      categoria: dataCategoria,
       marca: dataMarca,
     };
   } catch (error) {
-    console.error(error);
+
     throw error;
   }
 };
+
+export const getAllArticulosExistencia = async () => {
+  try {
+    const response = await HttpClient.get("Articulos/Existencia");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};  
 
 export const getMarca = async () => {
   try {
     const response = await HttpClient.get("Articulos/CodigosMarca");
     return response.data;
   } catch (error) {
-    console.error(error);
+   
     throw error;
   }
 };  
@@ -56,9 +68,25 @@ export const getRepuestosFilters = async (Marca, Grupo, Descripcion) => {
     const response = await HttpClient.get(URIM);
     return response.data;
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
 
-export default { updateImagenURL, getRepuestosFilters, getAllRepuestos };
+export const getGrupos = async () => {
+  try {
+    const response = await HttpClient.get(`Articulos/Grupos`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};  
+export const getCategorias = async () => {
+  try {
+    const response = await HttpClient.get(`Articulos/Categorias`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};  
+
+export default { updateImagenURL, getRepuestosFilters, getAllRepuestos, getGrupos, getCategorias, getAllArticulosExistencia };
