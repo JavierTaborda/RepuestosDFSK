@@ -1,25 +1,80 @@
-@keyframes slideDown {
-    from {
-        transform: translateY(-15%);
-        opacity: 0;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+body {
+  font-family: 'Roboto', sans-serif;
+font-size: 12px;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-15%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .modal.show .modal-dialog {
-    animation: slideDown 0.3s ease-out;
+  animation: slideDown 0.3s ease-out;
 }
 
 .modal-dialog {
-    max-width: 900px;
-
+  max-width: 900px;
 }
 
 .modal-content {
-    border-radius: 0px;
-    /* Ajusta el redondeo de las esquinas */
+  border-radius: 12px; /* Ajusta el redondeo de las esquinas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #fbfbfb;
+}
+
+.modal-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #000;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.alert {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.price-badge {
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #ff5a5f;
+}
+
+.details-section .table {
+  width: 100%;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.details-section .table td {
+  padding: 0.5rem 0;
+}
+
+.details-section .table i {
+  margin-right: 8px;
 }

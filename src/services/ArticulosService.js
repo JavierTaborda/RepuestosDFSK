@@ -10,9 +10,6 @@ export const updateImagenURL = async (url) => {
 };
 
 export const getAllRepuestos = async () => {
-  // const URI1 = `Articulos/Existencia`;
-  // const URI2 = `Articulos/Grupos`;
-  // const URI3 = `Articulos/CodigosMarca`;
 
   try {
     const fetchRepuestos = () => getAllArticulosExistencia();
@@ -58,13 +55,10 @@ export const getMarca = async () => {
   }
 };  
 
-export const getRepuestosFilters = async (Marca, Grupo, Descripcion) => {
+//TODO: No filtra
+export const getRepuestosFilters = async (Marca, Grupo, Categoria, Descripcion) => {
   try {
-    const URIM = `Articulos/Bodega/Marca/${encodeURIComponent(
-      Marca
-    )}/${encodeURIComponent(Grupo)}/${encodeURIComponent(
-      Descripcion === "" ? "*" : Descripcion
-    )}`;
+    const URIM = `Articulos/Bodega/Marca/${encodeURIComponent(Marca)}/${encodeURIComponent(Grupo)}/${encodeURIComponent(Categoria)}/${encodeURIComponent(Descripcion === "" ? "*" : Descripcion)}`;
     const response = await HttpClient.get(URIM);
     return response.data;
   } catch (error) {

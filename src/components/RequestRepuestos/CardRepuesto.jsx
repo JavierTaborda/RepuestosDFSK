@@ -41,6 +41,7 @@ export default function CardRepuesto({ repuestos, addToCart, cart, removeFromCar
                             <h6 className="cardtext mb-1" title={repuestos.descripcion}>
                                 {repuestos.descripcion}
                             </h6>
+                            <p className="text mb-0 mt-0 cardtext" title={repuestos.numeroparte}>N. PARTE: {repuestos.numeroparte ? repuestos.numeroparte : '-'}</p>
                             <p className="text mb-0 mt-0 cardtext" title={TipoOracion(repuestos.marca)}>{TipoOracion(repuestos.marca)}</p>
                             <p className={`mb-0 mt-0 ${getStockClass(repuestos.existencia)}`}>
                                 Stock: {repuestos.existencia}

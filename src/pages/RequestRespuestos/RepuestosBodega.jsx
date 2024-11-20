@@ -6,105 +6,105 @@ import { AuthContext } from '../../context/AuthProvider';
 import { getRepuestosFilters, getAllRepuestos } from '../../services/ArticulosService';
 
 export default function RepuestosBodega({ addToCart }) {
-    const { user } = useContext(AuthContext);
-    const [isLoading, setIsLoading] = useState(true);
-    const [dataRepuesto, setRepuestos] = useState([]);
-    const [dataMarca, setMarca] = useState([]);
-    const [dataGrupo, setGrupo] = useState([]);
-    const [dataCategoria, setCategoria] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [stringMarca, setStringMarca] = useState("*");
-    const [stringGrupo, setStringGrupo] = useState("*");
-    const [stringDescripcion, setStringDescripcion] = useState("*");
-    const [stringTextSearch, setStringTextSearch] = useState("");
-    const [orderData, setOrderData] = useState("");
-    const itemsPerPage = 12;
-    const toastId = useRef(null);
+  const { user } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataRepuesto, setRepuestos] = useState([]);
+  const [dataMarca, setMarca] = useState([]);
+  const [dataGrupo, setGrupo] = useState([]);
+  const [dataCategoria, setCategoria] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [stringMarca, setStringMarca] = useState("*");
+  const [stringGrupo, setStringGrupo] = useState("*");
+  const [stringCategoria, setStringCategoria] = useState("*");
+  const [stringDescripcion, setStringDescripcion] = useState("*");
+  const [stringTextSearch, setStringTextSearch] = useState("");
+  const [orderData, setOrderData] = useState("");
+  const itemsPerPage = 12;
+  const toastId = useRef(null);
 
-    // Calcular el índice de inicio para la paginación
-    const startIndex = useMemo(() => (currentPage - 1) * itemsPerPage, [currentPage, itemsPerPage]);
+  // Calcular el índice de inicio para la paginación
+  const startIndex = useMemo(() => (currentPage - 1) * itemsPerPage, [currentPage, itemsPerPage]);
 
-    const notifyError = (error) => {
-        if (!toast.isActive(toastId.current)) {
-            toastId.current = toast.error(error, { draggable: true });
-        }
+  const notifyError = (error) => {
+    if (!toast.isActive(toastId.current)) {
+      toastId.current = toast.error(error, { draggable: true });
+    }
+  };
+
+  const notifySuccess = () => {
+    if (!toast.isActive(toastId.current)) {
+      toastId.current = toast.success("Cargado exitoso ", { draggable: true });
+    }
+  };
+
+  // Obtener todos los repuestos al montar el componente
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { repuestos, grupo, categoria, marca } = await getAllRepuestos();
+        setRepuestos(repuestos);
+        setGrupo(grupo);
+        setCategoria(categoria);
+        setMarca(marca);
+      } catch (err) {
+        console.error(err);
+        notifyError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
+    fetchData();
+  }, []);
 
-    const notifySuccess = () => {
-        if (!toast.isActive(toastId.current)) {
-            toastId.current = toast.success("Cargado exitoso ", { draggable: true });
-        }
-    };
+  // Filtrar los repuestos según los criterios seleccionados
+  const filterMarca = async () => {
+    try {
+      setIsLoading(true);
+      const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo,stringCategoria ,stringDescripcion);
+      const sortedRepuestos = sortRepuestos(dataRepuesto, orderData);
+      setRepuestos(sortedRepuestos);
+      handlePageChange(1); // Reset to first page
+    } catch (error) {
+      notifyError('Error de la petición: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    // Obtener todos los repuestos al montar el componente
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { repuestos, grupo,categoria, marca } = await getAllRepuestos();
-                setRepuestos(repuestos);
-                console.log(repuestos);
-                setGrupo(grupo);
-                setCategoria(categoria);
-                setMarca(marca);
-            } catch (err) {
-                console.error(err);
-                notifyError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
+  // Ordenar los repuestos según el criterio seleccionado
+  const sortRepuestos = (repuestos, order) => {
+    return repuestos.sort((a, b) => {
+      switch (order) {
+        case "Mayor Existencia":
+          return b.existencia - a.existencia;
+        case "Menor Existencia":
+          return a.existencia - b.existencia;
+        case "Mayor Precio":
+          return b.venta - a.venta;
+        case "Menor Precio":
+          return a.venta - b.venta;
+        default:
+          return 0;
+      }
+    });
+  };
 
-    // Filtrar los repuestos según los criterios seleccionados
-    const filterMarca = async () => {
-        try {
-            setIsLoading(true);
-            const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo, stringDescripcion);
-            const sortedRepuestos = sortRepuestos(dataRepuesto, orderData);
-            setRepuestos(sortedRepuestos);
-            handlePageChange(1); // Reset to first page
-        } catch (error) {
-            notifyError('Error de la petición: ' + error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  // Filtrar los datos cada vez que los criterios de búsqueda o de ordenación cambian
+  useEffect(() => {
+    if (!isLoading) {
+      filterMarca();
+    }
+  }, [stringMarca, stringGrupo, stringDescripcion, orderData, stringCategoria]);
 
-    // Ordenar los repuestos según el criterio seleccionado
-    const sortRepuestos = (repuestos, order) => {
-        return repuestos.sort((a, b) => {
-            switch (order) {
-                case "Mayor Existencia":
-                    return b.existencia - a.existencia;
-                case "Menor Existencia":
-                    return a.existencia - b.existencia;
-                case "Mayor Precio":
-                    return b.venta - a.venta;
-                case "Menor Precio":
-                    return a.venta - b.venta;
-                default:
-                    return 0;
-            }
-        });
-    };
+  // Manejar el cambio de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-    // Filtrar los datos cada vez que los criterios de búsqueda o de ordenación cambian
-    useEffect(() => {
-        if (!isLoading) {
-            filterMarca();
-        }
-    }, [stringMarca, stringGrupo, stringDescripcion, orderData]);
+  // Obtener los repuestos visibles para la página actual
+  const visibleRepuestos = useMemo(() => dataRepuesto.slice(startIndex, startIndex + itemsPerPage), [dataRepuesto, startIndex, itemsPerPage]);
 
-    // Manejar el cambio de página
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    // Obtener los repuestos visibles para la página actual
-    const visibleRepuestos = useMemo(() => dataRepuesto.slice(startIndex, startIndex + itemsPerPage), [dataRepuesto, startIndex, itemsPerPage]);
-
-     return (
+  return (
     <>
       <h2 className="bd-title text-center mb-0 pt-2">Inventario de Repuestos</h2>
       <div className="container my-5">
@@ -168,6 +168,26 @@ export default function RepuestosBodega({ addToCart }) {
                   </a>
                 </li>
               ))}
+            </ul>
+          </div>
+          <div className="btn-group ps-2 pt-3" role="group">
+            <button
+              type="button"
+              className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-funnel" /> CATEGORÍA: {stringCategoria}
+            </button>
+            <ul className="dropdown-menu shadow">
+              <li>
+                <a onClick={() => setStringCategoria('*')} className="dropdown-item" href="#">Todos</a>
+              </li>
+              {dataCategoria.filter(item => item.idgrupo === (dataGrupo.find(grupo => grupo.grupo === stringGrupo)?.idgrupo || item.idgrupo)).map((item) =>
+              (<li key={item.idcategoria}>
+                <a onClick={() => setStringCategoria(item.categoria)} className="dropdown-item">
+                  {item.categoria} </a>
+              </li>))}
             </ul>
           </div>
           <div className="btn-group ps-2 pt-3" role="group">
