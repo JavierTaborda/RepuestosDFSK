@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import ImageCard from '../../components/forms/ImageCard';
 import Spinner from '../../components/forms/Spinner';
-import HttpClient from '../../services/HttpClient';
-
-
-import axios from 'axios';
+import {
+    getVehiculos,
+    UpdateAddVehicle,
+    getVehiculosFilter,
+    updateVehiculo,
+    getModeloTexto,
+    getModeloFilters
+}from '../../services/VehiclesService';
 
 
 export default function Vehicles() {
@@ -21,7 +23,6 @@ export default function Vehicles() {
 
     const [formVehicleData, setFormVehicleData] = useState({
         idVehiculo: 0,
-        codigo: '',
         descripcion: '',
         marca: '',
         modelo: '',
@@ -30,81 +31,98 @@ export default function Vehicles() {
         estatus: true,
     });
 
-    const fetchData = async (url, setData, errorMessage) => {
-        try {
-            const response = await HttpClient.get(url);
-            setData(response.data);
-            if (response.data.length === 0) {
-                toast.error(errorMessage);
-            }
-        } catch (error) {
-            toast.error(error.response?.data || "Error de conexión a los datos.");
-        }
-    };
-
-    const filterByArticulo = () => {
-        setSearchData(true);
-            fetchData( `Vehiculos/Codigo/${filterData}`, setVehicleData, "Artículo no encontrado");
-        setSearchData(false);
-    };
-
     const updateVehicle = async (vehiculo) => {
         vehiculo.estatus = !vehiculo.estatus;
         try {
-            await HttpClient.put('Vehiculos', vehiculo);
-            toast.success(`Se actualizó el estado del vehículo ${vehiculo.descripcion}`);
-            RefreshData();
+            const response = await updateVehiculo(vehiculo);
+            toast.success(`Se actualizó el estado del vehículo ${response.modelo} a ${response.estatus ? "Activo" : "Inactivo"}   `);
+
         } catch (error) {
             toast.error(`No se logró actualizar el estado del vehículo: ${error}`);
         }
+        finally {
+            RefreshData();
+        }
     };
 
-    const GetVehicleDFSK = () => {
+
+    const GetVehicleDFSK = async () => {
         setSearchDFSK(true);
-        fetchData(`Articulos/Bodega/Vehiculos/${filterDFSKData}`, setVehicleDFSKData, "Artículo no encontrado");
+        const response = await getModeloTexto(filterDFSKData);
+        setVehicleDFSKData(response);
         setSearchDFSK(false);
     };
 
-    const UpdateAddVehicle = async () => {
+    const CallUpdateAddVehicle = () => {
         try {
-            await axios.put('Vehiculos/AddUpdate', formVehicleData);
-            toast.success(`Se actualizó el vehículo ${formVehicleData.descripcion}`);
+            const response = UpdateAddVehicle(formVehicleData);
+
+            toast.success(`Se actualizó el modelo de vehículo ${formVehicleData.modelo}`);
             RefreshData();
         } catch (error) {
-            toast.error(`No se logró actualizar el estado del vehículo: ${error}`);
+            toast.error(`No se logró actualizar el modelo del vehículo: ${error}`);
         }
     };
 
     //refresh or getdata
-    const RefreshData = () => {
-        const url = filterData.length === 0 ? 'Vehiculos' : `Vehiculos/Codigo/${filterData}`;
-        fetchData(url, setVehicleData, "Error refreshing data");
+    const RefreshData = async () => {
+        try {
+            setSearchData(true);
+            let response;
+
+            if (filterData.length === 0) {
+                response = await getVehiculos();
+            } else {
+
+                response = await getVehiculosFilter(filterData);
+            }
+
+            if (response.length === 0) { toast.error("No se encontraron datos."); }
+            setVehicleData(response);
+
+        } catch (error) {
+            toast.error(error.response?.data || "Error de conexión a los datos.");
+        }
+        finally {
+            setSearchData(false);
+        }
     };
+
 
     //Add new vehicle from Sistem Dfsk
     const CreateVehicle = (vehiclearticulos) => {
         setFormVehicleData({
             idVehiculo: vehiclearticulos.idVehiculo || 0,
-            codigo: vehiclearticulos.articulo,
             descripcion: vehiclearticulos.descripcion,
-            modelo: vehiclearticulos.modelo,
+            modelo: vehiclearticulos.modelo1,
             marca: vehiclearticulos.marca,
             anho: vehiclearticulos.ano,
             estatus: true,
         });
-        console.log(formVehicleData);
     };
 
-    const updateFromDFSK = (articulo) => {
-        setFilterDFSKData(articulo);
-         setSearchDFSK(true);
-         toast.info('Valide el resultado de la busqueda, en el panel derecho.');
+    const updateFromDFSK = async (modelo) => {
+        try {
+
+            const response = await getModeloFilters(modelo.modelo, modelo.marca, modelo.anho);
+            setVehicleDFSKData(response);
+            if (response.length > 0) {
+                toast.info('Valide el resultado de la busqueda, en el panel.');
+            }
+            else {
+                toast.warning('No se encontraron datos.');
+            }
+        } catch (error) {
+
+            toast.warning('ocurrió un error en la búsqueda. ' + error.message);
+
+        }
     }
-    
+
 
     useEffect(() => {
         RefreshData();
-        
+
     }, []);
 
     useEffect(() => {
@@ -115,7 +133,7 @@ export default function Vehicles() {
 
     useEffect(() => {
         if (searchData) {
-            filterByArticulo();
+            RefreshData();
         }
     }, [searchData]);
 
@@ -127,7 +145,7 @@ export default function Vehicles() {
 
     useEffect(() => {
         if (vehicleDFSKData.length >= 1) {
-            UpdateAddVehicle();
+            CallUpdateAddVehicle();
         }
     }, [formVehicleData]);
 
@@ -149,10 +167,8 @@ export default function Vehicles() {
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th>Imagen</th>
-                                        <th>Artículo</th>
-                                        <th>Descripción</th>
                                         <th>Modelo</th>
+                                        <th>Descripción</th>
                                         <th>Marca</th>
                                         <th>Año</th>
                                         <th className='text-center'>Estado</th>
@@ -162,12 +178,8 @@ export default function Vehicles() {
                                 <tbody>
                                     {vehicleData?.map((item) => (
                                         <tr key={item.idVehiculo} className='p-1'>
-                                            <td style={{ maxHeight: '80px', maxWidth: '80px' }}>
-                                                <ImageCard info={item.descripcion} stock={item.existencia} img={item.urlimagen} />
-                                            </td>
-                                            <td className="align-middle">{item.codigo}</td>
-                                            <td className="align-middle">{item.descripcion}</td>
                                             <td className="align-middle">{item.modelo}</td>
+                                            <td className="align-middle">{item.descripcion}</td>
                                             <td className="align-middle">{item.marca}</td>
                                             <td className="align-middle">{item.anho}</td>
                                             <td className="align-middle text-center">
@@ -182,7 +194,7 @@ export default function Vehicles() {
                                                 </div>
                                             </td>
                                             <td className="align-middle text-center">
-                                                <button className="btn btn-outline-danger rounded-5" onClick={() => updateFromDFSK(item.codigo)} ><i className="bi bi-search"></i></button>
+                                                <button className="btn btn-outline-danger rounded-5" onClick={() => updateFromDFSK(item)} ><i className="bi bi-search"></i></button>
                                             </td>
                                         </tr>
                                     ))}
@@ -192,14 +204,14 @@ export default function Vehicles() {
                     </div>
                 </div>
                 <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-3'>
-                    <h6 className='text-center p-2'>Agregar Vehículos desde el Sistema Principal</h6>
+                    <h6 className='text-center p-2'>Agregar Modelos de Vehículos desde el Sistema Principal</h6>
                     <div className="row p-2 pt-3">
                         <div className="col-6 my-auto">
                             <input className="form-control me-2 rounded-5 shadow-sm my-auto" onChange={(e) => setFilterDFSKData(e.target.value)} type="search" placeholder="Artículo..." aria-label="Buscar" />
                         </div>
                         <div className="col-6">
                             <button type="button" className="btn btn-outline-danger rounded-5" onClick={() => filterDFSKData !== "" ? setSearchDFSK(true) : null}>
-                                Agregar Vehículo <i className="bi bi-truck-flatbed"></i>
+                                Agregar Modelo <i className="bi bi-truck-flatbed"></i>
                             </button>
                         </div>
                     </div>
@@ -207,12 +219,12 @@ export default function Vehicles() {
                         {searchDFSK ? <Spinner /> :
                             <ol className="list-group list-group-numbered rounded-5">
                                 {vehicleDFSKData.map((item) => (
-                                    <li key={item.articulo} className="list-group-item d-flex justify-content-between align-items-center">
+                                    <li key={item.idmodelo} className="list-group-item d-flex justify-content-between align-items-center">
                                         <div className="ms-2 me-auto">
-                                            <div className="fw-bold">{item.articulo} {item.descripcion}</div>
-                                            {item.modelo} - {item.marca} - {item.ano}
+                                            <div className="fw-bold">{item.modelo1} {item.descripcion}</div>
+                                            {item.modelo1} - {item.marca} - {item.ano}
                                         </div>
-                                        <button className="btn btn-danger rounded-5"  title='Insertar/Actualizar' onClick={() => CreateVehicle(item)}><i className="bi bi-arrow-down-up"></i></button>
+                                        <button className="btn btn-danger rounded-5" title='Insertar/Actualizar' onClick={() => CreateVehicle(item)}><i className="bi bi-arrow-down-up"></i></button>
                                     </li>
                                 ))}
                             </ol>

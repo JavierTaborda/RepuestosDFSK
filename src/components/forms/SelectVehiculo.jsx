@@ -45,11 +45,11 @@ return (
         value={dataIdVehiculo || ""}
         onChange={handleSelectChange}
       >
-        <option value="">Seleccione un vehículo</option>
+        <option value="">Seleccione un Modelo de Vehículo</option>
         {dataVehiculos.map((item) => (
           item.estatus && (
             <option key={item.idVehiculo} value={item.idVehiculo}>
-              {item.descripcion}
+              {item.modelo}
             </option>
           )
         ))}
