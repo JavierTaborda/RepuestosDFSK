@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import SelectVehiculo from "../../forms/SelectVehiculo";
-import HttpClient from "../../../services/HttpClient";
 import Spinner from "../../forms/Spinner";
 import { motion } from 'framer-motion';
 import { postRepuesto } from "../../../services/RepuestosService";
+
 export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
-    const [listRepuestos, setlistRepuestos] = useState([]);
-    const [repuestoData, setRepuestoData] = useState({
+    const initialState = {
         IdRepuesto: 0,
         Codigo: insertRepuesto ? "" : "DEFINIR",
+        NumParte: "",
         Nombre: "",
         Descripcion: "",
         Precio: null,
@@ -17,19 +17,19 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
         Marca: "",
         Estatus: true,
         EnInventario: false,
-    });
+    };
 
+    const [listRepuestos, setlistRepuestos] = useState([]);
+    const [repuestoData, setRepuestoData] = useState(initialState);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [isClicked, setIsClicked] = useState(false);
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setRepuestoData({ ...repuestoData, [name]: value });
         setIsClicked(false)
     };
-
 
     const handleIdVehiChange = (newIdVehi) => {
         setRepuestoData((prevData) => ({
@@ -48,7 +48,6 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
         return Object.keys(tempErrors).length === 0;
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         repuestoData.Precio = 0;
@@ -65,16 +64,19 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
 
                 if (response.status === 200) {
                     setrepuestoData(response.data);
+                    toast.success("Repuesto registrado con éxito");
+                    // Limpiar el formulario
+                    setRepuestoData(initialState);
                 } else {
                     toast.error("Error al registrar el repuesto");
                 }
             } catch (error) {
                 if (error.response) {
                     console.log(repuestoData);
-                    toast.error("Error al guardar los datos, hay una solicitud similar ya procesada: " + error.response.data);
+                    toast.error("Ya hay una solicitud similar por este reepuesto procesada.\nPor favor espere que sea registrado en nuestro inventario.");
                     setIsClicked(false);
                 } else if (error.request) {
-                    toast.error("Error conectando con el servidor.");
+                    toast.error("Error conectando con el servidor."); 
                 } else {
                     toast.error("Error: " + error.message);
                 }
@@ -86,6 +88,7 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
             toast.warning("Todos los campos son obligatorios");
         }
     };
+
     return (
         <form onSubmit={handleSubmit} className="pt-5">
             <div className="row g-3">
@@ -103,6 +106,18 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         />
                     </div> : null
                 }
+                <div className="col-md-4 col-lg-4">
+                    <label htmlFor="numparte" className="form-label">N. de Parte</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Ingresa Número de Parte"
+                        id="numparte"
+                        name="NumParte"
+                        value={repuestoData.NumParte}
+                        onChange={handleChange}
+                    />
+                </div>
                 <div className="col-md-8 col-lg-8">
                     <label htmlFor="Nombre" className="form-label">Nombre</label>
                     <input
@@ -141,16 +156,13 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         required
                     />
                 </div>
-                <div className="col-md-6 col-lg-6">
-                    <label className="form-label">Vehículo</label>
-                    <SelectVehiculo onIdVehiculoChange={handleIdVehiChange} />
-                </div>
-                {/* <div className="col-12">
-                    <div className="mb-3">
-                        <label htmlFor="formFile" className="form-label">Imagen Referencial</label>
-                        <input className="form-control" type="file" id="formFile" />
+                <div className="col-md-12 col-lg-6">
+                    <label className="form-label mb-0">Modelo de Vehículo</label>
+                    <div>
+                        <SelectVehiculo onIdVehiculoChange={handleIdVehiChange} />
                     </div>
-                </div> */}
+                </div>
+
             </div>
             <div className="d-grid gap-2 pt-5">
                 {insertRepuesto ?
