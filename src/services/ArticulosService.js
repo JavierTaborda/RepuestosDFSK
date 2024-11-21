@@ -16,19 +16,23 @@ export const getAllRepuestos = async () => {
     const fetchGrupos = () => getGrupos();
     const fetchCategorias = () => getCategorias();
     const fetchMarca = () => getMarca();
+    const fetchModelos = () => getModelos();
 
-    const [dataRepuesto, dataGrupo, dataCategoria, dataMarca] = await Promise.all([
+    const [dataRepuesto, dataGrupo, dataCategoria, dataMarca, dataModelo] = await Promise.all([
       fetchRepuestos(),
       fetchGrupos(),
       fetchCategorias(),
       fetchMarca(),
+      fetchModelos(),
     ]);
-  //console.log(dataGrupo.data);
+  //console.log(dataModelo);
+
     return {
       repuestos: dataRepuesto,
       grupo: dataGrupo,
       categoria: dataCategoria,
       marca: dataMarca,
+      modelo: dataModelo
     };
   } catch (error) {
 
@@ -55,10 +59,16 @@ export const getMarca = async () => {
   }
 };  
 
-//TODO: No filtra
-export const getRepuestosFilters = async (Marca, Grupo, Categoria, Descripcion) => {
+
+export const getRepuestosFilters = async (Marca, Grupo, Categoria, Descripcion, Modelo) => {
   try {
-    const URIM = `Articulos/Bodega/Marca/${encodeURIComponent(Marca)}/${encodeURIComponent(Grupo)}/${encodeURIComponent(Categoria)}/${encodeURIComponent(Descripcion === "" ? "*" : Descripcion)}`;
+    const URIM = `Articulos/Bodega/Filtros/${encodeURIComponent(
+      Marca
+    )}/${encodeURIComponent(Grupo)}/${encodeURIComponent(
+      Categoria
+    )}/${encodeURIComponent(
+      Descripcion === "" ? "*" : Descripcion
+    )}/${encodeURIComponent(Modelo)}`;
     const response = await HttpClient.get(URIM);
     return response.data;
   } catch (error) {
@@ -82,5 +92,16 @@ export const getCategorias = async () => {
     throw error;
   }
 };  
+  
+export const getModelos = async () => {
+  try {
+    const response = await HttpClient.get("Articulos/Modelos");
+    return response.data;
+  } catch (error) {
+    //console.error(error);
+    throw error;
+  }
+};
 
-export default { updateImagenURL, getRepuestosFilters, getAllRepuestos, getGrupos, getCategorias, getAllArticulosExistencia };
+
+export default { updateImagenURL, getRepuestosFilters, getAllRepuestos, getGrupos, getCategorias, getAllArticulosExistencia, getModelos };

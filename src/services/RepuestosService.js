@@ -69,6 +69,15 @@ export const getGrupos = async () => {
     throw error;
   }
 };
+export const getModelos = async () => {
+  try {
+    const response = await HttpClient.get("Articulos/Modelos");
+    return response.data;
+  } catch (error) {
+    //console.error(error);
+    throw error;
+  }
+};
 
 export default {
   getRepuestos,
@@ -78,4 +87,5 @@ export default {
   postRepuesto,
   listRepuestos,
   filterRepuestos,
+  getModelos,
 };

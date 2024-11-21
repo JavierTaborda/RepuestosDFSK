@@ -12,10 +12,12 @@ export default function RepuestosBodega({ addToCart }) {
   const [dataMarca, setMarca] = useState([]);
   const [dataGrupo, setGrupo] = useState([]);
   const [dataCategoria, setCategoria] = useState([]);
+  const [dataModelo, setModelo] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [stringMarca, setStringMarca] = useState("*");
   const [stringGrupo, setStringGrupo] = useState("*");
   const [stringCategoria, setStringCategoria] = useState("*");
+  const [stringModelo, setStringModelo] = useState("*");
   const [stringDescripcion, setStringDescripcion] = useState("*");
   const [stringTextSearch, setStringTextSearch] = useState("");
   const [orderData, setOrderData] = useState("");
@@ -41,11 +43,12 @@ export default function RepuestosBodega({ addToCart }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { repuestos, grupo, categoria, marca } = await getAllRepuestos();
+        const { repuestos, grupo, categoria, marca,modelo } = await getAllRepuestos();
         setRepuestos(repuestos);
         setGrupo(grupo);
         setCategoria(categoria);
         setMarca(marca);
+        setModelo(modelo);
       } catch (err) {
         console.error(err);
         notifyError(err.message);
@@ -60,7 +63,7 @@ export default function RepuestosBodega({ addToCart }) {
   const filterMarca = async () => {
     try {
       setIsLoading(true);
-      const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo,stringCategoria ,stringDescripcion);
+      const dataRepuesto = await getRepuestosFilters(stringMarca, stringGrupo,stringCategoria ,stringDescripcion, stringModelo);
       const sortedRepuestos = sortRepuestos(dataRepuesto, orderData);
       setRepuestos(sortedRepuestos);
       handlePageChange(1); // Reset to first page
@@ -94,7 +97,7 @@ export default function RepuestosBodega({ addToCart }) {
     if (!isLoading) {
       filterMarca();
     }
-  }, [stringMarca, stringGrupo, stringDescripcion, orderData, stringCategoria]);
+  }, [stringMarca, stringGrupo, stringDescripcion, orderData, stringCategoria, stringModelo]);
 
   // Manejar el cambio de página
   const handlePageChange = (pageNumber) => {
@@ -148,6 +151,30 @@ export default function RepuestosBodega({ addToCart }) {
               ))}
             </ul>
           </div>
+          <div className="btn-group ps-2 pt-3" role="group">
+            <button
+              type="button"
+              className="btn btn-outline-danger dropdown-toggle rounded-5 shadow-sm"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-funnel" /> MODELO: {stringModelo}
+            </button>
+            <ul className="dropdown-menu shadow">
+              <li>
+                <a onClick={() => setStringModelo('*')} className="dropdown-item" href="#">Todos</a>
+              </li>
+              {dataModelo.map((item) => (
+                <li key={item.idmodelo}>
+                  <a onClick={() => setStringModelo(item.modelo1)} className="dropdown-item">
+                    {item.modelo1} - {item.marca} - {item.ano}
+                  </a>
+                </li>
+              ))}
+
+            </ul>
+          </div>
+
           <div className="btn-group ps-2 pt-3" role="group">
             <button
               type="button"
