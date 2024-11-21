@@ -70,4 +70,4 @@ export const updateVehiculo = async (vehiculo) => {
   }
 };
 
-export default { getVehiculos, UpdateAddVehicle, getVehiculosFilter };
+export default { getVehiculos, UpdateAddVehicle, getVehiculosFilter,getModeloTexto,getModeloFilters,updateVehiculo };

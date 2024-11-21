@@ -1,4 +1,5 @@
 import HttpClient from "./HttpClient";
+
 export const updateImagenURL = async (url) => {
   try {
     const response = await HttpClient.post("Articulos/UpdateImageUrl", url);
@@ -104,4 +105,13 @@ export const getModelos = async () => {
 };
 
 
-export default { updateImagenURL, getRepuestosFilters, getAllRepuestos, getGrupos, getCategorias, getAllArticulosExistencia, getModelos };
+export default {
+  updateImagenURL,
+  getRepuestosFilters,
+  getAllRepuestos,
+  getGrupos,
+  getCategorias,
+  getAllArticulosExistencia,
+  getModelos,
+  getMarca
+};

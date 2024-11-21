@@ -31,15 +31,21 @@ export const postRepuesto = async (repuestoData) => {
 
 export const filterRepuestos = async (nombre, marca, inventario, modelo) => {
   try {
-   //  console.log({ nombre, marca, inventario, modelo }); 
-    const response = await HttpClient.get(`Repuestos/Filtrar`, {
-      params: { nombre, marca, inventario, modelo },
-    });
+    //console.log({ nombre, marca, inventario, modelo }); 
+     const query = new URLSearchParams({
+       nombre: nombre !== null ? nombre : '',
+       marca: marca !== null ? marca : '',
+       inventario: inventario !== null ? inventario : '',
+       modelo: modelo !== null ? modelo : '',
+     }).toString();
+   console.log(query);
+    const response = await HttpClient.get(`Repuestos/Filtrar?${query}`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
+
 
 export const listRepuestos = async (listArticulos) => {
   try {
@@ -50,16 +56,7 @@ export const listRepuestos = async (listArticulos) => {
   }
 };
 
-//Sitema IMB
-export const getMarcasImb = async () => {
-  try {
-    const response = await HttpClient.get("Articulos/CodigosMarca");
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
+//Concesionario
 export const getGrupos = async () => {
   try {
     const response = await HttpClient.get("Articulos/CodigosGrupo");
@@ -81,7 +78,6 @@ export const getModelos = async () => {
 
 export default {
   getRepuestos,
-  getMarcasImb,
   getGrupos,
   updateRespuestos,
   postRepuesto,
