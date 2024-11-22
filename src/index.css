@@ -33,7 +33,7 @@ background-color: rgb(172, 172, 172);
 /* Colores de los dropdown */
 .dropdown-menu{
     --bs-dropdown-link-hover-bg: #fb747d;
-    --bs-dropdown-link-active-bg: #F92432;
+    --bs-dropdown-link-active-bg: #d62e2f;
     border-radius: 4px;
    
 }
@@ -42,10 +42,10 @@ background-color: rgb(172, 172, 172);
   
   input:invalid {
     animation: justshake 0.3s forwards;
-    color: red;
+    color: #d62e2f;
   }
     .form-check-input:checked {
-      background-color: #f92432;
+      background-color: #d62e2f;
       border-color: #fb747d;
     }
   @keyframes justshake {

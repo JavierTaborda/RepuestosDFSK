@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
-import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton,
-    TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Collapse, IconButton, TextField, Button, FormControl, InputLabel, Select, MenuItem, Alert } from '@mui/material';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
@@ -21,11 +18,10 @@ export default function EstadosSolicitudes() {
     const [statusFilter, setStatusFilter] = useState('Todos');
     const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-    const [errormessage, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedData, setSelectedData] = useState(null);
-    const [uaseradmin, setuserAdmin] = useState(false);
-
+    const [userAdmin, setUserAdmin] = useState(false);
 
     const handleModalOpen = (data) => {
         setSelectedData(data);
@@ -36,31 +32,28 @@ export default function EstadosSolicitudes() {
         setModalOpen(false);
         setSelectedData(null);
     };
+
     const getData = async () => {
         setIsLoading(true);
-        setError(null); // Reset error state
-
+        setErrorMessage(null); // Reset error state
         try {
             const response = await getFilterSolicitudes(startDate, endDate, statusFilter, user.user);
             setResumen(response);
-            // console.log(response.data);
         } catch (error) {
             if (error.response) {
-                setError(error.response.data);
+                setErrorMessage(error.response.data);
             } else if (error.request) {
-                setError('No response received from server');
+                setErrorMessage('No response received from server');
             } else {
-                setError('Error: ' + error.message);
+                setErrorMessage('Error: ' + error.message);
             }
-
             if (error.response.status !== 401) {
-                toast.error(`Error en la carga de datos: ${errormessage}`);
+                toast.error(`Error en la carga de datos: ${errorMessage}`);
             }
         } finally {
             setIsLoading(false);
         }
     };
-
 
     const handleToggle = (id) => {
         setOpen((prevOpen) => ({ ...prevOpen, [id]: !prevOpen[id] }));
@@ -68,19 +61,15 @@ export default function EstadosSolicitudes() {
 
     const handleSearch = () => {
         getData();
-
-        //console.log(startDate, endDate, statusFilter, user.user);
     };
-
 
     useEffect(() => {
         if (user) {
             getData();
             if (user.role === 'admin') {
-                setuserAdmin(true);
+                setUserAdmin(true);
             }
         }
-
     }, [user]);
 
     if (!user) {
@@ -89,12 +78,10 @@ export default function EstadosSolicitudes() {
 
     return (
         <>
-
             <h2 className="bd-title text-center mb-0 p-3">Históricos de Pedidos</h2>
-
-            <div className='container pt-2'>
-                <div className='row p-2'>
-                    <div className='col-md-3 pt-3'>
+            <div className="container pt-2">
+                <div className="row p-2">
+                    <div className="col-md-3 pt-3">
                         <FormControl fullWidth>
                             <InputLabel id="status-select-label">Filtrar por status</InputLabel>
                             <Select
@@ -103,6 +90,7 @@ export default function EstadosSolicitudes() {
                                 value={statusFilter}
                                 label="Filtrar por status"
                                 onChange={(e) => setStatusFilter(e.target.value)}
+                                size="small"
                             >
                                 <MenuItem value="Todos"><em>Todos</em></MenuItem>
                                 <MenuItem value={true}>Pendientes</MenuItem>
@@ -110,7 +98,7 @@ export default function EstadosSolicitudes() {
                             </Select>
                         </FormControl>
                     </div>
-                    <div className='col-md-3 pt-3'>
+                    <div className="col-md-3 pt-3">
                         <TextField
                             InputLabelProps={{ shrink: true }}
                             type="date"
@@ -118,9 +106,10 @@ export default function EstadosSolicitudes() {
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
                             fullWidth
+                            size="small"
                         />
                     </div>
-                    <div className='col-md-3 pt-3'>
+                    <div className="col-md-3 pt-3">
                         <TextField
                             InputLabelProps={{ shrink: true }}
                             type="date"
@@ -128,24 +117,24 @@ export default function EstadosSolicitudes() {
                             value={endDate}
                             onChange={(e) => setEndDate(e.target.value)}
                             fullWidth
+                            size="small"
                         />
                     </div>
-                    <div className='col-md-3 pt-3'>
+                    <div className="col-md-3 pt-3">
                         <Button variant="contained" color="error" onClick={handleSearch}>
                             Buscar
                         </Button>
                     </div>
                 </div>
-
                 {isLoading ? (
                     <div className="text-center">
                         <Spinner />
                         <p>Cargando datos...</p>
                     </div>
-                ) : errormessage ? (
-                    <Alert severity="error">{errormessage}</Alert>
+                ) : errorMessage ? (
+                    <Alert severity="error">{errorMessage}</Alert>
                 ) : dataResumen.length > 0 ? (
-                    <TableContainer component={Paper} elevation={2} className='mt-3'>
+                    <TableContainer component={Paper} elevation={2} className="mt-3">
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -173,19 +162,27 @@ export default function EstadosSolicitudes() {
                                                 </IconButton>
                                             </TableCell>
                                             <TableCell>
-                                                <span className={resumen.estatus ? 'h5 text-warning' : ' h5 text-success'}>
+                                                <span className={resumen.estatus ? 'h5 text-warning' : 'h5 text-success'}>
                                                     {resumen.idResumenSolicitud}
                                                 </span>
                                             </TableCell>
                                             <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD hh:mm')}</TableCell>
                                             <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD hh:mm')}</TableCell>
                                             <TableCell>{resumen.usuario}</TableCell>
-                                            <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio * solicitud.cantidad), 0)}</span></TableCell>
-                                            <TableCell>  <i className="bi bi-qr-code" style={{ color: '#d62e2f' }}></i> {resumen.codigounico}</TableCell>
                                             <TableCell>
-                                                {uaseradmin ? <button className='btn btn-outline-danger rounded-5'
-                                                    onClick={() => handleModalOpen(resumen)}><i className="bi bi-pencil-fill"></i>
-                                                </button> : null}
+                                                <span className="h5">
+                                                    <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio * solicitud.cantidad), 0)}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell>
+                                                <i className="bi bi-qr-code" style={{ color: '#d62e2f' }}></i> {resumen.codigounico}
+                                            </TableCell>
+                                            <TableCell>
+                                                {userAdmin ? (
+                                                    <button className="btn btn-outline-danger rounded-5" onClick={() => handleModalOpen(resumen)}>
+                                                        <i className="bi bi-pencil-fill"></i>
+                                                    </button>
+                                                ) : null}
                                             </TableCell>
                                         </TableRow>
                                         <TableRow>
@@ -201,39 +198,32 @@ export default function EstadosSolicitudes() {
                                                                     <TableCell>Repuesto</TableCell>
                                                                     <TableCell align="right">Cantidad</TableCell>
                                                                     <TableCell align="right">Precio Estimado</TableCell>
-                                                                    <TableCell>Modelo de Vehículo</TableCell>                                                                    <TableCell>Estado</TableCell>
-
-                                                                    {uaseradmin ? (
-                                                                        <><TableCell>Responsable</TableCell>
+                                                                    <TableCell>Modelo de Vehículo</TableCell>
+                                                                    <TableCell>Estado</TableCell>
+                                                                    {userAdmin && (
+                                                                        <>
+                                                                            <TableCell>Responsable</TableCell>
                                                                             <TableCell>Fecha de Compra</TableCell>
-                                                                            <TableCell>Fecha de Llegada</TableCell></>)
-                                                                        : null}
-
+                                                                            <TableCell>Fecha de Llegada</TableCell>
+                                                                        </>
+                                                                    )}
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
                                                                 {resumen.solicitudes.map((solicitud) => (
                                                                     <TableRow key={solicitud.idSolicitud}>
-                                                                        <TableCell component="th" scope="row">
-                                                                            {solicitud.repuesto}
-                                                                        </TableCell>
+                                                                        <TableCell component="th" scope="row">{`#Parte:${solicitud.numParte}\n${solicitud.repuesto}`}</TableCell>
                                                                         <TableCell align="right">{solicitud.cantidad}</TableCell>
-                                                                        <TableCell align="right">
-                                                                            $ {Math.round(solicitud.cantidad * solicitud.precio * 100) / 100}
-                                                                        </TableCell>
-                                                                        <TableCell> {solicitud.vehiculo}</TableCell>
-                                                                        <TableCell> {solicitud.estado}</TableCell>
-
-                                                                        {uaseradmin ? (
+                                                                        <TableCell align="right">${Math.round(solicitud.cantidad * solicitud.precio * 100) / 100}</TableCell>
+                                                                        <TableCell>{solicitud.vehiculo}</TableCell>
+                                                                        <TableCell>{solicitud.estado}</TableCell>
+                                                                        {userAdmin && (
                                                                             <>
-                                                                                <TableCell> {solicitud.responsable}</TableCell>
-                                                                                <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
-                                                                                <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.Llegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                                <TableCell>{solicitud.responsable}</TableCell>
+                                                                                <TableCell>{solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                                <TableCell>{solicitud.fechaCompra ? dayjs(solicitud.Llegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
                                                                             </>
-
-                                                                        ) : null}
-
-
+                                                                        )}
                                                                     </TableRow>
                                                                 ))}
                                                             </TableBody>
@@ -247,15 +237,11 @@ export default function EstadosSolicitudes() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-
                 ) : dataResumen.length === 0 && !isLoading ? (
                     <p>No se encontraron solicitudes.</p>
                 ) : null}
                 <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
             </div>
-
         </>
-
-
     );
 }
