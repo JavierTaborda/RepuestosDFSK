@@ -38,17 +38,6 @@ background-color: rgb(172, 172, 172);
    
 }
 
-/* clases para inpust */
-/* input, .form-control:focus {
-    border-color: #fc9ca2;
-    box-shadow: 0 0 0 .15rem #dc35451a;
-    
-}
-input,select {   
-    border-radius: 15px !important;
-    box-shadow: 1px 1px 6px 0 rgba(0, 0, 0, 0.129);
-    color: dimgray;
-  } */
 
   
   input:invalid {
@@ -154,4 +143,53 @@ max-width: 400px;
 
 .nav-link:hover {
   text-decoration: underline;
+}
+
+/* FOOTER */
+
+/* styles.css */
+/* App.css */
+
+/* Estilos globales */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* El contenedor principal debe ocupar todo el espacio disponible */
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Tus estilos existentes para el footer */
+footer {
+  background-color: #f8f9fa;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+footer a {
+  color: #6c757d;
+  /* Color de texto de los enlaces */
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #343a40;
+  /* Color de texto al pasar el ratón */
+}
+
+footer .bi {
+  font-size: 1.5rem;
+  /* Tamaño de los iconos */
 }

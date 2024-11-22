@@ -2,7 +2,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-font-size: 12px;
+  font-size: 14px;
 }
 
 @keyframes slideDown {
@@ -22,19 +22,24 @@ font-size: 12px;
 }
 
 .modal-dialog {
-  max-width: 900px;
+  max-width: 800px;
 }
 
 .modal-content {
-  border-radius: 12px; /* Ajusta el redondeo de las esquinas */
+  border-radius: 12px;
+  /* Ajusta el redondeo de las esquinas */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  /* Evita que el contenido se salga del borde */
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #fbfbfb;
+  border-bottom: 1px solid #eaeaea;
+  background-color: #f7f7f7;
+  padding: 16px 24px;
 }
 
 .modal-title {
@@ -54,27 +59,42 @@ font-size: 12px;
   padding: 20px;
 }
 
-.alert {
-  font-size: 1rem;
-  margin-top: 10px;
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
 }
 
 .price-badge {
   font-size: 1.2rem;
   font-weight: bold;
-  background-color: #ff5a5f;
+  background-color: #d62e2f;
 }
 
-.details-section .table {
-  width: 100%;
+.details-section {
+  padding: 20px 0;
+}
+
+.details-section p.lead {
+  font-size: 1rem;
+  color: #333;
+}
+
+.alert {
   font-size: 1rem;
   margin-top: 10px;
 }
 
-.details-section .table td {
-  padding: 0.5rem 0;
+.close-btn {
+  background-color: transparent;
+  border-color: #d62e2f;
+  color: #d62e2f;
+  transition: all 0.3s;
 }
 
-.details-section .table i {
-  margin-right: 8px;
+.close-btn:hover {
+  background-color: #d62e2f;
+  color: #fff;
 }

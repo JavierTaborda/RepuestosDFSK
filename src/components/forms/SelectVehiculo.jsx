@@ -1,24 +1,22 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import HttpClient from '../../services/HttpClient';
-import  { getVehiculos } from '../../services/VehiclesService';
-import CustomSelect from "../forms/CustomSelect";
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { getVehiculos } from "../../services/VehiclesService";
+
 const URI = `Vehiculos/`;
 
-export default function SelectVehiculo({ onIdVehiculoChange }) {
+const SelectVehiculo = ({ onIdVehiculoChange }) => {
   const [dataVehiculos, setDataVehiculos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dataIdVehiculo, setdataIdVehiculo] = useState();
+  const [dataIdVehiculo, setdataIdVehiculo] = useState('');
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         setIsLoading(true);
         const response = await getVehiculos();
-      
         setDataVehiculos(response);
-        console.log(response);
+       
       } catch (error) {
         toast.error("Error en la carga de datos: " + error.message);
       } finally {
@@ -26,14 +24,13 @@ export default function SelectVehiculo({ onIdVehiculoChange }) {
       }
     };
 
-
     fetchData();
   }, []);
+
   const handleSelectChange = (e) => {
     const newIdVehi = e.target.value;
     setdataIdVehiculo(newIdVehi);
     onIdVehiculoChange(newIdVehi);
-
   };
 
   return (
@@ -43,38 +40,27 @@ export default function SelectVehiculo({ onIdVehiculoChange }) {
           <span className="visually-hidden">Loading...</span>
         </div>
       ) : (
-        <>
-          <CustomSelect
-            label="Modelo de Vehículo"
-              value={dataIdVehiculo}
-              onChange={handleSelectChange}
-              options={dataVehiculos}
-              keyField="idVehiculo"
-              valueField="idVehiculo"
-              displayExtra="anho"
-              displayField="modelo"
-              textinicial={"Seleccione un Modelo de Vehículo"}
-            sx={{ m: 1, minWidth: 220 }}
-            size="small"
+        <FormControl fullWidth>
+          <InputLabel id="modelo-select-label">Modelo de Vehículo</InputLabel>
+          <Select
             labelId="modelo-select-label"
-          />
-          {/* <select
-            className="form-select"
-            value={dataIdVehiculo || ""}
+            value={dataIdVehiculo}
             onChange={handleSelectChange}
+            label="Modelo de Vehículo"
           >
-            <option value="">Seleccione un Modelo de Vehículo</option>
-            {dataVehiculos.map((item) => (
-              item.estatus && (
-                <option key={item.idVehiculo} value={item.idVehiculo}>
-                  {item.modelo}
-                </option>
-              )
+            <MenuItem value="">
+              <em>Seleccione un Modelo de Vehículo</em>
+            </MenuItem>
+            {dataVehiculos.map((vehiculo) => (
+              <MenuItem key={vehiculo.idVehiculo} value={vehiculo.idVehiculo}>
+                {vehiculo.modelo} <em style={{ paddingLeft: '10px', color: '#a8a8a8' }}>{vehiculo.anho}</em>
+              </MenuItem>
             ))}
-          </select> */}
-        </>
+          </Select>
+        </FormControl>
       )}
     </>
   );
+};
 
-}
+export default SelectVehiculo;

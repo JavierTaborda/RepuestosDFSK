@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Spinner from "../../components/forms/Spinner";
 import FormRepuesto from "../../components/RequestRepuestos/Forms/FormRepuesto";
 import FormSolicitud from "../../components/RequestRepuestos/Forms/FormSolicitud";
@@ -6,44 +6,42 @@ import { motion } from 'framer-motion';
 import { toast } from "react-toastify";
 import { getInitialData, postSolicitud } from '../../services/SolicitudesService';
 import dayjs from 'dayjs';
-export default function CrearRepuesto() {
+import { AuthContext } from '../../context/AuthProvider';
 
-  const [repuestoData, setrepuestoData] = useState();
+export default function CrearRepuesto() {
+  const { user } = useContext(AuthContext);
+  const [repuestoData, setRepuestoData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [resumenData, setResumenData] = useState();
   const [quantity, setQuantity] = useState(1);
-  const [dataInicial, setdataInicial] = useState([]);
-  const [loadData, setloadData] = useState(true);
-  const [loadingForm, setloadingForm] = useState(false);
+  const [dataInicial, setDataInicial] = useState([]);
+  const [loadData, setLoadData] = useState(true);
+  const [loadingForm, setLoadingForm] = useState(false);
+  const [errordata, seterrorData] = useState(false);
 
   useEffect(() => {
     const fetchDataInicial = async () => {
       try {
         const response = await getInitialData();
-        setdataInicial(response);
-        //console.log(response);
+        setDataInicial(response);
       } catch (error) {
+
         toast.error("Error en la carga de datos: " + error.message);
+        seterrorData(true);
       } finally {
-        setloadData(false);
+        setLoadData(false);
       }
     };
-
     fetchDataInicial();
   }, []);
 
-
   useEffect(() => {
     if (repuestoData) {
-
       setIsLoading(true);
-    }
-    else {
+    } else {
       setIsLoading(false);
-
     }
   }, [repuestoData]);
-
 
   useEffect(() => {
     if (loadingForm) {
@@ -59,9 +57,9 @@ export default function CrearRepuesto() {
             toast.error("Error al registrar la solicitud");
           }
         } catch (error) {
-          toast.error("Error en la solicitud." + error.message);
+          toast.error("Error en la solicitud: " + error.message);
         } finally {
-          setloadingForm(false);
+          setLoadingForm(false);
         }
       };
       fetchData();
@@ -71,11 +69,9 @@ export default function CrearRepuesto() {
   const insertSolicitud = async (event) => {
     event.preventDefault();
     createlistSolicitudes();
-
   };
 
   const createlistSolicitudes = () => {
-
     const listSolicitudes = {
       idSolicitud: 0,
       idResumenSolicitud: 0,
@@ -89,49 +85,57 @@ export default function CrearRepuesto() {
     };
 
     setResumenData((prevData) => ({ ...prevData, solicitudes: [listSolicitudes] }));
-    setloadingForm(true);
+    setLoadingForm(true);
   };
+
   if (loadData) {
     return <Spinner />;
   }
+
   return (
     <>
-      <h2 className="bd-title text-center mb-0 pt-2">Crear Solicitud de Repuesto </h2>
-      <div className='container pt-2'>
+      <h2 className="text-center my-4">Crear Solicitud de Repuesto</h2>
+      <div className="container">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          <div className='row p-2  px-2'>
-            <div className='col-md-7 col-lg-8 shadow-sm rounded-5 p-4 ' >
-              <h4 className="bd-title text-center mb-0 pt-2">Inserte el Repuesto a Solicitar</h4>
-              <FormRepuesto
-                setrepuestoData={setrepuestoData}
-                insertRepuesto={false}
-              />
+          <div className="row">
+            <div className="col-md-7 col-lg-8 mb-4">
+              <div className="card shadow-sm rounded-5 p-4 bg-white">
+                <h5 className="card-title text-center">Inserte el Repuesto a Solicitar</h5>
+                <div className="card-body" style={{
+                  maxHeight: '60vh', overflowY: 'auto'}} >
+                  {errordata ? (<p className="text-danger text-center">Ocurrió un error al cargar los datos, por favor intente más tarde.</p>)
+                    : (loadingForm ? <Spinner /> :
+                      <FormRepuesto
+                        setrepuestoData={setRepuestoData}
+                        insertRepuesto={false}
+                      />
+                    )
+                  }
+                 
+                </div>
+              </div>
             </div>
 
-            {
-              !isLoading ? null :
-                loadingForm ? <Spinner /> :
-                  <motion.div
-                    className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-4'
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                  >
-                    <FormSolicitud
-                      setResumenData={setResumenData}
-                      onSubmit={insertSolicitud}
-
-                    />
-
-                  </motion.div>}
+            {isLoading && (
+              <div className="col-md-5 col-lg-4 order-md-last mb-4">
+                <div className="card shadow-sm rounded-5 p-4 bg-white">
+                  <h5 className="card-title text-center">Resumen de Solicitud</h5>
+                  <div className="card-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                    { (loadingForm ? <Spinner /> :
+                      <FormSolicitud setResumenData={setResumenData} onSubmit={insertSolicitud} />
+                      )
+                      }
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
     </>
   );
 }
-

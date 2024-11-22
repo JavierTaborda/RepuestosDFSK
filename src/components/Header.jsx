@@ -65,9 +65,9 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                 </div> 
               </>
             )}
-            <div className="mx-2 my-2">
+            {/* <div className="mx-2 my-2">
               <DarkMode />
-            </div>
+            </div> */}
           </div>
         </div>
       </nav>

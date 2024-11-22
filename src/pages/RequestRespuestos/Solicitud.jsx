@@ -8,8 +8,8 @@ import { AuthContext } from '../../context/AuthProvider';
 import { motion } from 'framer-motion';
 import { getInitialData, postSolicitud } from '../../services/SolicitudesService';
 import { listRepuestos } from '../../services/RepuestosService';
-function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
+function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
     const { user } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);
     const [dataRepuestos, setRepuestos] = useState([]);
@@ -17,7 +17,6 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     const [loadData, setloadData] = useState(true);
     const [createSolicitud, setcreateSolicitud] = useState(false);
     const [resumenData, setResumenData] = useState();
-
 
     const createlistSolicitudes = () => {
         const listSolicitudes = cart.map((item) => ({
@@ -31,9 +30,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
             precio: item.venta,
             observacion: '',
         }));
-        //console.log(listSolicitudes);
         setResumenData((prevData) => ({ ...prevData, solicitudes: listSolicitudes }));
-
     };
 
     const insertSolicitud = async (event) => {
@@ -45,8 +42,6 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     useEffect(() => {
         if (isLoading) {
             async function fetchData() {
-
-
                 try {
                     if (resumenData.idUsuario === 0) {
                         resumenData.idUsuario = user.user;
@@ -56,27 +51,20 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     if (response.status === 200) {
                         clearCart();
                         toast.success("Solicitud registrada correctamente");
-
                     } else {
                         toast.error("Error al registrar la solicitud");
                     }
-
                 } catch (error) {
                     console.log(error);
                     toast.error("Error en la solicitud: " + error.message);
-                }
-                finally {
+                } finally {
                     setIsLoading(false);
                 }
-
             }
-
             fetchData();
         }
-    }), [resumenData];
+    }, [resumenData]);
 
-
-    
     useEffect(() => {
         if (loadData) {
             if (cart.length === 0) {
@@ -108,11 +96,8 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
         }
     }, []);
 
-
-
-
     if (!user || loadData) {
-        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        return <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
             <motion.div
                 style={{ fontSize: '18px' }}
                 initial={{ opacity: 1 }}
@@ -124,45 +109,50 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
             <Spinner />
         </div>
     }
+
     return (
         <>
-            <h2 className="bd-title text-center mb-0 pt-2">Realizar Solicitud de Repuestos</h2>
-            <div className='container pt-2'>
+            <h2 className="text-center my-4">Realizar Solicitud de Repuestos</h2>
+            <div className="container">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1 }}
                 >
-                    <div className='row p-2  px-2'>
-                        <div className='col-md-7 col-lg-8 shadow-sm rounded-5 p-4 '>
-                            <div className="table-responsive" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-                                <CartTable
-                                    cart={cart}
-                                    removeFromCart={removeFromCart}
-                                    increaseQuantity={increaseQuantity}
-                                    decreaseQuantity={decreaseQuantity}
-                                    clearCart={clearCart}
-                                    isEmpty={isEmpty}
-                                    carTotal={carTotal}
-                                    sendForm={true}
-                                />
-
+                    <div className="row">
+                        <div className="col-md-7 col-lg-8 mb-4">
+                            <div className="card shadow-sm rounded-5 p-4">
+                                <h5 className="card-title">Detalles del Carrito</h5>
+                                <div className="card-body">
+                                    <div className="table-responsive" style={{minHeight: '60vh', maxHeight: '70vh', overflowY: 'auto' }}>
+                                        <CartTable
+                                            cart={cart}
+                                            removeFromCart={removeFromCart}
+                                            increaseQuantity={increaseQuantity}
+                                            decreaseQuantity={decreaseQuantity}
+                                            clearCart={clearCart}
+                                            isEmpty={isEmpty}
+                                            carTotal={carTotal}
+                                            sendForm={true}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div className='col-md-5 col-lg-4 order-md-last rounded-5 shadow-sm p-1'>
-                            <div className="table-responsive" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-                                {isEmpty ? <p className='text-center'>No posee repuestos a solicitar.</p> :
-
-                                    !createSolicitud ? null :
-
-                                        isLoading ? <Spinner /> : <FormSolicitud
-                                            setResumenData={setResumenData}
-                                            onSubmit={insertSolicitud}
-                                        />
-                                      
-                                }
-
+                        <div className="col-md-5 col-lg-4 order-md-last mb-4">
+                            <div className="card shadow-sm rounded-5 p-4">
+                                <h5 className="card-title">Resumen de Solicitud</h5>
+                                <div className="card-body" style={{ minHeight: '65vh', maxHeight: '70vh', overflowY: 'auto' }}>
+                                    {isEmpty ? <p className="text-center">No posee repuestos a solicitar.</p> :
+                                        !createSolicitud ? null :
+                                            isLoading ? <Spinner /> :
+                                                <FormSolicitud
+                                                    setResumenData={setResumenData}
+                                                    onSubmit={insertSolicitud}
+                                                />
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>

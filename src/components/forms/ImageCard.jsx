@@ -13,9 +13,9 @@ export default function ImageCard({ info, nparte, stock, img }) {
                         <br />
                         {info}
                     </p>
-                    {stock < 1 && (
+                    {/* {stock < 1 && (
                         <button className="btn btn-primary ">Generar Pedido</button>
-                    )}
+                    )} */}
                 </div>
             </section>
 

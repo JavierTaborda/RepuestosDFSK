@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import Spinner from '../../components/forms/Spinner';
-import {getStateSolicitudes} from '../../services/SolicitudesService';
+import { getFilterSolicitudes } from '../../services/SolicitudesService';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import DialogHistory from '../../components/RequestRepuestos/DialogHistory';
@@ -24,6 +24,7 @@ export default function EstadosSolicitudes() {
     const [errormessage, setError] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedData, setSelectedData] = useState(null);
+    const [uaseradmin, setuserAdmin] = useState(false);
 
 
     const handleModalOpen = (data) => {
@@ -40,9 +41,8 @@ export default function EstadosSolicitudes() {
         setError(null); // Reset error state
 
         try {
-            const response = await getStateSolicitudes(startDate,endDate,statusFilter,user.user);
-            //const response = await HttpClient.get(`Solicitudes/${startDate}/${endDate}/${statusFilter}/${user.user}`);
-            setResumen(response.data);
+            const response = await getFilterSolicitudes(startDate, endDate, statusFilter, user.user);
+            setResumen(response);
             // console.log(response.data);
         } catch (error) {
             if (error.response) {
@@ -76,6 +76,9 @@ export default function EstadosSolicitudes() {
     useEffect(() => {
         if (user) {
             getData();
+            if (user.role === 'admin') {
+                setuserAdmin(true);
+            }
         }
 
     }, [user]);
@@ -142,7 +145,7 @@ export default function EstadosSolicitudes() {
                 ) : errormessage ? (
                     <Alert severity="error">{errormessage}</Alert>
                 ) : dataResumen.length > 0 ? (
-                    <TableContainer component={Paper }elevation={2} className='mt-3'>
+                    <TableContainer component={Paper} elevation={2} className='mt-3'>
                         <Table>
                             <TableHead>
                                 <TableRow>
@@ -152,6 +155,7 @@ export default function EstadosSolicitudes() {
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Requerida</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitante</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Monto Estimado</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Código</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}></TableCell>
                                 </TableRow>
                             </TableHead>
@@ -173,12 +177,13 @@ export default function EstadosSolicitudes() {
                                                     {resumen.idResumenSolicitud}
                                                 </span>
                                             </TableCell>
-                                            <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                                            <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+                                            <TableCell>{dayjs(resumen.fechaCreacion).format('YYYY-MM-DD hh:mm')}</TableCell>
+                                            <TableCell>{dayjs(resumen.fechaCierre).format('YYYY-MM-DD hh:mm')}</TableCell>
                                             <TableCell>{resumen.usuario}</TableCell>
-                                            <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio*solicitud.cantidad), 0)}</span></TableCell>
+                                            <TableCell>  <span className='h5'> <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio * solicitud.cantidad), 0)}</span></TableCell>
+                                            <TableCell>  <i className="bi bi-qr-code" style={{ color: '#d62e2f' }}></i> {resumen.codigounico}</TableCell>
                                             <TableCell>
-                                                {user.role === 'admin' ? <button className='btn btn-outline-danger rounded-5' 
+                                                {uaseradmin ? <button className='btn btn-outline-danger rounded-5'
                                                     onClick={() => handleModalOpen(resumen)}><i className="bi bi-pencil-fill"></i>
                                                 </button> : null}
                                             </TableCell>
@@ -196,11 +201,14 @@ export default function EstadosSolicitudes() {
                                                                     <TableCell>Repuesto</TableCell>
                                                                     <TableCell align="right">Cantidad</TableCell>
                                                                     <TableCell align="right">Precio Estimado</TableCell>
-                                                                    <TableCell>Vehículo</TableCell>
-                                                                    <TableCell>Responsable</TableCell>
-                                                                    <TableCell>Estado</TableCell>
-                                                                    <TableCell>Fecha de Compra</TableCell>
-                                                                    <TableCell>Fecha de Llegada</TableCell>
+                                                                    <TableCell>Modelo de Vehículo</TableCell>                                                                    <TableCell>Estado</TableCell>
+
+                                                                    {uaseradmin ? (
+                                                                        <><TableCell>Responsable</TableCell>
+                                                                            <TableCell>Fecha de Compra</TableCell>
+                                                                            <TableCell>Fecha de Llegada</TableCell></>)
+                                                                        : null}
+
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
@@ -214,10 +222,18 @@ export default function EstadosSolicitudes() {
                                                                             $ {Math.round(solicitud.cantidad * solicitud.precio * 100) / 100}
                                                                         </TableCell>
                                                                         <TableCell> {solicitud.vehiculo}</TableCell>
-                                                                        <TableCell> {solicitud.responsable}</TableCell>
                                                                         <TableCell> {solicitud.estado}</TableCell>
-                                                                        <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
-                                                                        <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.Llegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+
+                                                                        {uaseradmin ? (
+                                                                            <>
+                                                                                <TableCell> {solicitud.responsable}</TableCell>
+                                                                                <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                                <TableCell> {solicitud.fechaCompra ? dayjs(solicitud.Llegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                            </>
+
+                                                                        ) : null}
+
+
                                                                     </TableRow>
                                                                 ))}
                                                             </TableBody>
@@ -235,7 +251,7 @@ export default function EstadosSolicitudes() {
                 ) : dataResumen.length === 0 && !isLoading ? (
                     <p>No se encontraron solicitudes.</p>
                 ) : null}
-            <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
+                <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
             </div>
 
         </>

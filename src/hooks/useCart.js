@@ -29,7 +29,7 @@ export const useCart = () => {
         return toast.warning("No hay existencia disponible");
       item.quantity = 1;
       setCart([...cart, item]);
-      toast.info("¡Se agregó el articulo " + item.articulo + "!");
+      toast.info("¡Se agregó el articulo " + item.descripcion + "!");
     }
   }
 

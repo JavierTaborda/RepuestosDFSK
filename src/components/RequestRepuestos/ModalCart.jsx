@@ -1,11 +1,10 @@
-import "../../styles/ModalCart.css";
 import React from 'react';
+import "../../styles/ModalCart.css";
 import ImageCard from "../forms/ImageCard";
-import QuantityControl from "./QuantityControl";
 
 const getStockClass = (stock) => {
   if (stock > 100) {
-    return 'alert-success'; // Verde 
+    return 'alert-success'; // Verde
   } else if (stock <= 100 && stock >= 50) {
     return 'alert-warning'; // Amarillo
   } else {
@@ -15,7 +14,7 @@ const getStockClass = (stock) => {
 
 const darkModal = () => {
   return document.body.classList.contains('bg-dark') ? 'bg-dark' : 'bg-light';
-}
+};
 
 const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
   return (
@@ -32,8 +31,8 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
             <div className="modal-body">
               <div className="row">
                 <div className="col-md-6">
-                  <div className="d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
-                    <ImageCard info={repuesto.descripcion} articulo={repuesto.articulo} stock={repuesto.existencia} img={repuesto.urlimagen} />
+                  <div className="image-container">
+                    <ImageCard info={repuesto.descripcion} nparte={repuesto.numeroparte} stock={repuesto.existencia} img={repuesto.urlimagen} />
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -62,7 +61,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-outline-danger rounded-5" onClick={handleClose}>
+              <button type="button" className="btn btn-outline-danger rounded-5 close-btn" onClick={handleClose}>
                 <i className="bi bi-x"></i> Cerrar
               </button>
             </div>

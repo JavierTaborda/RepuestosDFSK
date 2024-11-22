@@ -1,5 +1,5 @@
-
-import { ToastContainer, toast } from "react-toastify";
+import React from 'react';
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +10,6 @@ import { AuthProvider } from './context/AuthProvider';
 import AppRoutes from './routes/AppRoutes';
 
 function App() {
-
   const {
     cart,
     addToCart,
@@ -20,11 +19,11 @@ function App() {
     clearCart,
     isEmpty,
     carTotal
-  } = useCart()
+  } = useCart();
 
   return (
-    <>
-      <AuthProvider>
+    <AuthProvider>
+      <div id="root">
         <Header
           cart={cart}
           removeFromCart={removeFromCart}
@@ -34,23 +33,22 @@ function App() {
           isEmpty={isEmpty}
           carTotal={carTotal}
         />
-
-        <AppRoutes
-          cart={cart}
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}
-          clearCart={clearCart}
-          isEmpty={isEmpty}
-          carTotal={carTotal}
-        />
+        <main>
+          <AppRoutes
+            cart={cart}
+            addToCart={addToCart}
+            removeFromCart={removeFromCart}
+            increaseQuantity={increaseQuantity}
+            decreaseQuantity={decreaseQuantity}
+            clearCart={clearCart}
+            isEmpty={isEmpty}
+            carTotal={carTotal}
+          />
+        </main>
         <Footer />
-        <ToastContainer position="top-center" draggable />
-
-
-      </AuthProvider>
-    </>
+      </div>
+      <ToastContainer position="top-center" draggable />
+    </AuthProvider>
   );
 }
 
