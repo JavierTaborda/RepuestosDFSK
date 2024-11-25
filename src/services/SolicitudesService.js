@@ -24,6 +24,7 @@ export const getFilterSolicitudes = async (startDate, endDate, statusFilter, use
     const response = await HttpClient.get(
       `Solicitudes/${startDate}/${endDate}/${statusFilter}/${user}`
     );
+    
     return response.data;
   } catch (error) {
     //console.error(error);
@@ -34,7 +35,37 @@ export const getFilterSolicitudes = async (startDate, endDate, statusFilter, use
 export const getTracking = async (qrcode) => {
   try {
     const response = await HttpClient.get("qrtracking/" + qrcode);
-    return response;
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getEstadosSolicitudes = async () => {
+  try {
+    const response = await HttpClient.get("Estado/" );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const putSolicitud = async (solicitud) => {
+  try {
+    console.log(solicitud); 
+    const response = await HttpClient.put(
+      "Solicitudes/",
+      solicitud
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const putResumen = async (resumen) => {
+  try {
+    
+    const response = await HttpClient.put("Solicitudes/Resumen", resumen);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -42,7 +73,7 @@ export const getTracking = async (qrcode) => {
 export const postSolicitud = async (resumenData) => {
   try {
     const response = await HttpClient.post("Solicitudes", resumenData);
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -52,5 +83,8 @@ export default {
   getInitialData,
   postSolicitud,
   getFilterSolicitudes,
-  getTracking
+  getTracking,
+  getEstadosSolicitudes,
+  putSolicitud,
+  putResumen
 };
