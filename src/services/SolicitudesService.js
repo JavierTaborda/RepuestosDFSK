@@ -48,6 +48,15 @@ export const getEstadosSolicitudes = async () => {
     throw error;
   }
 }
+export const getEstadosEnvios = async () => {
+  try {
+    const response = await HttpClient.get("Solicitudes/Envios");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export const putSolicitud = async (solicitud) => {
   try {
@@ -73,6 +82,7 @@ export const putResumen = async (resumen) => {
 export const postSolicitud = async (resumenData) => {
   try {
     const response = await HttpClient.post("Solicitudes", resumenData);
+    
     return response.data;
   } catch (error) {
     throw error;

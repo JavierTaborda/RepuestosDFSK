@@ -48,7 +48,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     }
 
                     const response = await postSolicitud(resumenData);
-                    if (response.status === 200) {
+                    if (response) {
                         clearCart();
                         toast.success("Solicitud registrada correctamente");
                     } else {
@@ -100,17 +100,19 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
     }, []);
 
     if (!user || loadData) {
-        return <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
-            <motion.div
-                style={{ fontSize: '18px' }}
-                initial={{ opacity: 1 }}
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ repeat: Infinity, duration: 1 }}
-            >
-                Cargando lista de repuestos...
-            </motion.div>
-            <Spinner />
-        </div>
+        return (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <motion.div
+                    style={{ fontSize: '18px' }}
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                >
+                    Cargando lista de repuestos...
+                </motion.div>
+                <Spinner />
+            </div>
+        );
     }
 
     return (
@@ -124,29 +126,27 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                 >
                     <div className="row">
                         <div className="col-md-7 col-lg-8 mb-4">
-                            <div className="card shadow-sm rounded-5 p-4">
-                                <h5 className="card-title">Detalles del Carrito</h5>
-                                <div className="card-body">
-                                    <div className="table-responsive" style={{minHeight: '60vh', maxHeight: '70vh', overflowY: 'auto' }}>
-                                        <CartTable
-                                            cart={cart}
-                                            removeFromCart={removeFromCart}
-                                            increaseQuantity={increaseQuantity}
-                                            decreaseQuantity={decreaseQuantity}
-                                            clearCart={clearCart}
-                                            isEmpty={isEmpty}
-                                            carTotal={carTotal}
-                                            sendForm={true}
-                                        />
-                                    </div>
+                            <div className="p-4 rounded shadow bg-white">
+                                <h5 className="text-center">Detalles del Carrito</h5>
+                                <div className="table-responsive" style={{ minHeight: '60vh', maxHeight: '70vh', overflowY: 'auto' }}>
+                                    <CartTable
+                                        cart={cart}
+                                        removeFromCart={removeFromCart}
+                                        increaseQuantity={increaseQuantity}
+                                        decreaseQuantity={decreaseQuantity}
+                                        clearCart={clearCart}
+                                        isEmpty={isEmpty}
+                                        carTotal={carTotal}
+                                        sendForm={true}
+                                    />
                                 </div>
                             </div>
                         </div>
 
                         <div className="col-md-5 col-lg-4 order-md-last mb-4">
-                            <div className="card shadow-sm rounded-5 p-4">
-                                <h5 className="card-title">Resumen de Solicitud</h5>
-                                <div className="card-body" style={{ minHeight: '65vh', maxHeight: '70vh', overflowY: 'auto' }}>
+                            <div className="p-4 rounded shadow bg-white">
+                                <h5 className="text-center">Resumen de Solicitud</h5>
+                                <div style={{ minHeight: '65vh', maxHeight: '70vh', overflowY: 'auto' }}>
                                     {isEmpty ? <p className="text-center">No posee repuestos a solicitar.</p> :
                                         !createSolicitud ? null :
                                             isLoading ? <Spinner /> :

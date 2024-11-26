@@ -25,7 +25,6 @@ export default function CrearRepuesto() {
         const response = await getInitialData();
         setDataInicial(response);
       } catch (error) {
-
         toast.error("Error en la carga de datos: " + error.message);
         seterrorData(true);
       } finally {
@@ -51,7 +50,7 @@ export default function CrearRepuesto() {
             resumenData.idUsuario = user.user;
           }
           const response = await postSolicitud(resumenData);
-          if (response.status === 200) {
+          if (response) {
             toast.success("Solicitud registrada correctamente");
           } else {
             toast.error("Error al registrar la solicitud");
@@ -103,32 +102,28 @@ export default function CrearRepuesto() {
         >
           <div className="row">
             <div className="col-md-7 col-lg-8 mb-4">
-              <div className="card shadow-sm rounded-5 p-4 bg-white">
-                <h5 className="card-title text-center">Inserte el Repuesto a Solicitar</h5>
-                <div className="card-body" style={{
-                  maxHeight: '60vh', overflowY: 'auto'}} >
-                  {errordata ? (<p className="text-danger text-center">Ocurrió un error al cargar los datos, por favor intente más tarde.</p>)
-                    : (loadingForm ? <Spinner /> :
-                      <FormRepuesto
-                        setrepuestoData={setRepuestoData}
-                        insertRepuesto={false}
-                      />
-                    )
-                  }
-                 
+              <div className="p-4 rounded shadow bg-white">
+                <h5 className="text-center">Inserte el Repuesto a Solicitar</h5>
+                <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                  {errordata ? (
+                    <p className="text-danger text-center">
+                      Ocurrió un error al cargar los datos, por favor intente más tarde.
+                    </p>
+                  ) : loadingForm ? (
+                    <Spinner />
+                  ) : (
+                    <FormRepuesto setrepuestoData={setRepuestoData} insertRepuesto={false} />
+                  )}
                 </div>
               </div>
             </div>
 
             {isLoading && (
               <div className="col-md-5 col-lg-4 order-md-last mb-4">
-                <div className="card shadow-sm rounded-5 p-4 bg-white">
-                  <h5 className="card-title text-center">Resumen de Solicitud</h5>
-                  <div className="card-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-                    { (loadingForm ? <Spinner /> :
-                      <FormSolicitud setResumenData={setResumenData} onSubmit={insertSolicitud} />
-                      )
-                      }
+                <div className="p-4 rounded shadow bg-white">
+                  <h5 className="text-center">Resumen de Solicitud</h5>
+                  <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                    {loadingForm ? <Spinner /> : <FormSolicitud setResumenData={setResumenData} onSubmit={insertSolicitud} />}
                   </div>
                 </div>
               </div>

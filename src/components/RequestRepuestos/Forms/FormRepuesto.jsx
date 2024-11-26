@@ -73,10 +73,10 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
             } catch (error) {
                 if (error.response) {
                     console.log(repuestoData);
-                    toast.error("Ya hay una solicitud similar por este reepuesto procesada.\nPor favor espere que sea registrado en nuestro inventario.");
+                    toast.error("Ya hay una solicitud similar por este repuesto procesada.\nPor favor espere que sea registrado en nuestro inventario.");
                     setIsClicked(false);
                 } else if (error.request) {
-                    toast.error("Error conectando con el servidor."); 
+                    toast.error("Error conectando con el servidor.");
                 } else {
                     toast.error("Error: " + error.message);
                 }
@@ -92,7 +92,7 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
     return (
         <form onSubmit={handleSubmit} className="pt-5">
             <div className="row g-3">
-                {insertRepuesto ?
+                {insertRepuesto ? (
                     <div className="col-md-4 col-lg-4">
                         <label htmlFor="codigo" className="form-label">Código</label>
                         <input
@@ -104,8 +104,9 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                             value={repuestoData.Codigo}
                             onChange={handleChange}
                         />
-                    </div> : null
-                }
+                        {errors.Codigo && <small className="text-danger">{errors.Codigo}</small>}
+                    </div>
+                ) : null}
                 <div className="col-md-4 col-lg-4">
                     <label htmlFor="numparte" className="form-label">N. de Parte</label>
                     <input
@@ -117,6 +118,7 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         value={repuestoData.NumParte}
                         onChange={handleChange}
                     />
+                    {errors.NumParte && <small className="text-danger">{errors.NumParte}</small>}
                 </div>
                 <div className="col-md-8 col-lg-8">
                     <label htmlFor="Nombre" className="form-label">Nombre</label>
@@ -130,6 +132,7 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         onChange={handleChange}
                         required
                     />
+                    {errors.Nombre && <small className="text-danger">{errors.Nombre}</small>}
                 </div>
                 <div className="col-md-12 col-lg-12">
                     <label htmlFor="Descripcion" className="form-label">Descripción/Detalles</label>
@@ -142,6 +145,7 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         value={repuestoData.Descripcion}
                         onChange={handleChange}
                     />
+                    {errors.Descripcion && <small className="text-danger">{errors.Descripcion}</small>}
                 </div>
                 <div className="col-md-6 col-lg-6">
                     <label htmlFor="Marca" className="form-label">Marca</label>
@@ -155,31 +159,29 @@ export default function FormRepuesto({ setrepuestoData, insertRepuesto }) {
                         onChange={handleChange}
                         required
                     />
+                    {errors.Marca && <small className="text-danger">{errors.Marca}</small>}
                 </div>
                 <div className="col-md-12 col-lg-6">
                     <label className="form-label mb-0">Modelo de Vehículo</label>
-                    <div>
-                        <SelectVehiculo onIdVehiculoChange={handleIdVehiChange} />
-                    </div>
+                    <SelectVehiculo onIdVehiculoChange={handleIdVehiChange} />
+                    {errors.IdVehiculo && <small className="text-danger">{errors.IdVehiculo}</small>}
                 </div>
-
             </div>
-            <div className="d-grid gap-2 pt-5">
-                {insertRepuesto ?
+            <div className="d-grid gap-2 pt-4">
+                {insertRepuesto ? (
                     <button type="submit" className="btn btn-success mt-5">
                         <i className="bi bi-floppy"></i> Registrar Repuesto
                     </button>
-                    : <motion.button
+                ) : (
+                    <motion.button
                         type="submit"
-                        className="btn btn-success mt-5"
+                            className="btn btn-danger mt-2"
                         animate={{ x: isClicked ? -100 : 0, opacity: isClicked ? 0 : 1 }}
                         transition={{ type: "tween", stiffness: 300, duration: 0.5 }}
                     >
                         <i className="bi bi-arrow-right-square-fill"></i> Siguiente Paso
                     </motion.button>
-
-                }
-
+                )}
             </div>
             {isLoading && <Spinner />}
         </form>
