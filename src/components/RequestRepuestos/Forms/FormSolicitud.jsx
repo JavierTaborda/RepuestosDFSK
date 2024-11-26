@@ -60,7 +60,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                     <label htmlFor="textarea" className="form-label">Observación</label>
                     <textarea className="form-control" id="textarea" rows="3" placeholder="Comentarios..." name="observacion" value={localResumenData.observacion} onChange={handleChange} />
                 </div>
-                <div className="col-12 pt-2">
+                {/* <div className="col-12 pt-2">
                     <div className="row">
                         <div className="col-8">
                             <input type="text" className="form-control" id="cupon" name="cupon" value={localResumenData.cupon || ''} onChange={handleChange} />
@@ -71,7 +71,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className="d-grid gap-2">
                 <button type="submit" className="btn btn-success mt-5">

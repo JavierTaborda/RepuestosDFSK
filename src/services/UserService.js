@@ -9,7 +9,14 @@ export const loginService = async (credentials) => {
     throw error;
   }
 };
-
+export const getUsers = async () => {
+  try {
+    const response = await HttpClient.get("Usuarios");
+    return response.data;
+  } catch (error) {
+    toast.error("Error en la carga de datos: " + error.message);
+  }
+};
 export const getDataRoles = async () => {
   try {
     const response = await HttpClient.get("Usuarios/Roles");

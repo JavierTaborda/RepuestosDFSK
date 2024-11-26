@@ -4,6 +4,7 @@ import { Close, ExpandMore, ExpandLess } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { getEstadosSolicitudes, putSolicitud, putResumen } from '../../services/SolicitudesService';
+import ImgDefault from '../../components/forms/ImgDefault';
 
 const DialogHistory = ({ open, handleClose, data }) => {
     const [editableData, setEditableData] = useState(data);
@@ -179,20 +180,29 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                 <Box display="flex" justifyContent="space-between" alignItems="center">
                                     <Box display="flex" alignItems="center">
                                         <Card sx={{ width: 80, height: 80, marginRight: 2, borderRadius: '50%', overflow: 'hidden' }}>
-                                            <CardMedia
-                                                component="img"
-                                                height="80"
-                                                image={solicitud.imagen || ''}
-                                                alt={solicitud.repuesto || ''}
-                                                sx={{ objectFit: 'cover' }}
-                                            />
+                                            {solicitud.imagen ? (
+                                                <CardMedia
+                                                    component="img"
+                                                    height="80"
+                                                    image={solicitud.imagen || ''}
+                                                    alt={solicitud.repuesto || ''}
+                                                    sx={{ objectFit: 'cover' }}
+                                                />
+                                            ) : (
+                                                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                                                    <ImgDefault />
+                                                </Box>
+                                            )}
                                         </Card>
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Repuesto: {solicitud.numParte} - {solicitud.repuesto}</Typography>
+                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                            Repuesto: {solicitud.numParte} - {solicitud.repuesto}
+                                        </Typography>
                                     </Box>
                                     <IconButton onClick={() => toggleExpand(index)} size="small">
                                         {expanded[index] ? <ExpandLess /> : <ExpandMore />}
                                     </IconButton>
                                 </Box>
+
                                 <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
@@ -228,7 +238,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                         <Grid item xs={6}>
                                             <FormControl fullWidth margin="normal" sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }} size="small">
                                                 <InputLabel id={`estado-label-${index}`}>Estado</InputLabel>
-                                                <InputLabel id={`estado-label-${index}`}>Estado</InputLabel>
+                                      
                                                 <Select
                                                     labelId={`estado-label-${index}`}
                                                     value={solicitud.idEstado || ''}

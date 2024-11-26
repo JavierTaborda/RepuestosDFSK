@@ -6,9 +6,12 @@ import Typography from '@mui/material/Typography';
 import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 import Spinner from '../../components/forms/Spinner';
 import { getFilterSolicitudes } from '../../services/SolicitudesService';
+import { getUsers } from '../../services/UserService';
 import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import DialogHistory from '../../components/RequestRepuestos/DialogHistory';
+import QRDialog from '../../components/Qrtrack/QRDialog';
+import CustomSelect from '../../components/forms/CustomSelect';
 
 export default function EstadosSolicitudes() {
     const { user } = useContext(AuthContext);
@@ -20,8 +23,12 @@ export default function EstadosSolicitudes() {
     const [endDate, setEndDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
     const [errorMessage, setErrorMessage] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [qrDialogOpen, setQRDialogOpen] = useState(false);
     const [selectedData, setSelectedData] = useState(null);
     const [userAdmin, setUserAdmin] = useState(false);
+    const [usersdata, setUsersData] = useState([]);
+    const [iduser, setidUser] = useState(0);
+    const [qrcode, setQrCode] = useState();
 
     const handleModalOpen = (data) => {
         setSelectedData(data);
@@ -33,21 +40,27 @@ export default function EstadosSolicitudes() {
         setSelectedData(null);
     };
 
+    const handleQROpen = (codigoUnico) => {
+        setQrCode(codigoUnico);
+        setQRDialogOpen(true);
+    };
+
+    const handleQRClose = () => {
+        setQRDialogOpen(false);
+        setSelectedData(null);
+    };
+
     const getData = async () => {
+
         setIsLoading(true);
         setErrorMessage(null); // Reset error state
         try {
-            const response = await getFilterSolicitudes(startDate, endDate, statusFilter, user.user);
+            console.log(iduser);
+            const response = await getFilterSolicitudes(startDate, endDate, statusFilter, userAdmin ? iduser : user.user);
             setResumen(response);
         } catch (error) {
-            if (error.response) {
-                setErrorMessage(error.response.data);
-            } else if (error.request) {
-                setErrorMessage('No response received from server');
-            } else {
-                setErrorMessage('Error: ' + error.message);
-            }
-            if (error.response.status !== 401) {
+            setErrorMessage(error.response ? error.response.data : error.message);
+            if (error.response?.status !== 401) {
                 toast.error(`Error en la carga de datos: ${errorMessage}`);
             }
         } finally {
@@ -63,15 +76,24 @@ export default function EstadosSolicitudes() {
         getData();
     };
 
+    const getUsersList = async () => {
+        try {
+            const response = await getUsers();
+            setUsersData(response);
+        } catch (error) {
+            toast.error("Error en la carga de datos: " + error.message);
+        }
+    };
+
     useEffect(() => {
         if (user) {
-            getData();
             if (user.role === 'admin') {
                 setUserAdmin(true);
             }
+            getUsersList();
+            getData();
         }
     }, [user]);
-
     if (!user) {
         return <div><Spinner /></div>;
     }
@@ -120,12 +142,35 @@ export default function EstadosSolicitudes() {
                             size="small"
                         />
                     </div>
+                    {userAdmin && (
+                    <div className="col-md-3 pt-3">
+                        <FormControl fullWidth>
+                            <InputLabel id="concesionario-select-label">Concesionario</InputLabel>
+                            <Select
+                                labelId="concesionario-select-label"
+                                id="concesionario-select"
+                                value={iduser}
+                                label="Filtrar por Concesionario"
+                                onChange={(e) => setidUser(e.target.value)}
+                                size="small"
+                            >
+                                <MenuItem value="0"><em>Todos</em></MenuItem>
+                                {usersdata.map((user) => (
+                                    <MenuItem key={user.idUsuario} value={user.idUsuario}>
+                                        {user.nombre}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>)}
+                   
                     <div className="col-md-3 pt-3">
                         <Button variant="contained" color="error" onClick={handleSearch}>
                             Buscar
                         </Button>
                     </div>
                 </div>
+
                 {isLoading ? (
                     <div className="text-center">
                         <Spinner />
@@ -153,11 +198,7 @@ export default function EstadosSolicitudes() {
                                     <React.Fragment key={resumen.idResumenSolicitud}>
                                         <TableRow>
                                             <TableCell>
-                                                <IconButton
-                                                    aria-label="expand row"
-                                                    size="small"
-                                                    onClick={() => handleToggle(resumen.idResumenSolicitud)}
-                                                >
+                                                <IconButton aria-label="expand row" size="small" onClick={() => handleToggle(resumen.idResumenSolicitud)}>
                                                     {open[resumen.idResumenSolicitud] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                                                 </IconButton>
                                             </TableCell>
@@ -175,7 +216,7 @@ export default function EstadosSolicitudes() {
                                                 </span>
                                             </TableCell>
                                             <TableCell>
-                                                <i className="bi bi-qr-code" style={{ color: '#d62e2f' }}></i> {resumen.codigounico}
+                                                <i className="bi bi-qr-code" style={{ color: '#d62e2f', cursor: 'pointer' }} onClick={() => handleQROpen(resumen.codigoUnico)}></i>
                                             </TableCell>
                                             <TableCell>
                                                 {userAdmin ? (
@@ -221,7 +262,7 @@ export default function EstadosSolicitudes() {
                                                                             <>
                                                                                 <TableCell>{solicitud.responsable}</TableCell>
                                                                                 <TableCell>{solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
-                                                                                <TableCell>{solicitud.fechaCompra ? dayjs(solicitud.Llegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                                <TableCell>{solicitud.fechaLlegada ? dayjs(solicitud.fechaLlegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
                                                                             </>
                                                                         )}
                                                                     </TableRow>
@@ -241,7 +282,10 @@ export default function EstadosSolicitudes() {
                     <p>No se encontraron solicitudes.</p>
                 ) : null}
                 <DialogHistory open={modalOpen} handleClose={handleModalClose} data={selectedData} />
+                <QRDialog open={qrDialogOpen} handleClose={handleQRClose} codigoUnico={qrcode} />
             </div>
         </>
     );
 }
+
+

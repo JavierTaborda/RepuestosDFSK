@@ -74,7 +74,10 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
             const listArticulos = cart.map(repuesto => ({
                 codigo: repuesto.articulo,
                 nombre: repuesto.descripcion,
-                marca: repuesto.marca
+                marca: repuesto.marca,
+                numParte: repuesto.numeroparte,
+                precio: repuesto.venta,
+                imagen: repuesto.urlimagen
             }));
 
             const fetchData = async () => {
