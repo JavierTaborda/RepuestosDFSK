@@ -60,7 +60,6 @@ export const getEstadosEnvios = async () => {
 
 export const putSolicitud = async (solicitud) => {
   try {
-    console.log(solicitud); 
     const response = await HttpClient.put(
       "Solicitudes/",
       solicitud
