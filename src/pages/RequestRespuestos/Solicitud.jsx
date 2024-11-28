@@ -117,7 +117,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
     return (
         <>
-            <h2 className="text-center my-4">Realizar Solicitud de Repuestos</h2>
+            <h2 className="text-start mb-0 p-3 ms-5 mt-2">Realizar Solicitud de Repuestos</h2>
             <div className="container">
                 <motion.div
                     initial={{ opacity: 0 }}

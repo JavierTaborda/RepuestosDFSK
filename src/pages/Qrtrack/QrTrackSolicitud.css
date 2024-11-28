@@ -1,0 +1,66 @@
+/* QrTrackSolicitud.css */
+.qr-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.qr-info {
+  flex: 1;
+}
+
+.qr-title {
+  color: #FF5A5F;
+  margin-bottom: 20px;
+}
+
+.qr-paragraph {
+  color: #484848;
+  margin: 10px 0;
+}
+
+.qr-section-title {
+  color: #484848;
+  margin-top: 20px;
+}
+
+.qr-table-container {
+  flex: 2;
+}
+
+.qr-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.qr-table th, .qr-table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.qr-table th {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.qr-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.qr-table tr:hover {
+  background-color: #e2e2e2;
+}
+
+.qr-img-small {
+  width: 100px;
+  height: auto;
+  border-radius: 4px;
+}

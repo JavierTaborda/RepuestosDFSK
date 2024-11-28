@@ -93,7 +93,7 @@ export default function CrearRepuesto() {
 
   return (
     <>
-      <h2 className="text-center my-4">Crear Solicitud de Repuesto</h2>
+      <h2 className="text-start mb-0 p-3 ms-5 my-4 ">Crear Solicitud de Repuesto</h2>
       <div className="container">
         <motion.div
           initial={{ opacity: 0 }}

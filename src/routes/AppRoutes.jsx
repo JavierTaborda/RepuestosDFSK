@@ -10,15 +10,17 @@ import EstadosSolicitudes from '../pages/RequestRespuestos/EstadosSolicitudes';
 import Vehicles from '../pages/AddData/Vehicles';
 import VenUsers from '../pages/AddData/VenUsers';
 import Repuestos from '../pages/AddData/Repuestos';
+import QrTrackSolicitud from '../pages/Qrtrack/QrTrackSolicitud';
 function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
 
-    const isAuthenticated = true; // Aquí deberías verificar la autenticación real
-    const userRole = 'admin'; // Aquí deberías obtener el rol real del usuario
+    const isAuthenticated = true; 
+    const userRole = 'admin';
 
     return (
         <Routes>
             <Route path="/" element={<Inicio />} index />
             <Route path="/login" element={<Login />} />
+            <Route path="/dfsktrack" element={<QrTrackSolicitud />} />     
             <Route path="*" element={<Inicio />} />
 
             {/* authentication */}

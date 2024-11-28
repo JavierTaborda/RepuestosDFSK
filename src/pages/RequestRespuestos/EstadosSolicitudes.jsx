@@ -55,7 +55,7 @@ export default function EstadosSolicitudes() {
         setIsLoading(true);
         setErrorMessage(null); // Reset error state
         try {
-            console.log(iduser);
+
             const response = await getFilterSolicitudes(startDate, endDate, statusFilter, userAdmin ? iduser : user.user);
             setResumen(response);
         } catch (error) {
@@ -100,7 +100,7 @@ export default function EstadosSolicitudes() {
 
     return (
         <>
-            <h2 className="bd-title text-center mb-0 p-3">Históricos de Pedidos</h2>
+            <h2 className="bd-title text-start mb-0 p-3 ms-5 mt-2">Históricos de Pedidos</h2>
             <div className="container pt-2">
                 <div className="row p-2">
                     <div className="col-md-3 pt-3">
@@ -189,7 +189,7 @@ export default function EstadosSolicitudes() {
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Fecha de Requerida</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Solicitante</TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Monto Estimado</TableCell>
-                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}>Código</TableCell>
+                                    <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}></TableCell>
                                     <TableCell sx={{ backgroundColor: '#d62e2f', color: 'white' }}></TableCell>
                                 </TableRow>
                             </TableHead>
@@ -202,8 +202,8 @@ export default function EstadosSolicitudes() {
                                                     {open[resumen.idResumenSolicitud] ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell>
-                                                <span className={resumen.estatus ? 'h5 text-warning' : 'h5 text-success'}>
+                                            <TableCell size="small">
+                                                <span className={resumen.estatus ? 'h6 text-warning' : 'h5 text-success'}>
                                                     {resumen.idResumenSolicitud}
                                                 </span>
                                             </TableCell>
@@ -215,10 +215,10 @@ export default function EstadosSolicitudes() {
                                                     <i className="bi bi-currency-dollar"></i> {resumen.solicitudes.reduce((acc, solicitud) => acc + (solicitud.precio * solicitud.cantidad), 0)}
                                                 </span>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell size="small">
                                                 <i className="bi bi-qr-code" style={{ color: '#d62e2f', cursor: 'pointer' }} onClick={() => handleQROpen(resumen.codigoUnico)}></i>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell size="small">
                                                 {userAdmin ? (
                                                     <button className="btn btn-outline-danger rounded-5" onClick={() => handleModalOpen(resumen)}>
                                                         <i className="bi bi-pencil-fill"></i>

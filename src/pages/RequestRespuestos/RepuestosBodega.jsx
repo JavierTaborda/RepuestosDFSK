@@ -109,7 +109,7 @@ export default function RepuestosBodega({ addToCart }) {
 
   return (
     <>
-      <h2 className="bd-title text-center mb-0 pt-2">Inventario de Repuestos</h2>
+      <h2 className="bd-title text-start mb-0 ms-5 mt-3">Inventario de Repuestos</h2>
       <div className="container my-5">
         <div className="d-flex flex-wrap justify-content-between align-items-center p-3">
           <div className="d-flex pe-2 pt-3" role="search">

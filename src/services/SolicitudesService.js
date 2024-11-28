@@ -34,7 +34,7 @@ export const getFilterSolicitudes = async (startDate, endDate, statusFilter, use
 
 export const getTracking = async (qrcode) => {
   try {
-    const response = await HttpClient.get("qrtracking/" + qrcode);
+    const response = await HttpClient.get("Solicitudes/qrtracking/" + qrcode);
     return response.data;
   } catch (error) {
     throw error;
