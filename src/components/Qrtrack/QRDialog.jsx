@@ -3,6 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { FaQrcode, FaExternalLinkAlt } from 'react-icons/fa';
 import { saveAs } from 'file-saver';
 import domtoimage from 'dom-to-image';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const QRDialog = ({ open, handleClose, codigoUnico }) => {
     const qrRef = useRef(null);
@@ -42,7 +43,8 @@ const QRDialog = ({ open, handleClose, codigoUnico }) => {
     };
 
     const handleNavigate = () => {
-        window.location.href = `/dfsktrack?codigo=${codigoUnico}`;
+        //window.location.href = `/dfsktrack?codigo=${codigoUnico}`;
+        window.open(`/dfsktrack?codigo=${codigoUnico}`, '_blank');
     };
 
     const qrUrl = `https://appdfsk.vercel.app/dfsktrack?codigo=${codigoUnico}`;
@@ -50,13 +52,13 @@ const QRDialog = ({ open, handleClose, codigoUnico }) => {
     return (
         <div className="modal show d-block" tabIndex="-1" style={{ background: "rgba(0, 0, 0, 0.5)" }}>
             <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content" style={{ borderRadius: '15px', overflow: 'hidden' }}>
-                    <div className="modal-header" style={{ backgroundColor: '#d62e2f', color: '#fff', justifyContent: 'center' }}>
+                <div className="modal-content rounded-3">
+                    <div className="modal-header bg-white  justify-content-center">
                         <h5 className="modal-title">Acciones del QR</h5>
                         <button type="button" className="btn-close btn-close-white" aria-label="Close" onClick={handleClose}></button>
                     </div>
-                    <div className="modal-body text-center">
-                        <div ref={qrRef} className="mb-3 d-flex justify-content-center" style={{ padding: '20px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+                    <div className="modal-body text-center p-4">
+                        <div ref={qrRef} className="mb-3 d-flex justify-content-center  p-3 rounded-3 border border-danger">
                             <QRCodeSVG
                                 value={qrUrl}
                                 size={256}
@@ -65,27 +67,27 @@ const QRDialog = ({ open, handleClose, codigoUnico }) => {
                                 level="Q"
                                 includeMargin={true}
                                 imageSettings={{
-                                    src: "https://firebasestorage.googleapis.com/v0/b/repuestos-dfsk.appspot.com/o/logos%2Fdfsklogo.png?alt=media&token=8a01df7b-9999-4d3f-ae01-6e26a0eadb30",
+                                    src: "/dfsklogo.png",
                                     x: undefined,
                                     y: undefined,
                                     height: 50,
-                                    width: 50,
+                                    width: 70,
                                     excavate: true,
                                 }}
                             />
                         </div>
-                        <button className="btn btn-primary mb-2" onClick={handleDownloadPNG} style={{ backgroundColor: '#d62e2f', borderColor: '#d62e2f', borderRadius: '20px', width: '90%' }}>
+                        <button className="btn btn-outline-danger mb-2 w-100 rounded-pill" onClick={handleDownloadPNG}>
                             <FaQrcode className="me-2" /> Descargar PNG
                         </button>
-                        <button className="btn btn-primary mb-2" onClick={handleDownloadSVG} style={{ backgroundColor: '#d62e2f', borderColor: '#d62e2f', borderRadius: '20px', width: '90%' }}>
+                        <button className="btn btn-outline-danger mb-2 w-100 rounded-pill" onClick={handleDownloadSVG}>
                             <FaQrcode className="me-2" /> Descargar SVG
                         </button>
-                        <button className="btn btn-secondary mb-2" onClick={handleNavigate} style={{ backgroundColor: '#d62e2f', borderColor: '#d62e2f', borderRadius: '20px', width: '90%' }}>
+                        <button className="btn btn-outline-danger mb-2 w-100 rounded-pill" onClick={handleNavigate}>
                             <FaExternalLinkAlt className="me-2" /> Ir al enlace
                         </button>
                     </div>
                     <div className="modal-footer justify-content-center">
-                        <button type="button" className="btn btn-secondary" onClick={handleClose} style={{ backgroundColor: '#FFCC00', borderColor: '#FFCC00', color: '#000', borderRadius: '20px', width: '90%' }}>
+                        <button type="button" className="btn btn-warning w-100 rounded-pill text-black" onClick={handleClose}>
                             Cerrar
                         </button>
                     </div>

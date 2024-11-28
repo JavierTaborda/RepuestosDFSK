@@ -203,7 +203,7 @@ export default function EstadosSolicitudes() {
                                                 </IconButton>
                                             </TableCell>
                                             <TableCell size="small">
-                                                <span className={resumen.estatus ? 'h6 text-warning' : 'h5 text-success'}>
+                                                <span className={resumen.estatus ? 'h5 text-success':'h6 text-warning' }>
                                                     {resumen.idResumenSolicitud}
                                                 </span>
                                             </TableCell>

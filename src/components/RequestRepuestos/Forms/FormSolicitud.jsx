@@ -10,7 +10,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
     const [localResumenData, setLocalResumenData] = useState({
         idResumenSolicitud: 0,
         fechaCreacion: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
-        estatus: true,
+        estatus: false,
         fechaCierre: dayjs(new Date(new Date().setDate(new Date().getDate() + 5))).format('YYYY-MM-DDTHH:mm:ss'),
         observacion: '',
         idUsuario: user?.user || 0,

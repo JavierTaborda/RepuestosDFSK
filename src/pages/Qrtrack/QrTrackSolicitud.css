@@ -1,10 +1,14 @@
-/* QrTrackSolicitud.css */
 .qr-container {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   display: flex;
+  flex-direction: row;
+  /* Cambiado a fila para pantallas grandes */
   justify-content: space-between;
   gap: 20px;
 }
@@ -14,22 +18,58 @@
 }
 
 .qr-title {
-  color: #FF5A5F;
+  color: #d62e2f;
   margin-bottom: 20px;
+  font-size: 2em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ticket {
+  background: #f9f9f9;
+  border: 2px dashed #FF5A5F;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+  /* Centra el texto dentro del ticket */
+}
+
+.ticket-number {
+  color: #484848;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  /* Asegura que los iconos y el texto estén centrados */
 }
 
 .qr-paragraph {
   color: #484848;
   margin: 10px 0;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .qr-section-title {
   color: #484848;
   margin-top: 20px;
+  font-size: 1.5em;
+  border-bottom: 2px solid #FF5A5F;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .qr-table-container {
   flex: 2;
+  overflow-x: auto;
 }
 
 .qr-table {
@@ -37,9 +77,12 @@
   border-collapse: collapse;
   margin: 20px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.qr-table th, .qr-table td {
+.qr-table th,
+.qr-table td {
   border: 1px solid #ddd;
   padding: 12px 15px;
   text-align: left;
@@ -63,4 +106,21 @@
   width: 100px;
   height: auto;
   border-radius: 4px;
+}
+
+.qr-paragraph i {
+  color: #00A699;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+  .qr-container {
+    flex-direction: column;
+    /* Cambia a columna para pantallas pequeñas */
+  }
+
+  .qr-info {
+    margin-bottom: 20px;
+    /* Añadir margen en la parte inferior */
+  }
 }

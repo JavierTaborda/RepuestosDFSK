@@ -299,6 +299,19 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 size="small"
                                             />
                                         </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                label="Observaciones"
+                                                type="text"
+                                                value={solicitud.observacion || ''}
+                                                onChange={(e) => handleSolicitudChange(index, 'observacion', e.target.value)}
+                                                fullWidth
+                                                margin="normal"
+                                                InputLabelProps={{ shrink: true }}
+                                                sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
+                                                size="small"
+                                            />
+                                        </Grid>
                                     </Grid>
                                     <Box mt={2} textAlign="right">
                                         <Button onClick={() => handleUpdate(solicitud)} sx={{ backgroundColor: '#d62e2f', color: '#fff', '&:hover': { backgroundColor: '#d62e2f' } }} variant="contained" size="small">
