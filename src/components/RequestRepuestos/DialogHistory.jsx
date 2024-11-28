@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Typography, Box, TextField, Grid, FormControl, InputLabel, Select, MenuItem, IconButton, Collapse, Paper, Card, CardMedia, Skeleton } from '@mui/material';
+import { Dialog, Switch, DialogActions, FormControlLabel, DialogContent, DialogContentText, DialogTitle, Button, Typography, Box, TextField, Grid, FormControl, InputLabel, Select, MenuItem, IconButton, Collapse, Paper, Card, CardMedia, Skeleton } from '@mui/material';
 import { Close, ExpandMore, ExpandLess } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -95,7 +95,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                             <Grid item xs={6}>
                                 <DialogContentText sx={{ fontSize: '1.1em' }}>Fecha de Creación: {dayjs(editableData.fechaCreacion).format('YYYY-MM-DD HH:mm')}</DialogContentText>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <TextField
                                     label="Fecha de Cierre"
                                     type="date"
@@ -108,6 +108,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     size="small"
                                 />
                             </Grid>
+       
                             <Grid item xs={6}>
                                 <TextField
                                     label="Cliente"
@@ -120,6 +121,13 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                         readOnly: true,
                                     }}
                                 />
+                            </Grid>
+                            <Grid item xs={2}> 
+                                <FormControl component="fieldset" sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', m: 1}}> 
+                                    {editableData.estatus ? "Finalizado" : "Pendiente"} 
+                                     <FormControlLabel control={<Switch checked={editableData.estatus} onChange={(e) => handleChange('estatus', e.target.checked)} color="error" />} label="" /> 
+
+                                     </FormControl>
                             </Grid>
                             <Grid item xs={7}>
                                 <TextField

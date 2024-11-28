@@ -115,8 +115,8 @@ export default function EstadosSolicitudes() {
                                 size="small"
                             >
                                 <MenuItem value="Todos"><em>Todos</em></MenuItem>
-                                <MenuItem value={true}>Pendientes</MenuItem>
-                                <MenuItem value={false}>Finalizados</MenuItem>
+                                <MenuItem value={false}>Pendientes</MenuItem>
+                                <MenuItem value={true}>Finalizados</MenuItem>
                             </Select>
                         </FormControl>
                     </div>

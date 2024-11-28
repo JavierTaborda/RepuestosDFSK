@@ -24,15 +24,7 @@ function App() {
   return (
     <AuthProvider>
       <div id="root">
-        <Header
-          cart={cart}
-          removeFromCart={removeFromCart}
-          increaseQuantity={increaseQuantity}
-          decreaseQuantity={decreaseQuantity}
-          clearCart={clearCart}
-          isEmpty={isEmpty}
-          carTotal={carTotal}
-        />
+     
         <main>
           <AppRoutes
             cart={cart}
