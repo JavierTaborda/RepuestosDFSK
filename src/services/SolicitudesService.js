@@ -42,12 +42,14 @@ export const getTracking = async (qrcode) => {
 };
 export const getEstadosSolicitudes = async () => {
   try {
-    const response = await HttpClient.get("Estado/" );
-    return response.data;
+    const response = await HttpClient.get("Estado/");
+    const activeEstados = response.data.filter((estado) => estado.estatus); 
+    return activeEstados;
   } catch (error) {
     throw error;
   }
-}
+};
+
 export const getEstadosEnvios = async () => {
   try {
     const response = await HttpClient.get("Solicitudes/Envios");

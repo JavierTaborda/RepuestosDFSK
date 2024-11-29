@@ -12,7 +12,8 @@ import VenUsers from '../pages/AddData/VenUsers';
 import Repuestos from '../pages/AddData/Repuestos';
 import QrTrackSolicitud from '../pages/Qrtrack/QrTrackSolicitud';
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Estados from '../pages/AddData/Estados';
+import EstadosEntrega from '../pages/AddData/EstadosEntrega';
 
 function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
     const location = useLocation();
@@ -60,6 +61,8 @@ function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decrease
                     <Route path="/editrepuestos" element={<Repuestos />} />
                     <Route path="/vehiculos" element={<Vehicles />} />
                     <Route path="/users" element={<VenUsers />} />
+                    <Route path="/estados_solicitud" element={<Estados/>} />
+                    <Route path="/estados_entregas" element={<EstadosEntrega />} />
                 </Route>
             </Routes>
             

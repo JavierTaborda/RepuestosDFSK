@@ -14,7 +14,7 @@ export const getUsers = async () => {
     const response = await HttpClient.get("Usuarios");
     return response.data;
   } catch (error) {
-    toast.error("Error en la carga de datos: " + error.message);
+        throw error;
   }
 };
 export const getDataRoles = async () => {
@@ -22,17 +22,28 @@ export const getDataRoles = async () => {
     const response = await HttpClient.get("Usuarios/Roles");
     return response.data;
   } catch (error) {
-    toast.error("Error en la carga de datos: " + error.message);
+        throw error;
   }
 };
-export const postUserData = async () => {
+export const postUserData = async (Data) => {
   try {
+   console.log(Data);
+    const response = await HttpClient.post("auth/Registrar", Data);
    
-    const response = await HttpClient.post("/Auth/Registrar", formData);
     return response.data;
   } catch (error) {
-    toast.error("Error en la carga de datos: " + error.message);
+    console.error(error);
+       throw error;
   }
 };
+export const putUserData = async (Data) => {
+  try {
+   
+    const response = await HttpClient.put("Usuarios", Data);
+    return response.data;
+  } catch (error) {
+        throw error;
+  }
+}
 
-export default { loginService, getDataRoles, postUserData };    
+export default { loginService, getDataRoles, postUserData, putUserData, getUsers };    

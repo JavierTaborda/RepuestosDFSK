@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import { motion } from 'framer-motion';
 import { getDataRoles, postUserData } from '../../services/UserService';
 import Spinner from '../../components/forms/Spinner';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const VenUsers = () => {
   const { user } = useContext(AuthContext);
   const [dataRoles, setDataRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [clave2, setClave2] = useState('');
   const [formData, setFormData] = useState({
-    codigo: '',
+    username: '',
     nombre: '',
     email: '',
     telefono: '',
     clave: '',
-    confirmarClave: '',
     idRol: '',
     estatus: true,
   });
@@ -46,19 +45,50 @@ const VenUsers = () => {
     });
   };
 
+  const handlePhoneChange = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setFormData({
+      ...formData,
+      telefono: formattedPhoneNumber,
+    });
+  };
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength < 5) return phoneNumber;
+    if (phoneNumberLength < 8) {
+      return `${phoneNumber.slice(0, 4)}-${phoneNumber.slice(4, 7)}`;
+    }
+    return `${phoneNumber.slice(0, 4)}-${phoneNumber.slice(4, 7)}-${phoneNumber.slice(7, 11)}`;
+  };
+
+  const handleClave2Change = (e) => {
+    setClave2(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.clave !== formData.confirmarClave) {
+    if (formData.clave !== clave2) {
       toast.error('Las contraseñas no coinciden');
+      return;
+    }
+    if (formData.idRol === '') {
+      toast.error('Seleccione un rol');
       return;
     }
     try {
       const response = await postUserData(formData);
-      console.log('Response:', response);
-      toast.success('Usuario registrado exitosamente');
+      if (!response) {
+        toast.warning('Ya existe un usuario con este rif/cedula');
+        return;
+      } else {
+        toast.success('Usuario registrado exitosamente');
+      }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Error en el registro: ' + error.message);
+      toast.error('Error en el registro. Verifique los datos ');
     }
   };
 
@@ -85,13 +115,13 @@ const VenUsers = () => {
         <form onSubmit={handleSubmit} className="p-4 rounded shadow bg-white needs-validation" noValidate>
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label htmlFor="codigo" className="form-label">Rif/Cedula</label>
+              <label htmlFor="username" className="form-label">Rif/Cedula</label>
               <input
                 type="text"
                 className="form-control"
-                id="codigo"
-                name="codigo"
-                value={formData.codigo}
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 required
               />
@@ -130,7 +160,8 @@ const VenUsers = () => {
                 id="telefono"
                 name="telefono"
                 value={formData.telefono}
-                onChange={handleChange}
+                onChange={handlePhoneChange}
+                placeholder="0000-000-0000"
                 required
               />
             </div>
@@ -155,8 +186,8 @@ const VenUsers = () => {
                 className="form-control"
                 id="confirmarClave"
                 name="confirmarClave"
-                value={formData.confirmarClave}
-                onChange={handleChange}
+                value={clave2}
+                onChange={handleClave2Change}
                 required
               />
             </div>

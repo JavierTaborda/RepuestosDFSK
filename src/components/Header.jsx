@@ -45,6 +45,8 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                         <li><Link to="/editrepuestos" className="dropdown-item">Repuestos</Link></li>
                         <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
                         <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
+                        <li><Link to="/estados_solicitud" className="dropdown-item">Estados de Solicitud</Link></li>
+                        <li><Link to="/estados_entregas" className="dropdown-item">Entregas y Envíos</Link></li>
                       </ul>
                     </li>
                   )}

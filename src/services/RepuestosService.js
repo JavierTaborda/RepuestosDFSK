@@ -38,7 +38,7 @@ export const filterRepuestos = async (nombre, marca, inventario, modelo) => {
        inventario: inventario !== null ? inventario : '',
        modelo: modelo !== null ? modelo : '',
      }).toString();
-   console.log(query);
+
     const response = await HttpClient.get(`Repuestos/Filtrar?${query}`);
     return response.data;
   } catch (error) {
