@@ -36,14 +36,19 @@ export const postUserData = async (Data) => {
        throw error;
   }
 };
-export const putUserData = async (Data) => {
+export const putUserData = async (Data, newpassword) => {
   try {
-   
-    const response = await HttpClient.put("Usuarios", Data);
+    console.log(Data, newpassword);
+    const response = await HttpClient.put("Usuarios", {
+      user: Data,
+      newpass: newpassword,
+    });
     return response.data;
   } catch (error) {
-        throw error;
+    throw error;
+    
   }
-}
+};
+
 
 export default { loginService, getDataRoles, postUserData, putUserData, getUsers };    

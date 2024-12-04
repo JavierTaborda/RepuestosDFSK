@@ -11,7 +11,6 @@ import dayjs from 'dayjs';
 import { AuthContext } from '../../context/AuthProvider';
 import DialogHistory from '../../components/RequestRepuestos/DialogHistory';
 import QRDialog from '../../components/Qrtrack/QRDialog';
-import CustomSelect from '../../components/forms/CustomSelect';
 
 export default function EstadosSolicitudes() {
     const { user } = useContext(AuthContext);
@@ -53,7 +52,7 @@ export default function EstadosSolicitudes() {
     const getData = async () => {
 
         setIsLoading(true);
-        setErrorMessage(null); // Reset error state
+        setErrorMessage(null); 
         try {
 
             const response = await getFilterSolicitudes(startDate, endDate, statusFilter, userAdmin ? iduser : user.user);
@@ -246,6 +245,7 @@ export default function EstadosSolicitudes() {
                                                                             <TableCell>Responsable</TableCell>
                                                                             <TableCell>Fecha de Compra</TableCell>
                                                                             <TableCell>Fecha de Llegada</TableCell>
+                                                                            <TableCell>Fecha de Finalización</TableCell>
                                                                         </>
                                                                     )}
                                                                 </TableRow>
@@ -263,6 +263,7 @@ export default function EstadosSolicitudes() {
                                                                                 <TableCell>{solicitud.responsable}</TableCell>
                                                                                 <TableCell>{solicitud.fechaCompra ? dayjs(solicitud.fechaCompra).format('YYYY-MM-DD') : 'N/A'}</TableCell>
                                                                                 <TableCell>{solicitud.fechaLlegada ? dayjs(solicitud.fechaLlegada).format('YYYY-MM-DD') : 'N/A'}</TableCell>
+                                                                                <TableCell>{solicitud.fechaListo ? dayjs(solicitud.fechaListo).format('YYYY-MM-DD') : 'N/A'}</TableCell>
                                                                             </>
                                                                         )}
                                                                     </TableRow>

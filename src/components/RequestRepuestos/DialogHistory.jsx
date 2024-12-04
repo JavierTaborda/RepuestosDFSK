@@ -281,7 +281,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={4}>
                                             <TextField
                                                 label="Fecha de Compra"
                                                 type="date"
@@ -294,12 +294,25 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 size="small"
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={4}>
                                             <TextField
                                                 label="Fecha de Llegada"
                                                 type="date"
                                                 value={solicitud.fechaLlegada ? dayjs(solicitud.fechaLlegada).format('YYYY-MM-DD') : ''}
                                                 onChange={(e) => handleSolicitudChange(index, 'fechaLlegada', e.target.value)}
+                                                fullWidth
+                                                margin="normal"
+                                                InputLabelProps={{ shrink: true }}
+                                                sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
+                                                size="small"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                label="Fecha de Finalización"
+                                                type="date"
+                                                value={solicitud.fechaListo ? dayjs(solicitud.fechaListo).format('YYYY-MM-DD') : ''}
+                                                onChange={(e) => handleSolicitudChange(index, 'fechaListo', e.target.value)}
                                                 fullWidth
                                                 margin="normal"
                                                 InputLabelProps={{ shrink: true }}
