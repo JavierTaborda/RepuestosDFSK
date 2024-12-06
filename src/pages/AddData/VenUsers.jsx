@@ -161,7 +161,7 @@ const VenUsers = () => {
                 name="telefono"
                 value={formData.telefono}
                 onChange={handlePhoneChange}
-                placeholder="0000-000-0000"
+                placeholder="00000000000"
                 required
               />
             </div>

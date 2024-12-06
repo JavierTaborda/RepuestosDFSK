@@ -54,7 +54,7 @@ export default function EstadosSolicitudes() {
         setIsLoading(true);
         setErrorMessage(null); 
         try {
-
+           
             const response = await getFilterSolicitudes(startDate, endDate, statusFilter, userAdmin ? iduser : user.user);
             setResumen(response);
         } catch (error) {
@@ -88,8 +88,9 @@ export default function EstadosSolicitudes() {
         if (user) {
             if (user.role === 'admin') {
                 setUserAdmin(true);
+                getUsersList();
             }
-            getUsersList();
+            
             getData();
         }
     }, [user]);

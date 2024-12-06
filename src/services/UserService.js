@@ -17,6 +17,14 @@ export const getUsers = async () => {
         throw error;
   }
 };
+export const getUsersEdit = async () => {
+  try {
+    const response = await HttpClient.get("Usuarios/Edit");
+    return response.data;
+  } catch (error) {
+        throw error;
+  }
+};
 export const getDataRoles = async () => {
   try {
     const response = await HttpClient.get("Usuarios/Roles");
@@ -27,7 +35,6 @@ export const getDataRoles = async () => {
 };
 export const postUserData = async (Data) => {
   try {
-   console.log(Data);
     const response = await HttpClient.post("auth/Registrar", Data);
    
     return response.data;
@@ -38,7 +45,7 @@ export const postUserData = async (Data) => {
 };
 export const putUserData = async (Data, newpassword) => {
   try {
-    console.log(Data, newpassword);
+
     const response = await HttpClient.put("Usuarios", {
       user: Data,
       newpass: newpassword,
@@ -51,4 +58,4 @@ export const putUserData = async (Data, newpassword) => {
 };
 
 
-export default { loginService, getDataRoles, postUserData, putUserData, getUsers };    
+export default { loginService, getDataRoles, postUserData, putUserData, getUsers, getUsersEdit };    
