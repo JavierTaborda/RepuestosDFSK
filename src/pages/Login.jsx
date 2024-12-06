@@ -26,10 +26,9 @@ const Login = () => {
             await login({ username, password }).then((response) => {
                 toast.success(response);
             });
-        } catch (error) {
+        } catch (err) {
             setError('Falló el inicio de sesión, por favor verifique sus credenciales.');
-            console.log(error);
-            toast.error(error.request.response);
+            toast.warn(err);
         } finally {
             setLoading(false);
         }

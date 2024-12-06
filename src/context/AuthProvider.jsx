@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         try {
             const response = await loginService(credentials);
-            // console.log(response);
+
             Cookies.set('token_access', response.data.token, { expires: 1, secure: true, sameSite: 'Strict' });
             Cookies.set('refresh_token', response.data.refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
 
@@ -35,7 +35,8 @@ const AuthProvider = ({ children }) => {
             return ("Bienvenido, " + decodedToken.name);
         }
         catch (error) {
-            console.error(error);
+          
+            throw error;
         }
     };
 
