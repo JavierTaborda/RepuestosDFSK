@@ -16,13 +16,20 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
           </Link>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
-          </button>   
+          </button>
           <div className="collapse navbar-collapse justify-content-end" id="navbarContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               {!user ? (
-                <li className="nav-item">
-                  <Link to="/login" className="nav-link" style={{ color: '#555' }}>Login</Link>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <Link to="/login" className="nav-link" style={{ color: '#555' }}>Login</Link>
+                  </li>
+                  <div className="nav-link" style={{ color: '#555' }}>
+                    <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      Slicitar Servicio
+                    </Link>
+                  </div>
+                </>
               ) : (
                 <>
                   <li className="nav-item dropdown">
@@ -51,6 +58,17 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                       </ul>
                     </li>
                   )}
+                  <div className="nav-link" style={{ color: '#555' }}>
+                    <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      Formulario
+                    </Link>
+                  </div>
+                  <div className="nav-link" style={{ color: '#555' }}>
+                    <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
+                      Slicitar Servicio
+                    </Link>
+                  </div>
+
                 </>
               )}
             </ul>

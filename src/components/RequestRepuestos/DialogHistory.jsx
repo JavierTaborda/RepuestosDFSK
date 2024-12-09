@@ -20,10 +20,9 @@ const DialogHistory = ({ open, handleClose, data }) => {
                 const response = await getEstadosSolicitudes();
                 setEstadosSolicitudes(response);
                 setLoadingEstados(false);
-
             } catch (error) {
                 console.error(error);
-                toast.error('Error al cargar los estados de solicitudes. \n Intente de nuevo,');
+                toast.error('Error al cargar los estados de solicitudes. Intente de nuevo.');
                 handleClose();
             }
         };
@@ -48,32 +47,29 @@ const DialogHistory = ({ open, handleClose, data }) => {
     const handleUpdate = async (solicitud) => {
         try {
             const response = await putSolicitud(solicitud);
-            
             if (response) {
                 toast.success('Solicitud actualizada correctamente');
-            }
-            else {
-                toast.error('Error al actualizar la solicitud. \n Intente de nuevo.');
+            } else {
+                toast.error('Error al actualizar la solicitud. Intente de nuevo.');
             }
         } catch (error) {
             console.error(error);
-            toast.error('Error al actualizar la solicitud. \n Intente de nuevo.');
+            toast.error('Error al actualizar la solicitud. Intente de nuevo.');
         }
     };
+
     const handleUpdateAll = async (resumen) => {
         try {
             const response = await putResumen(resumen);
-
             if (response) {
                 toast.success('Cambios guardados correctamente');
                 handleClose();
-            }
-            else {
-                toast.error('Error al actualizar la solicitud. \n Intente de nuevo.');
+            } else {
+                toast.error('Error al actualizar la solicitud. Intente de nuevo.');
             }
         } catch (error) {
             console.error(error);
-            toast.error('Error al actualizar la solicitud. \n Intente de nuevo.');
+            toast.error('Error al actualizar la solicitud. Intente de nuevo.');
         }
     };
 
@@ -89,13 +85,13 @@ const DialogHistory = ({ open, handleClose, data }) => {
                 {editableData ? (
                     <Box>
                         <Grid container spacing={2} sx={{ mb: 2 }}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <DialogContentText sx={{ fontSize: '1.1em' }}>ID: {editableData.idResumenSolicitud}</DialogContentText>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <DialogContentText sx={{ fontSize: '1.1em' }}>Fecha de Creación: {dayjs(editableData.fechaCreacion).format('YYYY-MM-DD HH:mm')}</DialogContentText>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <TextField
                                     label="Fecha de Cierre"
                                     type="date"
@@ -108,8 +104,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     size="small"
                                 />
                             </Grid>
-       
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <TextField
                                     label="Cliente"
                                     value={editableData.usuario || ''}
@@ -117,19 +112,19 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     margin="normal"
                                     sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                     size="small"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
+                                    InputProps={{ readOnly: true }}
                                 />
                             </Grid>
-                            <Grid item xs={2}> 
-                                <FormControl component="fieldset" sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', m: 1}}> 
-                                    {editableData.estatus ? "Finalizado" : "Pendiente"} 
-                                     <FormControlLabel control={<Switch checked={editableData.estatus} onChange={(e) => handleChange('estatus', e.target.checked)} color="error" />} label="" /> 
-
-                                     </FormControl>
+                            <Grid item xs={12} md={2}>
+                                <FormControl component="fieldset" sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column', m: 1 }}>
+                                    {editableData.estatus ? "Finalizado" : "Pendiente"}
+                                    <FormControlLabel
+                                        control={<Switch checked={editableData.estatus} onChange={(e) => handleChange('estatus', e.target.checked)} color="error" />}
+                                        label=""
+                                    />
+                                </FormControl>
                             </Grid>
-                            <Grid item xs={7}>
+                            <Grid item xs={12} md={7}>
                                 <TextField
                                     label="Código Único"
                                     value={editableData.codigoUnico || ''}
@@ -137,12 +132,10 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     margin="normal"
                                     sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                     size="small"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
+                                    InputProps={{ readOnly: true }}
                                 />
                             </Grid>
-                            <Grid item xs={5}>
+                            <Grid item xs={12} md={5}>
                                 <TextField
                                     label="RIF"
                                     value={editableData.rif || 'No disponible'}
@@ -150,9 +143,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     margin="normal"
                                     sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                     size="small"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
+                                    InputProps={{ readOnly: true }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -163,9 +154,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                     margin="normal"
                                     sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                     size="small"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
+                                    InputProps={{ readOnly: true }}
                                 />
                             </Grid>
                         </Grid>
@@ -178,11 +167,11 @@ const DialogHistory = ({ open, handleClose, data }) => {
                             rows={3}
                             sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                             size="small"
-                            InputProps={{
-                                readOnly: true,
-                            }}
+                            InputProps={{ readOnly: true }}
                         />
-                        <Typography variant="h6" gutterBottom component="div" mt={3}>Detalles de Repuestos:</Typography>
+                        <Typography variant="h6" gutterBottom component="div" mt={3}>
+                            Detalles de Repuestos:
+                        </Typography>
                         {editableData.solicitudes.map((solicitud, index) => (
                             <Paper key={index} elevation={1} sx={{ mb: 3, p: 2, borderRadius: '8px', backgroundColor: '#fff' }}>
                                 <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -210,10 +199,9 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                         {expanded[index] ? <ExpandLess /> : <ExpandMore />}
                                     </IconButton>
                                 </Box>
-
                                 <Collapse in={expanded[index]} timeout="auto" unmountOnExit>
                                     <Grid container spacing={2}>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12} md={6}>
                                             <TextField
                                                 label="Cantidad"
                                                 type="number"
@@ -223,12 +211,10 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 margin="normal"
                                                 sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                                 size="small"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
+                                                InputProps={{ readOnly: true }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12} md={6}>
                                             <TextField
                                                 label="Precio"
                                                 type="number"
@@ -238,15 +224,12 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 margin="normal"
                                                 sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                                 size="small"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
+                                                InputProps={{ readOnly: true }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12} md={6}>
                                             <FormControl fullWidth margin="normal" sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }} size="small">
                                                 <InputLabel id={`estado-label-${index}`}>Estado</InputLabel>
-                                      
                                                 <Select
                                                     labelId={`estado-label-${index}`}
                                                     value={solicitud.idEstado || ''}
@@ -267,7 +250,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 </Select>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12} md={6}>
                                             <TextField
                                                 label="Responsable"
                                                 value={solicitud.responsable || ''}
@@ -276,12 +259,10 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 margin="normal"
                                                 sx={{ backgroundColor: 'white', borderRadius: 1, marginBottom: 2 }}
                                                 size="small"
-                                                InputProps={{
-                                                    readOnly: true,
-                                                }}
+                                                InputProps={{ readOnly: true }}
                                             />
                                         </Grid>
-                                        <Grid item xs={4}>
+                                        <Grid item xs={12} md={4}>
                                             <TextField
                                                 label="Fecha de Compra"
                                                 type="date"
@@ -294,7 +275,7 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 size="small"
                                             />
                                         </Grid>
-                                        <Grid item xs={4}>
+                                        <Grid item xs={12} md={4}>
                                             <TextField
                                                 label="Fecha de Llegada"
                                                 type="date"
@@ -307,9 +288,9 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                                 size="small"
                                             />
                                         </Grid>
-                                        <Grid item xs={4}>
+                                        <Grid item xs={12} md={4}>
                                             <TextField
-                                                label="Fecha de Finalización"
+                                                label="Fecha de Finalización"
                                                 type="date"
                                                 value={solicitud.fechaListo ? dayjs(solicitud.fechaListo).format('YYYY-MM-DD') : ''}
                                                 onChange={(e) => handleSolicitudChange(index, 'fechaListo', e.target.value)}
@@ -335,7 +316,12 @@ const DialogHistory = ({ open, handleClose, data }) => {
                                         </Grid>
                                     </Grid>
                                     <Box mt={2} textAlign="right">
-                                        <Button onClick={() => handleUpdate(solicitud)} sx={{ backgroundColor: '#d62e2f', color: '#fff', '&:hover': { backgroundColor: '#d62e2f' } }} variant="contained" size="small">
+                                        <Button
+                                            onClick={() => handleUpdate(solicitud)}
+                                            sx={{ backgroundColor: '#d62e2f', color: '#fff', '&:hover': { backgroundColor: '#d62e2f' } }}
+                                            variant="contained"
+                                            size="small"
+                                        >
                                             Actualizar
                                         </Button>
                                     </Box>
@@ -348,16 +334,25 @@ const DialogHistory = ({ open, handleClose, data }) => {
                 )}
             </DialogContent>
             <DialogActions sx={{ justifyContent: 'space-between', padding: '20px' }}>
-                <Button onClick={handleClose} sx={{ backgroundColor: '#FFCC00', color: '#000', '&:hover': { backgroundColor: '#FFCC00' } }} variant="outlined" size="small">
+                <Button
+                    onClick={handleClose}
+                    sx={{ backgroundColor: '#FFCC00', color: '#000', '&:hover': { backgroundColor: '#FFCC00' } }}
+                    variant="outlined"
+                    size="small"
+                >
                     Cerrar
                 </Button>
-                <Button onClick={() => handleUpdateAll( editableData)} sx={{ backgroundColor: '#d62e2f', color: '#fff', '&:hover': { backgroundColor: '#d62e2f' } }} variant="contained" size="small">
+                <Button
+                    onClick={() => handleUpdateAll(editableData)}
+                    sx={{ backgroundColor: '#d62e2f', color: '#fff', '&:hover': { backgroundColor: '#d62e2f' } }}
+                    variant="contained"
+                    size="small"
+                >
                     Guardar Todos
                 </Button>
             </DialogActions>
         </Dialog>
     );
+};
 
-
-}
 export default DialogHistory;

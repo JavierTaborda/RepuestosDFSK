@@ -50,9 +50,9 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
                     const response = await postSolicitud(resumenData);
                     if (response) {
                         clearCart();
-                        toast.success("Solicitud registrada correctamente");
+                        toast.success("¡Su compra ha sido exitosamente registrada!");
                     } else {
-                        toast.error("Error al registrar la solicitud");
+                        toast.error("Error al registrar su compra");
                     }
                 } catch (error) {
                     console.log(error);
@@ -117,7 +117,7 @@ function Solicitud({ cart, removeFromCart, increaseQuantity, decreaseQuantity, c
 
     return (
         <>
-            <h2 className="text-start mb-0 p-3 ms-5 mt-2">Realizar Solicitud de Repuestos</h2>
+            <h2 className="text-start mb-0 p-3 ms-5 mt-2">Realizar Compra de Repuestos</h2>
             <div className="container">
                 <motion.div
                     initial={{ opacity: 0 }}

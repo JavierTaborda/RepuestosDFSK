@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Form } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import Inicio from "../pages/Inicio";
 import Login from '../pages/Login';
@@ -15,6 +15,7 @@ import Header from "../components/Header";
 import Estados from '../pages/AddData/Estados';
 import EstadosEntrega from '../pages/AddData/EstadosEntrega';
 import UserTable from '../pages/AddData/UserTable';
+import FormConcesionario from '../pages/Customers/FormConcesionario';
 
 function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
     const location = useLocation();
@@ -65,6 +66,7 @@ function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decrease
                     <Route path="/users_table" element={<UserTable />} />
                     <Route path="/estados_solicitud" element={<Estados/>} />
                     <Route path="/estados_entregas" element={<EstadosEntrega />} />
+                    <Route path="/form_concesionarios" element={<FormConcesionario />} />
                 </Route>
             </Routes>
             

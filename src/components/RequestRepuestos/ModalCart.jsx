@@ -36,7 +36,7 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                   </div>
                 </div>
                 <div className="col-md-6">
-                  <span className="badge rounded-pill text-bg-success price-badge">
+                  <span className="badge rounded-pill text-bg-success price-badge p-2">
                     ${repuesto.venta.toFixed(2).toLocaleString()}
                   </span>
                   <div className='mt-2 p-2 details-section'>
@@ -47,6 +47,8 @@ const ModalCart = ({ show, handleClose, repuesto, addToCard }) => {
                       <br /><i className="bi bi-truck"></i> <b>Vehículo: </b>{repuesto.vehiculo}
                       <br /><i className="bi bi-list-ul"></i> <b>Grupo: </b>{repuesto.grupo}
                       <br /><i className="bi bi-border-width"></i> <b>Categoría: </b>{repuesto.categoria}
+                      <br /><i className="bi bi-sliders"></i> <b>Aplica: </b>{repuesto.aplica || '-'}
+                    
                     </p>
                     <div className={`alert ${getStockClass(repuesto.existencia)}`} role="alert">
                       <i className="bi bi-boxes"></i> En Stock: {repuesto.existencia}
