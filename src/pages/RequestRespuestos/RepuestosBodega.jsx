@@ -117,6 +117,7 @@ export default function RepuestosBodega({ addToCart }) {
               className="form-control me-2 rounded-5 shadow-sm"
               value={stringTextSearch}
               onChange={(e) => setStringTextSearch(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && setStringDescripcion(stringTextSearch)}
               type="search"
               placeholder="Buscar..."
               aria-label="Buscar"
