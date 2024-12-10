@@ -50,7 +50,7 @@ const Repuestos = () => {
 
     const handleModeloChange = (event) => {
         setFilterModelo(event.target.value);
-        toast.success('Búsqueda exitosa: ' + event.target.value);
+        
     };
 
     const handleSwitchChange = (event) => {
@@ -84,7 +84,7 @@ const Repuestos = () => {
                 }
                 if (modelo.length === 0) {
                     const models = await getVehiculos();
-                    setModelo(models.map(model => ({ id: model.idVehiculo, nombre: model.modelo })));  // Transformar los datos aquí 
+                    setModelo(models.map(model => ({ id: model.idVehiculo, nombre: model.modelo })));  
                 }
             } catch (error) {
                 setError(error);
@@ -198,7 +198,7 @@ const Repuestos = () => {
             <Dialog open={modalIsOpen} onClose={closeModal} aria-labelledby="form-dialog-title" sx={{ '& .MuiDialog-paper': { margin: 'auto', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', minWidth: '50%', padding: 4, borderRadius: 2, boxShadow: 3, transition: 'all 0.3s ease', '@media (max-width: 600px)': { minWidth: '90%' } } }}>
                 <DialogTitle id="form-dialog-title">Editar Repuesto</DialogTitle>
                 <DialogContent>
-                    {selectedRepuesto && <EditRepuesto initialData={selectedRepuesto} onSubmit={handleFormSubmit} />}
+                    {selectedRepuesto && <EditRepuesto initialData={selectedRepuesto} modelos={modelo} onSubmit={handleFormSubmit} />}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeModal} sx={{ color: '#d62e2f' }}>Cerrar</Button>

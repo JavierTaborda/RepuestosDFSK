@@ -5,7 +5,9 @@ import { uploadFile } from '../../../firebase/config';
 import { toast } from 'react-toastify';
 import { updateRespuestos } from '../../../services/RepuestosService';
 import { updateImagenURL } from '../../../services/ArticulosService';
-export default function EditRepuesto({ initialData, onSubmit }) {
+import Spinner from '../../forms/Spinner'; 
+
+export default function EditRepuesto({ initialData, onSubmit, modelos }) {
     const [formData, setFormData] = useState({
         idRepuesto: 0,
         codigo: '',
@@ -19,12 +21,11 @@ export default function EditRepuesto({ initialData, onSubmit }) {
         imagen: ''
     });
     const [file, setFile] = useState(null);
-
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         if (initialData) {
             setFormData(initialData);
-            //console.log(initialData)
         }
     }, [initialData]);
 
@@ -38,13 +39,17 @@ export default function EditRepuesto({ initialData, onSubmit }) {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: acceptedFiles => {
-            setFile(acceptedFiles[0]);
+            if (!isUploading) {
+                setFile(acceptedFiles[0]);
+            }
         }
     });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const fileType = file.name.split('.').pop(); // Get the file extension
+            setIsUploading(true);
+            const fileType = file.name.split('.').pop(); 
             const url = await uploadFile(file, `${formData.codigo}.${fileType}`);
             if (url.length > 0) {
                 formData.imagen = url;
@@ -56,20 +61,17 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                     } else {
                         toast.error("Error al actualizar el repuesto");
                     }
-                }
-
-                else {
+                } else {
                     toast.error("Error al actualizar el repuesto");
                 }
-
-                // onSubmit(formData);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             toast.error(error.message);
+        } finally {
+            setIsUploading(false);
         }
     };
-
 
     const previewImage = file ? URL.createObjectURL(file) : null;
 
@@ -97,7 +99,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-control"
                         />
                     </div>
-                    <div className="form-group  pt-2">
+                    <div className="form-group pt-2">
                         <label>Descripción:</label>
                         <input
                             type="text"
@@ -107,7 +109,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-control"
                         />
                     </div>
-                    <div className="form-group  pt-2">
+                    <div className="form-group pt-2">
                         <label>Precio:</label>
                         <input
                             type="number"
@@ -117,17 +119,24 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-control"
                         />
                     </div>
-                    <div className="form-group  pt-2">
-                        <label>ID Vehículo:</label>
-                        <input
-                            type="number"
+                    <div className="form-group pt-2">
+                        <label>Modelo:</label>
+                        <select
+                            className="form-select form-select mb-2"
+                            id="idVehiculo"
                             name="idVehiculo"
                             value={formData.idVehiculo}
                             onChange={handleChange}
-                            className="form-control"
-                        />
+                        >
+                            <option value="0">Seleccione un modelo</option>
+                            {modelos.map((modelo) => (
+                                <option key={modelo.id} value={modelo.id}>
+                                    {modelo.nombre}
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                    <div className="form-group  pt-2">
+                    <div className="form-group pt-2">
                         <label>Marca:</label>
                         <input
                             type="text"
@@ -137,7 +146,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-control"
                         />
                     </div>
-                    <div className="form-group  pt-2">
+                    <div className="form-group pt-2">
                         <label>En Inventario:</label>
                         <input
                             type="checkbox"
@@ -147,7 +156,7 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-check-input"
                         />
                     </div>
-                    <div className="form-group  pt-2">
+                    <div className="form-group pt-2">
                         <label>Estatus:</label>
                         <input
                             type="checkbox"
@@ -157,24 +166,29 @@ export default function EditRepuesto({ initialData, onSubmit }) {
                             className="form-check-input"
                         />
                     </div>
-                    <div className=" pt-2">
+                    <div className="pt-2">
                         <label>Imagen actual:</label>
                         <img src={formData.imagen} className="img-thumbnail" alt={formData.nombre} />
                     </div>
                 </div>
-                <div {...getRootProps()} className="p-4 border border-secondary rounded mt-4">
-                    <input {...getInputProps()} />
-                    <p className="text-center">
-                        {file ? file.name : "Arrastra y suelta una imagen aquí, o haz clic para seleccionar una imagen"}
-                    </p>
+                <div {...getRootProps()} className={`p-4 border border-secondary rounded mt-4 ${isUploading ? 'disabled' : ''}`}>
+                    <input {...getInputProps()} disabled={isUploading} />
+                    {isUploading ? (
+                        <div className="d-flex justify-content-center">
+                            <Spinner />
+                        </div>
+                    ) : (
+                        <p className="text-center">
+                            {file ? file.name : "Arrastra y suelta una imagen aquí, o haz clic para seleccionar una imagen"}
+                        </p>
+                    )}
                     {previewImage && (
                         <div className="mt-4 d-flex justify-content-center">
                             <img src={previewImage} alt="Preview" className="img-thumbnail" style={{ maxHeight: "100px" }} />
                         </div>
                     )}
                 </div>
-          
-                <button type="submit" className="btn btn-success mt-4">Guardar</button>
+                <button type="submit" className="btn btn-success mt-4" disabled={isUploading}>Guardar</button>
             </form>
         </motion.div>
     );
