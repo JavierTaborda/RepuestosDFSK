@@ -24,11 +24,11 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                   <li className="nav-item">
                     <Link to="/login" className="nav-link" style={{ color: '#555' }}>Login</Link>
                   </li>
-                  <div className="nav-link" style={{ color: '#555' }}>
+                  {/* <div className="nav-link" style={{ color: '#555' }}>
                     <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Slicitar Servicio
+                      Servicios
                     </Link>
-                  </div>
+                  </div> */}
                 </>
               ) : (
                 <>
@@ -58,16 +58,16 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                       </ul>
                     </li>
                   )}
-                  <div className="nav-link" style={{ color: '#555' }}>
+                  {/* <div className="nav-link" style={{ color: '#555' }}>
                     <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
                       Formulario
                     </Link>
                   </div>
                   <div className="nav-link" style={{ color: '#555' }}>
                     <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
-                      Slicitar Servicio
-                    </Link>
-                  </div>
+                      Servicios
+                    </Link> 
+                  </div>*/}
 
                 </>
               )}
