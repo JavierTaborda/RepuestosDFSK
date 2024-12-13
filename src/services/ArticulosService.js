@@ -79,6 +79,7 @@ export const getRepuestosFilters = async (Marca, Grupo, Categoria, Descripcion, 
 
 export const getGrupos = async () => {
   try {
+    
     const response = await HttpClient.get(`Articulos/Grupos`);
     return response.data;
   } catch (error) {
@@ -104,6 +105,27 @@ export const getModelos = async () => {
   }
 };
 
+export const getVehiculosBodegas = async (bodega) => {
+  try {
+    const response = await HttpClient.get(`Articulos/Bodega/Concesionario/${bodega}`);
+    return response.data;
+  } catch (error) {
+  
+    throw error;
+  }
+};
+
+export const getSerialesVehiculosBodegas = async (bodega,articulo) => {
+  try {
+    const response = await HttpClient.get(
+      `Articulos/Bodega/Seriales/${bodega}/${articulo}`
+    );
+    return response.data;
+  } catch (error) {
+  
+    throw error;
+  }
+};
 
 export default {
   updateImagenURL,
@@ -113,5 +135,6 @@ export default {
   getCategorias,
   getAllArticulosExistencia,
   getModelos,
-  getMarca
+  getMarca,
+  getVehiculosBodegas
 };

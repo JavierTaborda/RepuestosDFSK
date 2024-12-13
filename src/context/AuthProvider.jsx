@@ -10,18 +10,26 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
+    const [userAdmin, setUserAdmin] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!user) {
             const token = Cookies.get('token_access');
             if (token) {
-                const decodedToken = jwtDecode(token);
-                setUser(decodedToken);
+                try {
+                    const decodedToken = jwtDecode(token);
+                    setUser(decodedToken);
+                    setUserAdmin(decodedToken.role === 'admin');
+                } catch (error) {
+                    //console.error("Error al decodificar el token:", error);
+                    logout(); 
+                }
             }
         }
 
     }, []);
+    
     const login = async (credentials) => {
         try {
             const response = await loginService(credentials);
@@ -53,7 +61,7 @@ const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, redirect }}>
+        <AuthContext.Provider value={{ user, userAdmin, login, logout, redirect }}>
             {children}
         </AuthContext.Provider>
     );

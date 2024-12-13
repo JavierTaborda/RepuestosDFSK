@@ -1,0 +1,83 @@
+/* Estilos específicos para la página de vehículos */
+
+.vehicles-container {
+    padding: 20px;
+}
+
+.vehicle-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-5px);
+}
+
+.vehicle-card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.vehicle-card-body {
+    padding: 15px;
+}
+
+.vehicle-card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.vehicle-card-text {
+    font-size: 0.875rem;
+    color: #333;
+}
+
+.vehicle-search-input {
+    font-size: 1rem;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/* 
+.btn-primary {
+    background-color: #FF5A5F;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #FF3D3D;
+}
+
+.btn-outline-primary {
+    border-color: #FF5A5F;
+    color: #FF5A5F;
+}
+
+.btn-outline-primary:hover {
+    background-color: #FF5A5F;
+    color: #fff;
+}
+
+.btn-outline-primary.active {
+    background-color: #FF5A5F;
+    color: #fff;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-outline-secondary.active {
+    background-color: #6c757d;
+    color: #fff;
+} */

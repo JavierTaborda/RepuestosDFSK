@@ -3,13 +3,10 @@ import { toast } from 'react-toastify';
 import { getUsersEdit, putUserData } from '../../services/UserService';
 import RoleDropdown from '../../components/UsersVen/RoleDropdown';
 import UserFilter from '../../components/UsersVen/UserFilter';
-import { FaEdit, FaUser, FaEnvelope, FaPhone, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import Spinner from '../../components/forms/Spinner';
 
 
 const UserTable = () => {
- 
-
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
@@ -21,6 +18,7 @@ const UserTable = () => {
         email: '',
         telefono: '',
         idRol: '',
+        bodega: '',
         estatus: true,
     });
     const [searchQuery, setSearchQuery] = useState('');
@@ -28,8 +26,6 @@ const UserTable = () => {
     const [newpass2, setNewPass2] = useState('');
 
     useEffect(() => {
-        
-        
         const fetchUsers = async () => {
             setIsLoading(true);
             try {
@@ -53,6 +49,7 @@ const UserTable = () => {
             email: user.email || '',
             telefono: user.telefono || '',
             idRol: user.idRol || '',
+            bodega: user.bodega || '',
             estatus: user.estatus || true,
         });
         setNewPass('');
@@ -76,7 +73,7 @@ const UserTable = () => {
                 toast.error('Las contraseñas no coinciden');
                 return;
             }
-            const response = await putUserData(editFormData, newpass  );
+            const response = await putUserData(editFormData, newpass);
             toast.success('Usuario actualizado exitosamente');
             setShow(false);
             setUsers(users.map((user) => (user.idUsuario === response.idUsuario ? response : user)));
@@ -105,7 +102,6 @@ const UserTable = () => {
             user.telefono.includes(searchQuery)
     );
 
-
     return (
         <div className="container mt-5">
             <h2 className="text-center mb-4">Lista de Usuarios</h2>
@@ -115,37 +111,38 @@ const UserTable = () => {
                     <Spinner />
                 </div>
             ) : (
-                    <div className="table-responsive">
-                <table className="table table-striped table-bordered shadow-sm p-3 mb-5 bg-body rounded ">
-                    <thead>
-                        <tr>
-                            <th className="text-center bg-danger text-white"><FaUser className="me-2" />Rif/Cedula</th>
-                            <th className="text-center bg-danger text-white"><FaUser className="me-2" />Nombre</th>
-                            <th className="text-center bg-danger text-white"><FaEnvelope className="me-2" />Email</th>
-                            <th className="text-center bg-danger text-white"><FaPhone className="me-2" />Teléfono</th>
-                            <th className="text-center bg-danger text-white"><FaCheckCircle className="me-2" />Activo</th>
-                            <th className="text-center bg-danger text-white "><FaEdit className="me-2" />Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredUsers.map((user) => (
-                            <tr key={user.idUsuario}>
-                                <td>{user.username}</td>
-                                <td>{user.nombre}</td>
-                                <td>{user.email}</td>
-                                <td>{user.telefono}</td>
-                                <td className='text-center'>{user.estatus ? <FaCheckCircle className="text-success" /> : <FaTimesCircle className="text-danger" />}</td>
-                                <td className="text-center">
-                               
-                                    <button className="btn btn-warning" onClick={() => handleEdit(user)}>
-                                        <FaEdit /> Editar 
-                                    </button>
-                                </td>
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered shadow-sm p-3 mb-5 bg-body rounded ">
+                        <thead>
+                            <tr>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-person-fill me-2"></i>Rif/Cedula</th>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-person-fill me-2"></i>Nombre</th>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-envelope-fill me-2"></i>Email</th>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-telephone-fill me-2"></i>Teléfono</th>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-box-seam me-2"></i>Bodega</th>
+                                <th className="text-center bg-danger text-white"><i className="bi bi-check-circle-fill me-2"></i>Activo</th>
+                                <th className="text-center bg-danger text-white "><i className="bi bi-pencil-fill me-2"></i>Acciones</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {filteredUsers.map((user) => (
+                                <tr key={user.idUsuario}>
+                                    <td>{user.username}</td>
+                                    <td>{user.nombre}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.telefono}</td>
+                                    <td>{user.bodega}</td>
+                                    <td className='text-center'>{user.estatus ? <i className="bi bi-check-circle-fill text-success"></i> : <i className="bi bi-x-circle-fill text-danger"></i>}</td>
+                                    <td className="text-center">
+                                        <button className="btn btn-warning" onClick={() => handleEdit(user)}>
+                                            <i className="bi bi-pencil-fill"></i> Editar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
             {show && (
                 <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -159,62 +156,27 @@ const UserTable = () => {
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
                                         <label htmlFor="username" className="form-label">Rif/Cedula</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="username"
-                                            name="username"
-                                            value={editFormData.username}
-                                            onChange={handleChange}
-                                            required
-                                        />
+                                        <input type="text" className="form-control" id="username" name="username" value={editFormData.username} onChange={handleChange} required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="nombre" className="form-label">Nombre</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="nombre"
-                                            name="nombre"
-                                            value={editFormData.nombre}
-                                            onChange={handleChange}
-                                            required
-                                        />
+                                        <input type="text" className="form-control" id="nombre" name="nombre" value={editFormData.nombre} onChange={handleChange} required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="email" className="form-label">Email</label>
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            id="email"
-                                            name="email"
-                                            value={editFormData.email}
-                                            onChange={handleChange}
-                                            required
-                                        />
+                                        <input type="email" className="form-control" id="email" name="email" value={editFormData.email} onChange={handleChange} required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="telefono" className="form-label">Teléfono</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="telefono"
-                                            name="telefono"
-                                            value={editFormData.telefono}
-                                            onChange={handleChange}
-                                            required
-                                        />
+                                        <input type="text" className="form-control" id="telefono" name="telefono" value={editFormData.telefono} onChange={handleChange} required />
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="bodega" className="form-label">Bodega</label>
+                                        <input type="text" className="form-control" id="bodega" name="bodega" value={editFormData.bodega} onChange={handleChange} required />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="estatus" className="form-label">Estado</label>
-                                        <select
-                                            className="form-select"
-                                            id="estatus"
-                                            name="estatus"
-                                            value={editFormData.estatus}
-                                            onChange={handleChange}
-                                            required
-                                        >
+                                        <select className="form-select" id="estatus" name="estatus" value={editFormData.estatus} onChange={handleChange} required >
                                             <option value={true}>Activo</option>
                                             <option value={false}>Inactivo</option>
                                         </select>
@@ -224,25 +186,12 @@ const UserTable = () => {
                                         <div className="row">
                                             <div className="col-6">
                                                 <label htmlFor="newpass" className="form-label">Contraseña</label>
-                                                <input
-                                                    type="password"
-                                                    className="form-control"
-                                                    id="newpass"
-                                                    name="newpass"
-                                                    value={newpass}
-                                                    onChange={(e) => setNewPass(e.target.value)}
-                                                />
+                                                <input type="password" className="form-control" id="newpass" name="newpass" value={newpass} onChange={(e) => setNewPass(e.target.value)} />
                                             </div>
+                                       
                                             <div className="col-6">
                                                 <label htmlFor="newpass2" className="form-label">Confirmar Contraseña</label>
-                                                <input
-                                                    type="password"
-                                                    className="form-control"
-                                                    id="newpass2"
-                                                    name="newpass2"
-                                                    value={newpass2}
-                                                    onChange={(e) => setNewPass2(e.target.value)}
-                                                />
+                                                <input type="password" className="form-control" id="newpass2" name="newpass2" value={newpass2} onChange={(e) => setNewPass2(e.target.value)} />
                                             </div>
                                         </div>
                                     </div>

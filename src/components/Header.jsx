@@ -58,6 +58,11 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                       </ul>
                     </li>
                   )}
+                    <div className="nav-link" style={{ color: '#555' }}>
+                      <Link to="/inventario_vehiculos" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        Inventario de Vehiculos
+                      </Link>
+                    </div>
                   {/* <div className="nav-link" style={{ color: '#555' }}>
                     <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
                       Formulario

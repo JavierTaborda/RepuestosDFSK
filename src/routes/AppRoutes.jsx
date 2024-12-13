@@ -15,6 +15,7 @@ import Header from "../components/Header";
 import Estados from '../pages/AddData/Estados';
 import EstadosEntrega from '../pages/AddData/EstadosEntrega';
 import UserTable from '../pages/AddData/UserTable';
+import VehiclesPage from '../pages/VehicleInventory/VehiclesPage';
 import FormConcesionario from '../pages/Customers/FormConcesionario';
 
 function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart, isEmpty, carTotal }) {
@@ -56,6 +57,7 @@ function AppRoutes({ cart, addToCart, removeFromCart, increaseQuantity, decrease
                         />
                     } />
                     <Route path="/solicitudes" element={<EstadosSolicitudes />} />
+                    <Route path="/inventario_vehiculos" element={<VehiclesPage />} />
                 </Route>
 
                 {/* AddData admin*/}
