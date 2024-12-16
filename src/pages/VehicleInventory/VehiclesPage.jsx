@@ -154,7 +154,7 @@ const VehiclesPage = () => {
                 <div className="row">
                     {filteredVehicles.length > 0 ? (
                         filteredVehicles.map((vehicle) => (
-                            <VehicleCard key={vehicle.articulo} vehicle={vehicle} />
+                            <VehicleCard key={vehicle.articulo} vehicle={vehicle} bodega={selectedBodega} />
                         ))
                     ) : (
                         <div className="col-12">

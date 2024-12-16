@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { FaQrcode, FaExternalLinkAlt } from 'react-icons/fa';
 import { saveAs } from 'file-saver';
 import domtoimage from 'dom-to-image';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const QRDialog = ({ open, handleClose, codigoUnico }) => {
     const qrRef = useRef(null);
