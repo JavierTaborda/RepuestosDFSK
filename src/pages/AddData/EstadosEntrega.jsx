@@ -35,7 +35,7 @@ const EstadosEntrega = () => {
                 await postEstadosEntrega(estado);
                 toast.success('Estado registrado correctamente');
             }
-            const response = await getEstadosSolicitudes();
+            const response = await getEstadosEntrega();
             const activeEstados = response.filter(estado => estado.activo);
             setEstados(activeEstados);
             setEstado({ idEstadosEnvio: 0, estado: '', descripcion: '', activo: true, tiempo: 0 });

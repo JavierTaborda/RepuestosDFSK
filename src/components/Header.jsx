@@ -43,26 +43,27 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
                       <li><Link to="/solicitudes" className="dropdown-item">Historial</Link></li>
                     </ul>
                   </li>
-                  {user.role === 'admin' && (
-                    <li className="nav-item dropdown">
-                      <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#555' }}>
-                        Admin
-                      </a>
-                      <ul className="dropdown-menu shadow-sm">
-                        <li><Link to="/editrepuestos" className="dropdown-item">Repuestos</Link></li>
-                        <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
-                        <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
-                        <li><Link to="/users_table" className="dropdown-item">Editar Usuarios</Link></li>
-                        <li><Link to="/estados_solicitud" className="dropdown-item">Estados de  Solicitud</Link></li>
-                        <li><Link to="/estados_entregas" className="dropdown-item">Entregas y Envíos</Link></li>
-                      </ul>
-                    </li>
-                  )}
+                
                     <div className="nav-link" style={{ color: '#555' }}>
                       <Link to="/inventario_vehiculos" style={{ textDecoration: 'none', color: 'inherit' }}>
                         Inventario de Vehiculos
                       </Link>
                     </div>
+                    {user.role === 'admin' && (
+                      <li className="nav-item dropdown">
+                        <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ color: '#555' }}>
+                          Admin
+                        </a>
+                        <ul className="dropdown-menu shadow-sm">
+                          <li><Link to="/editrepuestos" className="dropdown-item">Repuestos</Link></li>
+                          <li><Link to="/vehiculos" className="dropdown-item">Vehículos</Link></li>
+                          <li><Link to="/users" className="dropdown-item">Usuarios</Link></li>
+                          <li><Link to="/users_table" className="dropdown-item">Editar Usuarios</Link></li>
+                          <li><Link to="/estados_solicitud" className="dropdown-item">Estados de  Solicitud</Link></li>
+                          <li><Link to="/estados_entregas" className="dropdown-item">Entregas y Envíos</Link></li>
+                        </ul>
+                      </li>
+                    )}
                   {/* <div className="nav-link" style={{ color: '#555' }}>
                     <Link to="/form_concesionarios" style={{ textDecoration: 'none', color: 'inherit' }}>
                       Formulario

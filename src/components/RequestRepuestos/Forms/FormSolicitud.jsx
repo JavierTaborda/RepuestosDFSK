@@ -9,9 +9,9 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
     const { user } = useContext(AuthContext);
     const [localResumenData, setLocalResumenData] = useState({
         idResumenSolicitud: 0,
-        fechaCreacion: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss'),
+        fechaCreacion: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
         estatus: false,
-        fechaCierre: dayjs(new Date(new Date().setDate(new Date().getDate() + 5))).format('YYYY-MM-DDTHH:mm:ss'),
+        fechaCierre: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
         observacion: '',
         idUsuario: user?.user || 0,
         idEstadosEnvio: 0,
@@ -42,6 +42,9 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
         if (name === 'idEstadosEnvio') {
             const selected = enviosData.find(envio => envio.idEstadosEnvio === parseInt(value));
             setSelectedEnvio(selected);
+            // Actualizar la fecha de cierre automáticamente
+            const nuevaFechaCierre = dayjs().add(selected.tiempo, 'day').format('YYYY-MM-DDTHH:mm:ss');
+            setLocalResumenData(prevData => ({ ...prevData, idEstadosEnvio: value, fechaCierre: nuevaFechaCierre }));
         }
     };
 
@@ -51,6 +54,14 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
         if (!localResumenData.telefono) tempErrors.telefono = "El teléfono es requerido";
         if (!localResumenData.rif) tempErrors.rif = "El RIF es requerido";
         if (!localResumenData.idEstadosEnvio) tempErrors.idEstadoEntrega = "El estado de entrega es requerido";
+        const fechaCierre = dayjs(localResumenData.fechaCierre);
+        const fechaMinima = dayjs().add(selectedEnvio?.tiempo || 0, 'day');
+        const fechaMaxima = dayjs().add(6, 'month');
+        if (fechaCierre.isBefore(fechaMinima)) {
+            tempErrors.fechaCierre = 'La fecha debe ser mayor o igual a la suma de días de entrega';
+        } else if (fechaCierre.isAfter(fechaMaxima)) {
+            tempErrors.fechaCierre = 'La fecha no puede ser mayor a 6 meses a partir de hoy';
+        }
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
     };
@@ -58,6 +69,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (validate()) {
+        
             setResumenData(localResumenData);
             onSubmit(event);
         } else {
@@ -80,6 +92,8 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
         fetchEstadosEnvios();
     }, []);
 
+
+
     return (
         <form onSubmit={handleSubmit} className="p-4 rounded shadow bg-white">
             <div className="row g-3">
@@ -89,12 +103,9 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                 </div>
                 <div className="col-12 pt-2">
                     <label htmlFor="fechainicial" className="form-label">Fecha de Solicitud</label>
-                    <input type="datetime" className="form-control" id="fechainicial" name="fechaSolicitud" value={localResumenData.fechaCreacion} disabled />
+                    <input type="datetime-local" className="form-control" id="fechainicial" name="fechaSolicitud" value={localResumenData.fechaCreacion} disabled />
                 </div>
-                <div className="col-12 pt-2">
-                    <label htmlFor="fechacierre" className="form-label">Fecha Deseada de Entrega </label>
-                    <input type="datetime-local" className="form-control" id="fechacierre" name="fechaCierre" value={localResumenData.fechaCierre} onChange={handleChange} />
-                </div>
+
                 <div className="col-12 pt-2">
                     <label htmlFor="vendedor" className="form-label">Solicitante</label>
                     <input type="input" className="form-control" placeholder="Vendedor/Concesionario" value={user.name} disabled />
@@ -104,7 +115,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                     {loading ? (
                         <p>Cargando estados de envío...</p>
                     ) : (
-                            <select className="form-select form-select mb-2" id="idEstadosEnvio" name="idEstadosEnvio" value={localResumenData.idEstadosEnvio} onChange={handleChange}>
+                        <select className="form-select form-select mb-2" id="idEstadosEnvio" name="idEstadosEnvio" value={localResumenData.idEstadosEnvio} onChange={handleChange}>
                             <option value="">Seleccione un estado</option>
                             {enviosData.map((envio) => (
                                 <option key={envio.idEstadosEnvio} value={envio.idEstadosEnvio}>
@@ -123,10 +134,24 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                         transition={{ duration: 0.5 }}
                     >
                         <div className="alert alert-danger" role="alert">
-                            Aproximadamente {selectedEnvio.tiempo} días
+                            Aproximadamente {selectedEnvio.tiempo > 1 ? selectedEnvio.tiempo + ' días' : selectedEnvio.tiempo + ' día'}
                         </div>
+                        
                     </motion.div>
                 )}
+                <div className="col-12 pt-2">
+                    <label htmlFor="fechacierre" className="form-label">Fecha Aproximada de Entrega</label>
+                    <input
+                        type="datetime-local"
+                        className={`form-control ${errors.fechaCierre ? 'is-invalid' : ''}`}
+                        id="fechacierre"
+                        name="fechaCierre"
+                        value={localResumenData.fechaCierre}
+                        onChange={handleChange}
+                        
+                    />
+                    {errors.fechaCierre && <div className="text-danger">{errors.fechaCierre}</div>}
+                </div>
                 <div className="col-12 pt-2">
                     <label htmlFor="direccion" className="form-label">Dirección</label>
                     <input type="text" className="form-control" id="direccion" name="direccion" value={localResumenData.direccion} onChange={handleChange} />
@@ -142,7 +167,6 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
                     <input type="text" className="form-control" id="rif" name="rif" value={localResumenData.rif} onChange={handleChange} />
                     {errors.rif && <div className="text-danger">{errors.rif}</div>}
                 </div>
-                
                 <div className="col-12 pt-2">
                     <label htmlFor="textarea" className="form-label">Observación</label>
                     <textarea className="form-control" id="textarea" rows="3" placeholder="Comentarios..." name="observacion" value={localResumenData.observacion} onChange={handleChange} />
@@ -150,7 +174,7 @@ const FormSolicitud = ({ setResumenData, onSubmit }) => {
             </div>
             <div className="d-grid gap-2">
                 <button type="submit" className="btn btn-danger mt-5">
-                    <i className="bi bi-floppy"></i> Crear Solicitud
+                    <i className="bi bi-floppy"></i> Generar Compra
                 </button>
             </div>
         </form>
