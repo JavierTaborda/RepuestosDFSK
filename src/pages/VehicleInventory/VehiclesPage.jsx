@@ -90,9 +90,9 @@ const VehiclesPage = () => {
 
 
     return (
-        <div className="vehicles-container container">
+        <div className="vehicles-container container-fluid">
             <h2 className="text-start mb-0 mt-2">Inventario de Vehículos</h2>
-            <div className="d-flex justify-content-center mb-4 text-start pt-3">
+            <div className="d-flex justify-content-center mb-4 text-start pt-3 flex-column flex-md-row">
                 {userAdmin ? (
                     <>
                         <h5 className="text-start mt-1">Selecciona una bodega:</h5>
@@ -104,7 +104,7 @@ const VehiclesPage = () => {
                             value={selectedBodega}
                             onChange={(e) => handleBodegaChange(Number(e.target.value))}
                             required
-                            style={{ width: '200px', marginLeft: '10px' }}
+                            style={{ width: '100%', maxWidth: '200px', marginLeft: '10px' }}
                         >
                             {loadingUsers ? (
                                 <option>Cargando...</option>
@@ -125,7 +125,7 @@ const VehiclesPage = () => {
                             placeholder="ingresa manualmente.."
                             value={manualBodega}
                             onChange={handleManualBodegaChange}
-                            style={{ width: '200px', marginLeft: '10px' }}
+                            style={{ width: '100%', maxWidth: '200px', marginLeft: '10px' }}
                         />
                     </>
                 ) : (
