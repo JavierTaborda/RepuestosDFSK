@@ -4,32 +4,32 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
-
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-
     const [user, setUser] = useState(null);
     const [userAdmin, setUserAdmin] = useState(null);
+    const [loadingAuth, setLoadingAuth] = useState(true); // Estado de carga
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user) {
-            const token = Cookies.get('token_access');
-            if (token) {
-                try {
-                    const decodedToken = jwtDecode(token);
-                    setUser(decodedToken);
-                    setUserAdmin(decodedToken.role === 'admin');
-                } catch (error) {
-                    //console.error("Error al decodificar el token:", error);
-                    logout(); 
-                }
+        const token = Cookies.get('token_access');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+                setUser(decodedToken);
+                setUserAdmin(decodedToken.role === 'admin');
+            } catch (error) {
+                console.error("Error al decodificar el token:", error);
+                logout();
+            } finally {
+                setLoadingAuth(false); // La carga ha terminado
             }
+        } else {
+            setLoadingAuth(false); // No hay token, la carga ha terminado
         }
-
     }, []);
-    
+
     const login = async (credentials) => {
         try {
             const response = await loginService(credentials);
@@ -39,29 +39,28 @@ const AuthProvider = ({ children }) => {
 
             const decodedToken = jwtDecode(response.data.token);
             setUser(decodedToken);
-            navigate('/inicio'); // Redirige a la página de inicial después del login
-            return ("Bienvenido, " + decodedToken.name);
-        }
-        catch (error) {
-          
+            setUserAdmin(decodedToken.role === 'admin');
+            navigate('/inicio'); // Redirige a la página de inicio después del login
+            return "Bienvenido, " + decodedToken.name;
+        } catch (error) {
             throw error;
         }
     };
-
 
     const logout = () => {
         Cookies.remove('token_access');
         Cookies.remove('refresh_token');
         setUser(null);
+        setUserAdmin(null);
         navigate('/login');
-
     };
+
     const redirect = () => {
-        navigate('/login')
-    }
+        navigate('/login');
+    };
 
     return (
-        <AuthContext.Provider value={{ user, userAdmin, login, logout, redirect }}>
+        <AuthContext.Provider value={{ user, userAdmin, loadingAuth, login, logout, redirect }}>
             {children}
         </AuthContext.Provider>
     );

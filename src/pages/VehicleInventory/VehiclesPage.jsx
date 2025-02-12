@@ -8,17 +8,15 @@ import { AuthContext } from '../../context/AuthProvider';
 import { getUsers } from '../../services/UserService';
 import '../../components/VehicleInventory/VehiclesPage.css';
 
-
-
 const VehiclesPage = () => {
-    const { user, userAdmin } = useContext(AuthContext);
+    const { user, userAdmin, loadingAuth } = useContext(AuthContext); // Usa loadingAuth
     const [vehicles, setVehicles] = useState([]);
     const [userdata, setUsersData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedBodega, setSelectedBodega] = useState('');
-    const [manualBodega, setManualBodega] = useState(''); // Nuevo estado para bodega manual
+    const [manualBodega, setManualBodega] = useState('');
 
     const fetchVehicles = async (bodega) => {
         setLoading(true);
@@ -45,14 +43,14 @@ const VehiclesPage = () => {
     };
 
     useEffect(() => {
-        if (user) {
+        if (!loadingAuth && user) { // Espera a que loadingAuth sea false
             if (userAdmin) {
                 getUsersList();
             }
-            fetchVehicles(user.bodega)
+            fetchVehicles(user.bodega);
             setSelectedBodega(user.bodega);
         }
-    }, [user, userAdmin]);
+    }, [user, userAdmin, loadingAuth]); // Agrega loadingAuth como dependencia
 
     useEffect(() => {
         if (selectedBodega !== '' && user) {
@@ -60,17 +58,15 @@ const VehiclesPage = () => {
         }
     }, [selectedBodega]);
 
-
     const handleBodegaChange = (bodega) => {
         setSelectedBodega(bodega);
-        setManualBodega(''); // Reseteamos el input manual al seleccionar del select
+        setManualBodega('');
     };
 
-    // Manejar cambio en el input manual
     const handleManualBodegaChange = (event) => {
         const value = event.target.value;
         setManualBodega(value);
-        setSelectedBodega(value); // Actualiza el estado de selectedBodega con el valor del input
+        setSelectedBodega(value);
     };
 
     const filteredVehicles = vehicles.filter(vehicle =>
@@ -79,8 +75,8 @@ const VehiclesPage = () => {
         vehicle.color.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-
-    if (!user || userAdmin === null) {
+    // Muestra un spinner si el contexto aún está cargando
+    if (loadingAuth) {
         return (
             <div className="d-flex justify-content-center align-items-center vh-100">
                 <Spinner />
@@ -88,6 +84,10 @@ const VehiclesPage = () => {
         );
     }
 
+    // Si no hay usuario o userAdmin es null, muestra un mensaje
+    if (!user || userAdmin === null) {
+        return <div>No hay datos de usuario disponibles.</div>;
+    }
 
     return (
         <div className="vehicles-container container-fluid">
@@ -96,7 +96,6 @@ const VehiclesPage = () => {
                 {userAdmin ? (
                     <>
                         <h5 className="text-start mt-1">Selecciona una bodega:</h5>
-
                         <select
                             className="form-select"
                             id="idUsuario"
@@ -118,7 +117,6 @@ const VehiclesPage = () => {
                                 </>
                             )}
                         </select>
-
                         <input
                             type="number"
                             className="form-control"
