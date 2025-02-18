@@ -25,19 +25,21 @@ axios.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      const newToken = await refreshToken();
-      if (newToken) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-        return axios(originalRequest);
-      }
-    }
+   if (
+     error.response &&
+     error.response.status === 401 &&
+     !originalRequest._retry &&
+     originalRequest._retryCount < 3
+   ) {
+     originalRequest._retry = true;
+     originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
+     const newToken = await refreshToken();
+     if (newToken) {
+       axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+       originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+       return axios(originalRequest);
+     }
+   }
     return Promise.reject(error);
   }
 );
@@ -51,21 +53,24 @@ const refreshToken = async () => {
     Cookies.set("token_access", newToken, {
       expires: 1,
       secure: true,
-      sameSite: "Strict",
+      sameSite: "None",
     });
-
     return newToken;
   } catch (error) {
     toast.warning(
       "Tu sesión ha expirado. Redirigiendo a la página de login..."
     );
 
+    // Limpia el estado de autenticación
+    Cookies.remove("token_access");
+    Cookies.remove("refresh_token");
+    setUser(null);
+    setUserAdmin(null);
+
     setTimeout(() => {
       window.location.href = "/login";
-      Cookies.remove("token_access");
-      Cookies.remove("refresh_token");
-    }, 4000); 
-    newToken = null;
+    }, 4000);
+    return null;
   }
 };
 

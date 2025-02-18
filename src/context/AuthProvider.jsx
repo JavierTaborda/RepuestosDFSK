@@ -34,8 +34,8 @@ const AuthProvider = ({ children }) => {
         try {
             const response = await loginService(credentials);
 
-            Cookies.set('token_access', response.data.token, { expires: 1, secure: true, sameSite: 'Strict' });
-            Cookies.set('refresh_token', response.data.refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
+            Cookies.set('token_access', response.data.token, { expires: 1, secure: true, sameSite: 'None' });
+            Cookies.set('refresh_token', response.data.refreshToken, { expires: 7, secure: true, sameSite: 'None' });
 
             const decodedToken = jwtDecode(response.data.token);
             setUser(decodedToken);

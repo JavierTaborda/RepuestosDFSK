@@ -14,14 +14,14 @@ const VehiclesPage = () => {
     const [userdata, setUsersData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingUsers, setLoadingUsers] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(''); 
     const [selectedBodega, setSelectedBodega] = useState('');
     const [manualBodega, setManualBodega] = useState('');
 
-    const fetchVehicles = async (bodega) => {
+    const fetchVehicles = async () => {
         setLoading(true);
         try {
-            const data = await getVehiculosBodegas(bodega);
+            const data = await getVehiculosBodegas(selectedBodega);
             setVehicles(data);
         } catch (error) {
             toast.error('No se pueden obtener los vehículos. Inténtalo de nuevo.');
@@ -46,15 +46,15 @@ const VehiclesPage = () => {
         if (!loadingAuth && user) { // Espera a que loadingAuth sea false
             if (userAdmin) {
                 getUsersList();
-            }
-            fetchVehicles(user.bodega);
+            }            
             setSelectedBodega(user.bodega);
+            fetchVehicles(user.bodega);
         }
     }, [user, userAdmin, loadingAuth]); // Agrega loadingAuth como dependencia
 
     useEffect(() => {
         if (selectedBodega !== '' && user) {
-            fetchVehicles(selectedBodega);
+            fetchVehicles();
         }
     }, [selectedBodega]);
 

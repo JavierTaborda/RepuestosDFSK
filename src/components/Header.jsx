@@ -8,7 +8,7 @@ export default function Header({ cart, removeFromCart, increaseQuantity, decreas
 
   return (
     <header>
-      <nav className="navbar navbar-expand-lg sticky-top" style={{ backgroundColor: '#f8f9f9', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <nav className="navbar navbar-expand-md sticky-top" style={{ backgroundColor: '#f8f9f9', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <div className="container-fluid">
           <Link to="/" className="navbar-brand d-flex align-items-center" style={{ fontWeight: 'bold', color: '#333' }}>
             <img src="/dfsklogo.png" alt="Logo" width="80" className="me-2" />
