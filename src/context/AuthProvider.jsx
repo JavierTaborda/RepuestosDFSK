@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
             const decodedToken = jwtDecode(response.data.token);
             setUser(decodedToken);
             setUserAdmin(decodedToken.role === 'admin');
-            navigate('/inicio'); // Redirige a la página de inicio después del login
+            navigate('/repuestos'); // Redirige a la página de inicio después del login
             return "Bienvenido, " + decodedToken.name;
         } catch (error) {
             throw error;
